@@ -1,0 +1,5 @@
+.DS_Store
+*.log
+
+# Lokale Backups / Exports
+trainingsplan-*.json
