@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surf Fitness – Profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="inputform.css">
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-eyebrow"><a href="index.html" style="color:inherit;text-decoration:none">← Zurück zum Plan</a></div>
+    <h1>Dein persönliches Profil</h1>
+    <p>Definiere dein Ziel und deinen aktuellen Stand – damit der Trainingsplan genau auf dich passt.</p>
+  </div>
+
+  <div class="steps" id="steps">
+    <div class="step active" id="step-1"></div>
+    <div class="step" id="step-2"></div>
+    <div class="step" id="step-3"></div>
+    <div class="step" id="step-4"></div>
+    <div class="step" id="step-5"></div>
+  </div>
+
+  <div class="main">
+
+    <!-- SECTION 1: PERSÖNLICHE DATEN -->
+    <div class="section active" id="section-1">
+      <div class="section-header">
+        <div class="section-tag tag-personal">01 — Persönliche Daten</div>
+        <h2>Wer bist du?</h2>
+        <p>Basis-Informationen für die Trainingsberechnung.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="name">Name</label>
+        <input type="text" id="name" placeholder="Dein Name" autocomplete="given-name" />
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label" for="alter">Alter</label>
+          <input type="number" id="alter" placeholder="z.B. 32" min="16" max="80" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="geschlecht">Geschlecht</label>
+          <select id="geschlecht">
+            <option value="">Auswählen</option>
+            <option value="w">Weiblich</option>
+            <option value="m">Männlich</option>
+            <option value="d">Divers</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label" for="groesse">Größe (cm)</label>
+          <input type="number" id="groesse" placeholder="z.B. 168" min="140" max="220" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="gewicht">Gewicht (kg)</label>
+          <input type="number" id="gewicht" placeholder="z.B. 54" min="40" max="150" />
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="field-group">
+        <label class="field-label">Trainingserfahrung</label>
+        <div class="level-group">
+          <button class="level-btn" data-group="training" data-value="anfaenger">
+            Anfänger<div class="level-sub">sporadisch</div>
+          </button>
+          <button class="level-btn" data-group="training" data-value="intermediate">
+            Intermediate<div class="level-sub">2–3× /Wo</div>
+          </button>
+          <button class="level-btn" data-group="training" data-value="advanced">
+            Advanced<div class="level-sub">4–5× /Wo</div>
+          </button>
+          <button class="level-btn" data-group="training" data-value="pro">
+            Pro<div class="level-sub">athletisch</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Surf-Level</label>
+        <div class="level-group">
+          <button class="level-btn" data-group="surf" data-value="anfaenger">
+            Anfänger<div class="level-sub">stehe selten</div>
+          </button>
+          <button class="level-btn" data-group="surf" data-value="intermediate">
+            Intermediate<div class="level-sub">stehe regelmäßig</div>
+          </button>
+          <button class="level-btn" data-group="surf" data-value="advanced">
+            Advanced<div class="level-sub">lese Wellen</div>
+          </button>
+          <button class="level-btn" data-group="surf" data-value="pro">
+            Pro<div class="level-sub">auch große Wellen</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-next" id="btn-1-next">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: ZIELDEFINITION -->
+    <div class="section" id="section-2">
+      <div class="section-header">
+        <div class="section-tag tag-goal">02 — Zieldefinition</div>
+        <h2>Was ist dein Ziel?</h2>
+        <p>Definiere deinen Trip und was "fit genug" für dich bedeutet.</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="trip-datum">Trip-Datum</label>
+        <input type="date" id="trip-datum" />
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label" for="surf-tage">Surf-Tage am Stück</label>
+          <input type="number" id="surf-tage" placeholder="z.B. 7" min="1" max="30" />
+          <div class="field-hint">Wie viele Tage willst du aktiv surfen?</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="surf-stunden">Stunden pro Tag</label>
+          <input type="number" id="surf-stunden" placeholder="z.B. 4" min="1" max="10" step="0.5" />
+          <div class="field-hint">Aktive Surf-Zeit täglich</div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-back" id="btn-2-back">← Zurück</button>
+        <button class="btn btn-next" id="btn-2-next">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: STATUS PADDLE POWER -->
+    <div class="section" id="section-3">
+      <div class="section-header">
+        <div class="section-tag tag-paddle">03 — Paddle Power</div>
+        <h2>Dein aktueller Stand</h2>
+        <p>Ausdauer, Oberkörperkraft und Cardio-Basis.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span class="dot dot-paddle">●</span> Selbsteinschätzung
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Paddelausdauer</div>
+              <div class="scale-desc" id="desc-paddelausdauer"></div>
+            </div>
+            <div class="scale-value accent-paddle" id="val-paddelausdauer">1</div>
+          </div>
+          <input type="range" class="range-paddle" min="1" max="5" value="1" step="1" id="range-paddelausdauer" data-key="paddelausdauer" data-category="paddle">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Oberkörperkraft</div>
+              <div class="scale-desc" id="desc-okoerper"></div>
+            </div>
+            <div class="scale-value accent-paddle" id="val-okoerper">1</div>
+          </div>
+          <input type="range" class="range-paddle" min="1" max="5" value="1" step="1" id="range-okoerper" data-key="okoerper" data-category="paddle">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Cardio-Basis</div>
+              <div class="scale-desc" id="desc-cardio"></div>
+            </div>
+            <div class="scale-value accent-paddle" id="val-cardio">1</div>
+          </div>
+          <input type="range" class="range-paddle" min="1" max="5" value="1" step="1" id="range-cardio" data-key="cardio" data-category="paddle">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+      </div>
+
+      <div class="garmin-toggle" id="garmin-toggle-paddle">
+        <div class="garmin-toggle-label"><strong>Garmin / Sportuhr</strong> — optionale Biodaten ergänzen</div>
+        <div class="toggle-switch" id="toggle-garmin-paddle"><div class="toggle-knob"></div></div>
+      </div>
+
+      <div class="garmin-fields" id="garmin-paddle">
+        <div class="garmin-grid">
+          <div class="garmin-field">
+            <label for="vo2max">VO2max (ml/kg/min)</label>
+            <input type="number" id="vo2max" placeholder="z.B. 42" min="20" max="90" />
+          </div>
+          <div class="garmin-field">
+            <label for="ruhe-hf">Ruheherzfrequenz (bpm)</label>
+            <input type="number" id="ruhe-hf" placeholder="z.B. 58" min="30" max="100" />
+          </div>
+          <div class="garmin-field">
+            <label for="hrv">HRV (ms)</label>
+            <input type="number" id="hrv" placeholder="z.B. 45" min="10" max="200" />
+          </div>
+          <div class="garmin-field">
+            <label for="body-battery">Body Battery (0–100)</label>
+            <input type="number" id="body-battery" placeholder="z.B. 72" min="0" max="100" />
+          </div>
+          <div class="garmin-field">
+            <label for="load">Wöch. Trainingsbelastung</label>
+            <input type="number" id="load" placeholder="z.B. 320" min="0" max="2000" />
+          </div>
+          <div class="garmin-field">
+            <label for="garmin-status">Trainingsstatus</label>
+            <select id="garmin-status">
+              <option value="">Auswählen</option>
+              <option>Unproduktiv</option>
+              <option>Basis</option>
+              <option>Aerob</option>
+              <option>Spitzenform</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-back" id="btn-3-back">← Zurück</button>
+        <button class="btn btn-next" id="btn-3-next">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: STATUS SURF STRENGTH -->
+    <div class="section" id="section-4">
+      <div class="section-header">
+        <div class="section-tag tag-strength">04 — Surf Strength</div>
+        <h2>Kraft & Pop-up</h2>
+        <p>Unterkörper-Stabilität und dein Pop-up-Stand.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span class="dot dot-strength">●</span> Selbsteinschätzung
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Pop-up</div>
+              <div class="scale-desc" id="desc-popup"></div>
+            </div>
+            <div class="scale-value accent-strength" id="val-popup">1</div>
+          </div>
+          <input type="range" class="range-strength" min="1" max="5" value="1" step="1" id="range-popup" data-key="popup" data-category="strength">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Unterkörper-Stabilität</div>
+              <div class="scale-desc" id="desc-stabilitaet"></div>
+            </div>
+            <div class="scale-value accent-strength" id="val-stabilitaet">1</div>
+          </div>
+          <input type="range" class="range-strength" min="1" max="5" value="1" step="1" id="range-stabilitaet" data-key="stabilitaet" data-category="strength">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-back" id="btn-4-back">← Zurück</button>
+        <button class="btn btn-next" id="btn-4-next">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: STABILITÄT & BEWEGLICHKEIT -->
+    <div class="section" id="section-5">
+      <div class="section-header">
+        <div class="section-tag tag-mobility">05 — Stabilität & Beweglichkeit</div>
+        <h2>Mobilität & Balance</h2>
+        <p>Wie beweglich und koordiniert bist du aktuell?</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span class="dot dot-mobility">●</span> Selbsteinschätzung
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Beweglichkeit</div>
+              <div class="scale-desc" id="desc-beweglichkeit"></div>
+            </div>
+            <div class="scale-value accent-mobility" id="val-beweglichkeit">1</div>
+          </div>
+          <input type="range" class="range-mobility" min="1" max="5" value="1" step="1" id="range-beweglichkeit" data-key="beweglichkeit" data-category="mobility">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Körpergefühl / Balance</div>
+              <div class="scale-desc" id="desc-balance"></div>
+            </div>
+            <div class="scale-value accent-mobility" id="val-balance">1</div>
+          </div>
+          <input type="range" class="range-mobility" min="1" max="5" value="1" step="1" id="range-balance" data-key="balance" data-category="mobility">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-back" id="btn-5-back">← Zurück</button>
+        <button class="btn btn-submit" id="btn-submit">Profil erstellen →</button>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="section" id="section-summary">
+      <div class="section-header">
+        <div class="section-tag tag-goal">✓ Profil erstellt</div>
+        <h2 id="summary-name">Dein Surf-Profil</h2>
+        <p id="summary-trip"></p>
+      </div>
+
+      <div class="sub-label">Persönliche Daten</div>
+      <div class="summary-grid" id="summary-personal"></div>
+
+      <div class="sub-label">Paddle Power</div>
+      <div id="summary-paddle"></div>
+
+      <div class="sub-label">Surf Strength</div>
+      <div id="summary-strength"></div>
+
+      <div class="sub-label">Stabilität & Beweglichkeit</div>
+      <div id="summary-mobility"></div>
+
+      <div class="summary-actions">
+        <button class="btn btn-export" id="btn-export">JSON exportieren ↓</button>
+        <button class="btn btn-back btn-full" id="btn-reset">← Neu eingeben</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="inputform.js"></script>
+</body>
+</html>

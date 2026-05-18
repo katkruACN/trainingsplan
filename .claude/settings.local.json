@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3)",
+      "Bash(ls -la /Users/katharina.kruczek/Desktop/ClaudeCode/fitness_Inputform/)",
+      "Read(//Users/katharina.kruczek/Desktop/ClaudeCode/fitness_Inputform/**)",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}
