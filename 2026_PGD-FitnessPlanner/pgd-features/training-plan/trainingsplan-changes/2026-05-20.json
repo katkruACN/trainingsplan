@@ -6,9 +6,898 @@
     "basedOn": "base",
     "changedBy": "Katharina (via Claude Code)",
     "trigger": "review",
-    "summary": "Strukturelle Änderungen: (1) Sportart 'Surfen' als drei Kategorien angelegt – surfen-eisbach, surfen-o2, surfen-jochen, alle Surf Strength (orange). (2) Kalender-Korrektur 2026: Wochen starten auf echten Montagen (11.5., 18.5., 25.5., 1.6., 8.6., 15.6.), Inhalte sind in den richtigen Wochentag-Slot gewandert. Diese Änderungen sind direkt in base.json eingebaut – daher hat dieser Snapshot keine unit-level changes."
+    "summary": "Strukturelle Änderungen: (1) Sportart 'Surfen' als drei Kategorien angelegt – surfen-eisbach, surfen-o2, surfen-jochen, alle Surf Strength (orange). (2) Kalender-Korrektur 2026: Wochen starten auf echten Montagen (11.5., 18.5., 25.5., 1.6., 8.6., 15.6.), Inhalte sind in den richtigen Wochentag-Slot gewandert. Diese Änderungen sind direkt in base.json eingebaut – daher hat dieser Snapshot keine unit-level changes.",
+    "updatedAt": "2026-05-20T15:34:34.434Z"
   },
-  "changes": [],
+  "changes": [
+    {
+      "id": "c1",
+      "unitId": "w0-d4-u0",
+      "field": "category",
+      "from": "mobility",
+      "to": "yoga",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c2",
+      "unitId": "w0-d4-u0",
+      "field": "title",
+      "from": "Ganzkörper-Mobilisation",
+      "to": "Yoga-Session",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c3",
+      "unitId": "w0-d4-u0",
+      "field": "duration",
+      "from": 20,
+      "to": 90,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c4",
+      "unitId": "w0-d6-u1",
+      "field": "removed",
+      "from": {
+        "unitId": "w0-d6-u1",
+        "category": "mobility",
+        "title": "Nach dem Rad",
+        "description": "Hüftbeuger & Schultern lösen.",
+        "detail": [
+          "Hip Flexor Stretch 45 sek/S",
+          "Schulter-Querstretch",
+          "Katze-Kuh 10×"
+        ],
+        "duration": 15,
+        "completed": false
+      },
+      "to": null,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c5",
+      "unitId": "w1-d0-u0",
+      "field": "category",
+      "from": "yoga",
+      "to": "hiit",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c6",
+      "unitId": "w1-d0-u0",
+      "field": "title",
+      "from": "Sanctuary buchen",
+      "to": "HIIT-Session",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c7",
+      "unitId": "w1-d0-u0",
+      "field": "duration",
+      "from": 0,
+      "to": 20,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c8",
+      "unitId": "w1-d0-u0",
+      "field": "detail",
+      "from": [],
+      "to": [
+        "Thread the Needle 10× je Seite",
+        "Doorway Chest Stretch 30 sek/S",
+        "Schulterblatt-Mobilisation an Wand"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c9",
+      "unitId": "w1-d1-u0",
+      "field": "category",
+      "from": "mobility",
+      "to": "yoga",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c10",
+      "unitId": "w1-d1-u0",
+      "field": "title",
+      "from": "Mobilisation",
+      "to": "Sanctuary Studio buchen",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c11",
+      "unitId": "w1-d1-u0",
+      "field": "duration",
+      "from": 20,
+      "to": 60,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c12",
+      "unitId": "w1-d1-u0",
+      "field": "detail",
+      "from": [
+        "Thread the Needle 10× je Seite",
+        "Doorway Chest Stretch 30 sek/S",
+        "Schulterblatt-Mobilisation an Wand"
+      ],
+      "to": [],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c13",
+      "unitId": "w1-d2-u0",
+      "field": "category",
+      "from": "yoga",
+      "to": "erholung",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c14",
+      "unitId": "w1-d2-u0",
+      "field": "title",
+      "from": "Sanctuary buchen – Fäden gezogen",
+      "to": "Aktive Erholung",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c15",
+      "unitId": "w1-d3-u0",
+      "field": "category",
+      "from": "erholung",
+      "to": "surfen-jochen",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c16",
+      "unitId": "w1-d3-u0",
+      "field": "title",
+      "from": "Erholung",
+      "to": "Surfen bei Jochen Schweizer",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c17",
+      "unitId": "w1-d3-u0",
+      "field": "duration",
+      "from": 0,
+      "to": 60,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c18",
+      "unitId": "w1-d4-u0",
+      "field": "category",
+      "from": "rad",
+      "to": "kraft-upper",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c19",
+      "unitId": "w1-d4-u0",
+      "field": "title",
+      "from": "Radfahren · Zone 1",
+      "to": "Krafttraining Oberkörper oder Paddeln in FM",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c20",
+      "unitId": "w1-d5-u0",
+      "field": "category",
+      "from": "mobility",
+      "to": "rad",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c21",
+      "unitId": "w1-d5-u0",
+      "field": "title",
+      "from": "Schulter + Hüfte vorbereiten",
+      "to": "Radfahren Ammersee",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c22",
+      "unitId": "w1-d5-u0",
+      "field": "duration",
+      "from": 25,
+      "to": 120,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c23",
+      "unitId": "w1-d6-u0",
+      "field": "category",
+      "from": "rad",
+      "to": "paddeln",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c24",
+      "unitId": "w1-d6-u0",
+      "field": "title",
+      "from": "Radfahren",
+      "to": "Paddel-Session / Nikita BBQ",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c25",
+      "unitId": "w1-d6-u1",
+      "field": "title",
+      "from": "Nach dem Rad",
+      "to": "Mobilisation",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c26",
+      "unitId": "w2-d0-u0",
+      "field": "category",
+      "from": "yoga",
+      "to": "rad",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c27",
+      "unitId": "w2-d0-u0",
+      "field": "title",
+      "from": "Sanctuary buchen",
+      "to": "Radfahren mit Dani",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c28",
+      "unitId": "w2-d0-u0",
+      "field": "duration",
+      "from": 0,
+      "to": 180,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c29",
+      "unitId": "w2-d1-u0",
+      "field": "title",
+      "from": "Kraft A – Oberkörper/Core (leicht)",
+      "to": "Kraft A – Oberkörper/Core (leicht) vor Mädelsabend",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c30",
+      "unitId": "w2-d2-u0",
+      "field": "category",
+      "from": "rad",
+      "to": "yoga",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c31",
+      "unitId": "w2-d2-u0",
+      "field": "title",
+      "from": "Radfahren · Zone 1–2",
+      "to": "Yoga-Session vor Office Tag",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c32",
+      "unitId": "w2-d2-u0",
+      "field": "duration",
+      "from": 45,
+      "to": 30,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c33",
+      "unitId": "w2-d3-u0",
+      "field": "title",
+      "from": "Erholung",
+      "to": "Aktive Erholung - Office / Ausstand Verena",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c34",
+      "unitId": "w2-d4-u0",
+      "field": "category",
+      "from": "paddeln",
+      "to": "kraft-lower",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c35",
+      "unitId": "w2-d4-u0",
+      "field": "title",
+      "from": "Erste Paddle-Session – 2 km",
+      "to": "Krafttraining Beine",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c36",
+      "unitId": "w2-d4-u0",
+      "field": "duration",
+      "from": 30,
+      "to": 25,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c37",
+      "unitId": "w2-d4-u0",
+      "field": "detail",
+      "from": [
+        "Warm-up: Armkreisen + Cobra 5 min an Land",
+        "Board-Position: Brust auf Mittelpunkt",
+        "Entspanntes gleichmäßiges Tempo",
+        "Pause wenn Schultern brennen",
+        "Cool-down: Cobra + Schulter dehnen"
+      ],
+      "to": [
+        "Schulter-Querstretch 45 sek/S",
+        "Doorway Chest Stretch",
+        "Thread the Needle (Thoraxrotation)"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c38",
+      "unitId": "w2-d5-u0",
+      "field": "category",
+      "from": "mobility",
+      "to": "paddeln",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c39",
+      "unitId": "w2-d5-u0",
+      "field": "title",
+      "from": "Schulter-Fokus",
+      "to": "Erste Paddle-Session – 2 km",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c40",
+      "unitId": "w2-d5-u0",
+      "field": "duration",
+      "from": 25,
+      "to": 30,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c41",
+      "unitId": "w2-d5-u0",
+      "field": "detail",
+      "from": [
+        "Schulter-Querstretch 45 sek/S",
+        "Doorway Chest Stretch",
+        "Thread the Needle (Thoraxrotation)"
+      ],
+      "to": [
+        "Warm-up: Armkreisen + Cobra 5 min an Land",
+        "Board-Position: Brust auf Mittelpunkt",
+        "Entspanntes gleichmäßiges Tempo",
+        "Pause wenn Schultern brennen",
+        "Cool-down: Cobra + Schulter dehnen"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c42",
+      "unitId": "w2-d6-u0",
+      "field": "category",
+      "from": "rad",
+      "to": "surfen-o2",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c43",
+      "unitId": "w2-d6-u0",
+      "field": "title",
+      "from": "Zone 2",
+      "to": "Surfen in o2 Surftown",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c44",
+      "unitId": "w2-d6-u0",
+      "field": "duration",
+      "from": 50,
+      "to": 60,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c45",
+      "unitId": "w2-d6-u1",
+      "field": "removed",
+      "from": {
+        "unitId": "w2-d6-u1",
+        "category": "kraft",
+        "title": "Kraft A – Schulter & Core",
+        "description": "Vollständige Einheit A.",
+        "detail": [
+          "Lat Pulldown 3×12",
+          "Seated Row 3×12",
+          "Push-ups 3×10 (3 sek runter)",
+          "Face Pulls 3×15",
+          "Pallof Press 3×10/S",
+          "Dead Bug 3×10/S"
+        ],
+        "duration": 55,
+        "completed": false
+      },
+      "to": null,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c46",
+      "unitId": "w3-d0-u0",
+      "field": "category",
+      "from": "paddeln",
+      "to": "kraft-upper",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c47",
+      "unitId": "w3-d0-u0",
+      "field": "title",
+      "from": "Paddeln 3 km",
+      "to": "Krafttraining Oberkörper",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c48",
+      "unitId": "w3-d0-u0",
+      "field": "duration",
+      "from": 40,
+      "to": 55,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c49",
+      "unitId": "w3-d0-u0",
+      "field": "detail",
+      "from": [
+        "Warm-up 5 min an Land",
+        "Catch-Phase: Arm weit vorne, hoher Ellenbogen",
+        "Rotation aus Schulter & Rumpf",
+        "2–3 kurze Pausen erlaubt"
+      ],
+      "to": [
+        "Lat Pulldown 3×12",
+        "Seated Cable Row 3×12",
+        "KH Schulterpress 3×10",
+        "Face Pulls 3×15",
+        "Push-ups 3×12 (3 sek runter)",
+        "Dead Bug 3×10/S"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c50",
+      "unitId": "w3-d0-u1",
+      "field": "removed",
+      "from": {
+        "unitId": "w3-d0-u1",
+        "category": "mobility",
+        "title": "Nach Paddeln",
+        "description": "Schultern & Brustwirbelsäule.",
+        "detail": [],
+        "duration": 20,
+        "completed": false
+      },
+      "to": null,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c51",
+      "unitId": "w3-d1-u0",
+      "field": "category",
+      "from": "kraft",
+      "to": "surfen-eisbach",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c52",
+      "unitId": "w3-d1-u0",
+      "field": "title",
+      "from": "Kraft A – Push/Pull Oberkörper",
+      "to": "Surfen am Eisbach",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c53",
+      "unitId": "w3-d1-u0",
+      "field": "duration",
+      "from": 55,
+      "to": 40,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c54",
+      "unitId": "w3-d1-u0",
+      "field": "detail",
+      "from": [
+        "Lat Pulldown 3×12",
+        "Seated Cable Row 3×12",
+        "KH Schulterpress 3×10",
+        "Face Pulls 3×15",
+        "Push-ups 3×12 (3 sek runter)",
+        "Dead Bug 3×10/S"
+      ],
+      "to": [
+        "Warm-up 5 min an Land",
+        "Catch-Phase: Arm weit vorne, hoher Ellenbogen",
+        "Rotation aus Schulter & Rumpf",
+        "2–3 kurze Pausen erlaubt"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c55",
+      "unitId": "w3-d2-u0",
+      "field": "removed",
+      "from": {
+        "unitId": "w3-d2-u0",
+        "category": "rad",
+        "title": "Zone 2",
+        "description": "Steady-State, keine Sprints. Kannst dich noch unterhalten.",
+        "detail": [],
+        "duration": 60,
+        "completed": false
+      },
+      "to": null,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c56",
+      "unitId": "w3-d3-u0",
+      "field": "category",
+      "from": "yoga",
+      "to": "paddeln",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c57",
+      "unitId": "w3-d3-u0",
+      "field": "title",
+      "from": "Sanctuary buchen",
+      "to": "Paddel-Session 4km - Feiertag",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c58",
+      "unitId": "w3-d5-u0",
+      "field": "category",
+      "from": "erholung",
+      "to": "surfen-o2",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c59",
+      "unitId": "w3-d5-u0",
+      "field": "title",
+      "from": "Vollständige Erholung",
+      "to": "Surfen in o2 Surftown",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c60",
+      "unitId": "w3-d6-u0",
+      "field": "category",
+      "from": "paddeln",
+      "to": "rad",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c61",
+      "unitId": "w3-d6-u0",
+      "field": "title",
+      "from": "Paddeln 4 km",
+      "to": "Zone 2",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c62",
+      "unitId": "w3-d6-u0",
+      "field": "duration",
+      "from": 50,
+      "to": 70,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c63",
+      "unitId": "w3-d6-u0",
+      "field": "detail",
+      "from": [
+        "Technik-Fokus: sauberer Catch, Rumpfrotation",
+        "Gleichmäßiges Tempo",
+        "Danach Schulter dehnen"
+      ],
+      "to": [],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c64",
+      "unitId": "w3-d6-u1",
+      "field": "removed",
+      "from": {
+        "unitId": "w3-d6-u1",
+        "category": "rad",
+        "title": "Zone 2",
+        "description": "Morgens paddeln, nachmittags Rad – oder mit 2h Pause.",
+        "detail": [],
+        "duration": 70,
+        "completed": false
+      },
+      "to": null,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c65",
+      "unitId": "w4-d3-u0",
+      "field": "category",
+      "from": "mobility",
+      "to": "surfen-jochen",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c66",
+      "unitId": "w4-d3-u0",
+      "field": "title",
+      "from": "Mobilisation",
+      "to": "Surfen bei Jochen Schweizer",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c67",
+      "unitId": "w4-d4-u0",
+      "field": "category",
+      "from": "hiit",
+      "to": "erholung",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c68",
+      "unitId": "w4-d4-u0",
+      "field": "title",
+      "from": "Limitlezz buchen",
+      "to": "Erholung",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c69",
+      "unitId": "w4-d5-u0",
+      "field": "category",
+      "from": "erholung",
+      "to": "rad",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c70",
+      "unitId": "w4-d5-u0",
+      "field": "title",
+      "from": "Erholung",
+      "to": "Zone 2/3 Mix",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c71",
+      "unitId": "w4-d5-u0",
+      "field": "duration",
+      "from": 0,
+      "to": 80,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c72",
+      "unitId": "w4-d5-u0",
+      "field": "detail",
+      "from": [],
+      "to": [
+        "0–30 min: Zone 2",
+        "30–50 min: 3–4 kurze Anstiege Zone 3",
+        "50–80 min: zurück Zone 2"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c73",
+      "unitId": "w4-d6-u0",
+      "field": "category",
+      "from": "rad",
+      "to": "kraft",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c74",
+      "unitId": "w4-d6-u0",
+      "field": "title",
+      "from": "Zone 2/3 Mix",
+      "to": "Kraft A – Oberkörper",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c75",
+      "unitId": "w4-d6-u0",
+      "field": "duration",
+      "from": 80,
+      "to": 55,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c76",
+      "unitId": "w4-d6-u0",
+      "field": "detail",
+      "from": [
+        "0–30 min: Zone 2",
+        "30–50 min: 3–4 kurze Anstiege Zone 3",
+        "50–80 min: zurück Zone 2"
+      ],
+      "to": [
+        "Lat Pulldown 3×12",
+        "Cable Row 3×12",
+        "Push-ups 3×15 (3 sek runter)",
+        "Face Pulls 3×15",
+        "Side Plank 3×40 sek/S",
+        "Kabelzug-Rotation 3×12/S"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c77",
+      "unitId": "w4-d6-u1",
+      "field": "removed",
+      "from": {
+        "unitId": "w4-d6-u1",
+        "category": "kraft",
+        "title": "Kraft A – Oberkörper",
+        "description": "Letzte vollständige Krafteinheit A.",
+        "detail": [
+          "Lat Pulldown 3×12",
+          "Cable Row 3×12",
+          "Push-ups 3×15 (3 sek runter)",
+          "Face Pulls 3×15",
+          "Side Plank 3×40 sek/S",
+          "Kabelzug-Rotation 3×12/S"
+        ],
+        "duration": 55,
+        "completed": false
+      },
+      "to": null,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c78",
+      "unitId": "w5-d1-u0",
+      "field": "category",
+      "from": "kraft",
+      "to": "mobility",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c79",
+      "unitId": "w5-d1-u0",
+      "field": "title",
+      "from": "Kraft C – Leicht & Erhalt",
+      "to": "Mobilisation",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c80",
+      "unitId": "w5-d1-u0",
+      "field": "duration",
+      "from": 35,
+      "to": 20,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c81",
+      "unitId": "w5-d1-u0",
+      "field": "detail",
+      "from": [
+        "Lat Pulldown 2×12 (leicht)",
+        "Face Pulls 2×15",
+        "Bulgarian Split Squat 2×8/S (Körpergewicht)",
+        "Dead Bug 2×10/S",
+        "Push-ups 2×10"
+      ],
+      "to": [],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c82",
+      "unitId": "w5-d1-u1",
+      "field": "category",
+      "from": "mobility",
+      "to": "rad",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c83",
+      "unitId": "w5-d1-u1",
+      "field": "title",
+      "from": "Mobilisation",
+      "to": "Lockere Radausfahrt · Zone 1",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c84",
+      "unitId": "w5-d1-u1",
+      "field": "duration",
+      "from": 20,
+      "to": 45,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c85",
+      "unitId": "w5-d2-u0",
+      "field": "category",
+      "from": "rad",
+      "to": "kraft",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c86",
+      "unitId": "w5-d2-u0",
+      "field": "title",
+      "from": "Lockere Radausfahrt · Zone 1",
+      "to": "Pop-up Training 2×10",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c87",
+      "unitId": "w5-d2-u0",
+      "field": "duration",
+      "from": 45,
+      "to": 10,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c88",
+      "unitId": "w5-d2-u0",
+      "field": "detail",
+      "from": [],
+      "to": [
+        "Liegend, Hände neben Brust",
+        "Explosiv hochdrücken, beide Beine gleichzeitig vorne",
+        "Ziel: unter 1 Sekunde",
+        "Stabiler Stand nach der Landung"
+      ],
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c89",
+      "unitId": "w5-d2-u1",
+      "field": "title",
+      "from": "Pop-up Training 2×10",
+      "to": "Kraft C – Leicht & Erhalt",
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c90",
+      "unitId": "w5-d2-u1",
+      "field": "duration",
+      "from": 10,
+      "to": 35,
+      "reason": "manual-edit-detected"
+    },
+    {
+      "id": "c91",
+      "unitId": "w5-d2-u1",
+      "field": "detail",
+      "from": [
+        "Liegend, Hände neben Brust",
+        "Explosiv hochdrücken, beide Beine gleichzeitig vorne",
+        "Ziel: unter 1 Sekunde",
+        "Stabiler Stand nach der Landung"
+      ],
+      "to": [
+        "Lat Pulldown 2×12 (leicht)",
+        "Face Pulls 2×15",
+        "Bulgarian Split Squat 2×8/S (Körpergewicht)",
+        "Dead Bug 2×10/S",
+        "Push-ups 2×10"
+      ],
+      "reason": "manual-edit-detected"
+    }
+  ],
   "delta": {
     "categoryShifts": {
       "mobility": 0,
@@ -28,9 +917,9 @@
       "surfen-jochen": 0,
       "erholung": 0
     },
-    "durationDeltaMin": 0,
+    "durationDeltaMin": 535,
     "unitsAdded": 0,
-    "unitsRemoved": 0
+    "unitsRemoved": 6
   },
   "goalImpact": {
     "overall": "positiv",
