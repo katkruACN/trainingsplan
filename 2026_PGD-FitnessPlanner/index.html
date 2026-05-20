@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDG - Surf Fitness Planner</title>
+  <link rel="stylesheet" href="shared/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-top">
+      <h1 class="phase-name">
+        <span class="phase-icon" aria-hidden="true">🏄</span>
+        PDG - Surf
+      </h1>
+      <div class="header-actions">
+        <button type="button" class="btn" id="fs-connect-btn" title="Mit trainingsplan-changes/ verbinden – base.json wird geladen, Edits speichern automatisch in den Tages-Snapshot.">Verzeichnis verbinden</button>
+        <a href="pgd-features/inputform/pgd-inputform.html" class="btn btn-primary">Meine Fitnessdaten</a>
+      </div>
+    </div>
+    <div class="fs-status off" id="fs-status">Verzeichnis nicht verbunden</div>
+
+    <div class="progress-section">
+      <div class="main-goal">
+        <div class="goal-header">
+          <div class="goal-title">Ziel: Gain Surf Power Malediven 2026</div>
+          <div class="goal-date">Bis 20.6.2026</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-label" id="progress-label">Noch keine Einheiten geplant</div>
+      </div>
+
+      <div class="sub-goals" id="sub-goals"></div>
+    </div>
+  </header>
+
+  <div class="week-tabs-wrapper">
+    <nav class="week-tabs" id="week-tabs"></nav>
+  </div>
+
+  <main class="week-view">
+    <div class="week-container">
+      <div class="week-header">
+        <div class="week-title-block">
+          <div class="week-eyebrow" id="week-eyebrow">Woche 1</div>
+          <h2 class="week-goal" id="week-goal">Wochenziel</h2>
+          <div class="week-progress" id="week-progress">0 / 0 Einheiten erledigt</div>
+        </div>
+      </div>
+      <div class="days-list" id="days-list"></div>
+    </div>
+  </main>
+
+  <dialog id="edit-dialog" class="edit-dialog">
+    <form id="edit-form" method="dialog">
+      <h2 id="edit-title">Einheit bearbeiten</h2>
+      <p class="edit-unit-title" id="edit-unit-title"></p>
+      <label>
+        Wochentag
+        <select name="weekday" required>
+          <option value="0">Montag</option>
+          <option value="1">Dienstag</option>
+          <option value="2">Mittwoch</option>
+          <option value="3">Donnerstag</option>
+          <option value="4">Freitag</option>
+          <option value="5">Samstag</option>
+          <option value="6">Sonntag</option>
+        </select>
+      </label>
+      <label>
+        Kategorie
+        <select name="category" required>
+          <option value="mobility">Mobility</option>
+          <option value="yoga">Yoga</option>
+          <option value="balance">Balance</option>
+          <option value="rad">Cardio Radfahren</option>
+          <option value="laufen">Cardio Laufen</option>
+          <option value="paddeln">Paddeln</option>
+          <option value="schwimmen">Schwimmen</option>
+          <option value="kraft">Kraft</option>
+          <option value="kraft-upper">Kraft Upper</option>
+          <option value="kraft-lower">Kraft Lower</option>
+          <option value="hiit">HIIT</option>
+          <option value="popup">Pop-up Training</option>
+          <option value="surfen-eisbach">Surfen Eisbach</option>
+          <option value="surfen-o2">Surfen o2 Surftown</option>
+          <option value="surfen-jochen">Surfen Jochen Schweizer</option>
+          <option value="erholung">Erholung</option>
+        </select>
+      </label>
+      <label>
+        Titel
+        <input type="text" name="title" placeholder="z. B. Mobilisation">
+      </label>
+      <label>
+        Dauer (Minuten)
+        <input type="number" name="duration" min="0" step="5" placeholder="z. B. 45">
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-danger" id="delete-btn">Löschen</button>
+        <button type="button" class="btn btn-secondary" id="cancel-btn">Abbrechen</button>
+        <button type="submit" class="btn btn-primary">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="pgd-features/training-plan/pgd-fitnessplan.js"></script>
+</body>
+</html>

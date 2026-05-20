@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "version": "2026-05-20",
+    "versionNumber": 1,
+    "createdAt": "2026-05-20",
+    "basedOn": "base",
+    "changedBy": "Katharina (via Claude Code)",
+    "trigger": "review",
+    "summary": "Strukturelle Änderungen: (1) Sportart 'Surfen' als drei Kategorien angelegt – surfen-eisbach, surfen-o2, surfen-jochen, alle Surf Strength (orange). (2) Kalender-Korrektur 2026: Wochen starten auf echten Montagen (11.5., 18.5., 25.5., 1.6., 8.6., 15.6.), Inhalte sind in den richtigen Wochentag-Slot gewandert. Diese Änderungen sind direkt in base.json eingebaut – daher hat dieser Snapshot keine unit-level changes."
+  },
+  "changes": [],
+  "delta": {
+    "categoryShifts": {
+      "mobility": 0,
+      "yoga": 0,
+      "balance": 0,
+      "rad": 0,
+      "laufen": 0,
+      "paddeln": 0,
+      "schwimmen": 0,
+      "kraft": 0,
+      "kraft-upper": 0,
+      "kraft-lower": 0,
+      "hiit": 0,
+      "popup": 0,
+      "surfen-eisbach": 0,
+      "surfen-o2": 0,
+      "surfen-jochen": 0,
+      "erholung": 0
+    },
+    "durationDeltaMin": 0,
+    "unitsAdded": 0,
+    "unitsRemoved": 0
+  },
+  "goalImpact": {
+    "overall": "positiv",
+    "paddlePower": {
+      "impact": "neutral",
+      "reason": "Keine Änderung an Paddle-, Cardio- oder Oberkörper-Einheiten.",
+      "score": "0"
+    },
+    "surfStrength": {
+      "impact": "positiv",
+      "reason": "Surfen ist jetzt eigene Kategorie statt nur Aktivität im Titel. Spot (Eisbach / o2 / Jochen Schweizer) kann direkt im Bearbeiten-Dialog gewählt werden – vereinfacht Planung und macht echtes Surfen im Trip-Ready-Score sichtbar.",
+      "score": "+1"
+    },
+    "mobility": {
+      "impact": "neutral",
+      "reason": "Keine Änderung an Mobility-, Yoga- oder Balance-Einheiten.",
+      "score": "0"
+    },
+    "riskFlags": [
+      {
+        "flag": "Surf-Kategorien existieren, werden aber von keiner geplanten Einheit verwendet",
+        "mitigation": "Im nächsten Schritt mindestens eine echte Surf-Einheit pro Woche (z. B. donnerstags 20–21 h Jochen Schweizer) zuordnen – wird dann als unit-level change in einem späteren Snapshot dokumentiert."
+      }
+    ],
+    "recommendation": "Plan ist jetzt kalendarisch korrekt (20. Mai = Mittwoch ✓, 20. Juni = Samstag ✓) und um Surf-Kategorien erweitert. Nächste Schritte: echte Surf-Einheiten einplanen."
+  }
+}

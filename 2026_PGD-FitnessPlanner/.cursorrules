@@ -1,0 +1,7 @@
+This is FitnessPlanner 2026 — a web app for creating training plans and tracking fitness progress.
+
+The developer is not a programmer. 
+Always explain changes in plain language. Show exactly which file to edit and what to change. 
+Never refactor without asking first.
+Stack: vanilla HTML, CSS, JavaScript. No frameworks, no build tools.
+Before starting any task: read CONTEXT.md for current project state. After completing a task: suggest a one-line commit message the developer can use in Cursor.

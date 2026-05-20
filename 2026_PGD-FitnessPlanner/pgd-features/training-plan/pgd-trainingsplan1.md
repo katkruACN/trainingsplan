@@ -60,14 +60,14 @@
   Spazieren 20–30 min. Kein Sport.
 
 ### Sa · 17. Mai
-- [ ] `PADDLE` **Klickies – erste Einheit 15–20 min**  
+- [ ] `PADDLE` **Radfahren – erste Einheit 15–20 min**  
   Flache Strecke, Zone 1. Fokus: sicheres Ein- und Ausklicken.  
   - Vorher: 10× Einklicken stehend an Wand üben
   - Nur bekannte flache Runde
   - Bei jedem Stopp bewusst ausklicken
   - Kein Hügel, keine Schnelligkeit
 
-- [ ] `MOBILITY` **Mobility nach Rad 15 min**  
+- [ ] `MOBILITY` **Mobility nach Radfahrt 15 min**  
   Hüftbeuger & Schultern lösen.  
   - Hip Flexor Stretch 45 sek/S
   - Schulter-Querstretch
@@ -103,7 +103,7 @@
 **Wochenziel 29–31 Mai:** Paddle-Distanz auf 3 km steigern. Rad auf 50 min Zone 2. Schultern am nächsten Tag: müde aber kein Kater.
 
 ### Do · 22. Mai
-- [ ] `PADDLE` **Klickies 20 min · Zone 1**  
+- [ ] `PADDLE` **Radfahren 20 min · Zone 1**  
   Flache Strecke. Klick-Reflex entwickeln.  
   - Kein Hügel
   - Tempo: locker, unterhalten möglich
@@ -118,7 +118,7 @@
   - Cobra-Stretch 5× halten 3 sek
 
 ### Sa · 24. Mai
-- [ ] `PADDLE` **Klickies 35 min**  
+- [ ] `PADDLE` **Radfahren 35 min**  
   Leicht hügeliger Weg ok. Klick-Gefühl wird besser.  
   - Zone 1–2
   - Ausklick-Reflex testen: kurz bremsen & sofort ausklicken
@@ -143,10 +143,8 @@
   - Dead Bug 2×8/S
 
 ### Di · 27. Mai
-- [ ] `PADDLE` **Klickies 45 min · Zone 1–2**  
-  Längere Ausfahrt. Klickies werden sicherer.  
-  - Trinkpause = Ausklick-Test
-  - Erste leichte Hügel ok wenn Reflex sitzt
+- [ ] `PADDLE` **Radfahren 45 min · Zone 1–2**  
+  Längere Ausfahrt. Training mit dem neuen Rad 
 
 ### Mi · 28. Mai
 - [ ] `REST` **Erholung**  

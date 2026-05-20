@@ -1,0 +1,338 @@
+{
+  "meta": {
+    "version": "base",
+    "schemaVersion": 4,
+    "createdAt": "2026-05-20",
+    "source": "pgd-fitnessplan.js · seedState() · schemaVersion 4",
+    "phaseName": "Malediven Surftrip · 20. Juni 2026",
+    "note": "Readonly. Nie überschreiben. Jede Änderung geht in versions/YYYY-MM-DD.json"
+  },
+  "constants": {
+    "storageKey": "trainingsplan-v2",
+    "numWeeks": 6,
+    "weekStartDates": ["2026-05-11","2026-05-18","2026-05-25","2026-06-01","2026-06-08","2026-06-15"],
+    "weekDateRanges": ["11. – 17. Mai","18. – 24. Mai","25. – 31. Mai","1. – 7. Juni","8. – 14. Juni","15. – 21. Juni"],
+    "weekPhaseNames": ["Slow Start","Get ready","Perform","Accelerate","Peak-Block","Tapering"],
+    "weekGoals": [
+      "Sanfter Wiedereinstieg nach OP — erste Rad-Runde",
+      "Langsamer Einstieg in Trainingsplan",
+      "Paddel-Distanz auf 3 km & erste Krafteinheiten",
+      "4 km Paddeln am Stück & HIIT-Start",
+      "5 km Paddeln ohne langen Stopp — Peak",
+      "Tapering & Abflug ✈️ Malediven 20. Juni"
+    ]
+  },
+  "categories": {
+    "mobility":        { "label": "Mobility",                  "subGoal": "mobility",    "location": { "place": "Zu Hause" } },
+    "yoga":            { "label": "Yoga",                      "subGoal": "mobility",    "location": { "place": "Sanctuary Studio", "note": "buchen, 60 min Session" } },
+    "balance":         { "label": "Balance",                   "subGoal": "mobility",    "location": { "place": "Zu Hause" } },
+    "rad":             { "label": "Cardio Radfahren",          "subGoal": "paddlePower", "location": { "place": "Draussen" } },
+    "laufen":          { "label": "Cardio Laufen",             "subGoal": "paddlePower", "location": { "place": "Draussen" } },
+    "paddeln":         { "label": "Paddeln",                   "subGoal": "paddlePower", "location": { "place": "Feldmoching", "note": "Anfahrt 25 min" } },
+    "schwimmen":       { "label": "Schwimmen",                 "subGoal": "paddlePower", "location": { "place": "Nordbad", "note": "Anfahrt 10 min" } },
+    "kraft":           { "label": "Kraft",                     "subGoal": "paddlePower", "location": { "place": "Leo's Fitness", "note": "Anfahrt 10 min" } },
+    "kraft-upper":     { "label": "Kraft Upper",               "subGoal": "paddlePower", "location": { "place": "Leo's Fitness", "note": "Anfahrt 10 min" } },
+    "kraft-lower":     { "label": "Kraft Lower",               "subGoal": "surfStrength","location": { "place": "Leo's Fitness", "note": "Anfahrt 10 min" } },
+    "hiit":            { "label": "HIIT",                      "subGoal": "surfStrength","location": { "place": "Limitlezz", "note": "buchen, 45 min Session" } },
+    "popup":           { "label": "Pop-up Training",           "subGoal": "surfStrength","location": { "place": "Zu Hause" } },
+    "surfen-eisbach":  { "label": "Surfen Eisbach",            "subGoal": "surfStrength","location": { "place": "Eisbach" } },
+    "surfen-o2":       { "label": "Surfen o2 Surftown",        "subGoal": "surfStrength","location": { "place": "o2 Surftown", "note": "buchen" } },
+    "surfen-jochen":   { "label": "Surfen Jochen Schweizer",   "subGoal": "surfStrength","location": { "place": "Jochen Schweizer", "note": "donnerstags 20–21 h" } },
+    "erholung":        { "label": "Erholung",                  "subGoal": null,          "location": null }
+  },
+  "subGoals": [
+    { "id": "paddlePower",  "title": "Paddel Power",              "categories": ["paddeln","schwimmen","rad","laufen","kraft-upper","kraft"] },
+    { "id": "surfStrength", "title": "Surf Strength",             "categories": ["hiit","kraft","kraft-lower","popup","surfen-eisbach","surfen-o2","surfen-jochen"] },
+    { "id": "mobility",     "title": "Stabilität & Beweglichkeit","categories": ["mobility","yoga","balance"] }
+  ],
+  "weeks": [
+    {
+      "weekIdx": 0,
+      "phase": "Slow Start",
+      "dateRange": "11. – 17. Mai",
+      "goal": "Sanfter Wiedereinstieg nach OP — erste Rad-Runde",
+      "days": [
+        { "dayIdx": 0, "weekday": "Mo", "date": "11. Mai",  "units": [] },
+        { "dayIdx": 1, "weekday": "Di", "date": "12. Mai",  "units": [] },
+        { "dayIdx": 2, "weekday": "Mi", "date": "13. Mai",  "units": [] },
+        { "dayIdx": 3, "weekday": "Do", "date": "14. Mai",  "units": [] },
+        {
+          "dayIdx": 4, "weekday": "Fr", "date": "15. Mai",
+          "units": [
+            { "unitId": "w0-d4-u0", "category": "mobility", "title": "Ganzkörper-Mobilisation", "description": "Sanft reaktivieren – kein Kardio, kein Schwitzen.", "detail": ["Katze-Kuh 10×","Thorax-Rotation 10× je Seite","Hip Circles 10× je Seite","Schulter-Querstretch 30 sek/S","Kind-Haltung 1 min"], "duration": 20, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 5, "weekday": "Sa", "date": "16. Mai",
+          "units": [
+            { "unitId": "w0-d5-u0", "category": "erholung", "title": "Aktive Erholung", "description": "Spazieren 20–30 min. Kein Sport.", "detail": [], "duration": 25, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 6, "weekday": "So", "date": "17. Mai",
+          "units": [
+            { "unitId": "w0-d6-u0", "category": "rad", "title": "Radfahren – erste Einheit", "description": "Flache Strecke, Zone 1. Sicherer Umgang mit den Pedalen.", "detail": ["Vorher: 10× Einklicken stehend an Wand üben","Nur bekannte flache Runde","Bei jedem Stopp bewusst ausklicken","Kein Hügel, keine Schnelligkeit"], "duration": 20, "completed": false },
+            { "unitId": "w0-d6-u1", "category": "mobility", "title": "Nach dem Rad", "description": "Hüftbeuger & Schultern lösen.", "detail": ["Hip Flexor Stretch 45 sek/S","Schulter-Querstretch","Katze-Kuh 10×"], "duration": 15, "completed": false }
+          ]
+        }
+      ]
+    },
+    {
+      "weekIdx": 1,
+      "phase": "Get ready",
+      "dateRange": "18. – 24. Mai",
+      "goal": "Langsamer Einstieg in Trainingsplan",
+      "days": [
+        {
+          "dayIdx": 0, "weekday": "Mo", "date": "18. Mai",
+          "units": [
+            { "unitId": "w1-d0-u0", "category": "yoga", "title": "Sanctuary buchen", "description": "Yin oder Hatha – kein Hot Yoga. Körper nach erster Rad-Runde erholen.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 1, "weekday": "Di", "date": "19. Mai",
+          "units": [
+            { "unitId": "w1-d1-u0", "category": "mobility", "title": "Mobilisation", "description": "Schulter & Brustwirbelsäule.", "detail": ["Thread the Needle 10× je Seite","Doorway Chest Stretch 30 sek/S","Schulterblatt-Mobilisation an Wand"], "duration": 20, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 2, "weekday": "Mi", "date": "20. Mai",
+          "units": [
+            { "unitId": "w1-d2-u0", "category": "yoga", "title": "Sanctuary buchen – Fäden gezogen", "description": "Sanfte Klasse, kein Vinyasa. Heute startet Phase 2.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 3, "weekday": "Do", "date": "21. Mai",
+          "units": [
+            { "unitId": "w1-d3-u0", "category": "erholung", "title": "Erholung", "description": "Spanisch + ruhiger Tag.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 4, "weekday": "Fr", "date": "22. Mai",
+          "units": [
+            { "unitId": "w1-d4-u0", "category": "rad", "title": "Radfahren · Zone 1", "description": "Flache Strecke. Routine entwickeln.", "detail": ["Kein Hügel","Tempo: locker, unterhalten möglich","Bei jedem Stopp ausklicken"], "duration": 20, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 5, "weekday": "Sa", "date": "23. Mai",
+          "units": [
+            { "unitId": "w1-d5-u0", "category": "mobility", "title": "Schulter + Hüfte vorbereiten", "description": "Mobility für Paddeln.", "detail": ["Pigeon Pose 1 min/S","World's Greatest Stretch 5×/S","90/90 Hip Stretch","Cobra-Stretch 5× halten 3 sek"], "duration": 25, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 6, "weekday": "So", "date": "24. Mai",
+          "units": [
+            { "unitId": "w1-d6-u0", "category": "rad", "title": "Radfahren", "description": "Leicht hügeliger Weg ok. Gefühl wird besser.", "detail": ["Zone 1–2","Ausklick-Reflex testen: kurz bremsen & sofort ausklicken"], "duration": 35, "completed": false },
+            { "unitId": "w1-d6-u1", "category": "mobility", "title": "Nach dem Rad", "description": "Hüftbeuger & Quad stretchen.", "detail": ["Hip Flexor Stretch 45 sek/S","Quad Stretch stehend","Pigeon Pose"], "duration": 15, "completed": false }
+          ]
+        }
+      ]
+    },
+    {
+      "weekIdx": 2,
+      "phase": "Perform",
+      "dateRange": "25. – 31. Mai",
+      "goal": "Paddel-Distanz auf 3 km & erste Krafteinheiten",
+      "days": [
+        {
+          "dayIdx": 0, "weekday": "Mo", "date": "25. Mai",
+          "units": [
+            { "unitId": "w2-d0-u0", "category": "yoga", "title": "Sanctuary buchen", "description": "Langsamerer Kurs – Atmung und Regeneration.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 1, "weekday": "Di", "date": "26. Mai",
+          "units": [
+            { "unitId": "w2-d1-u0", "category": "kraft", "title": "Kraft A – Oberkörper/Core (leicht)", "description": "Erste Krafteinheit. Technik sauber, Gewicht moderat.", "detail": ["Lat Pulldown 3×10 (leicht)","Seated Row 3×10","Push-ups 3×8 langsam (3 sek runter)","Face Pulls 3×12","Dead Bug 2×8/S"], "duration": 50, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 2, "weekday": "Mi", "date": "27. Mai",
+          "units": [
+            { "unitId": "w2-d2-u0", "category": "rad", "title": "Radfahren · Zone 1–2", "description": "Längere Ausfahrt, sicherer im Sattel.", "detail": ["Trinkpause = Ausklick-Test","Erste leichte Hügel ok wenn Reflex sitzt"], "duration": 45, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 3, "weekday": "Do", "date": "28. Mai",
+          "units": [
+            { "unitId": "w2-d3-u0", "category": "erholung", "title": "Erholung", "description": "Spanisch – kurzer Tag.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 4, "weekday": "Fr", "date": "29. Mai",
+          "units": [
+            { "unitId": "w2-d4-u0", "category": "paddeln", "title": "Erste Paddle-Session – 2 km", "description": "Erster Tag am See bei den Eltern!", "detail": ["Warm-up: Armkreisen + Cobra 5 min an Land","Board-Position: Brust auf Mittelpunkt","Entspanntes gleichmäßiges Tempo","Pause wenn Schultern brennen","Cool-down: Cobra + Schulter dehnen"], "duration": 30, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 5, "weekday": "Sa", "date": "30. Mai",
+          "units": [
+            { "unitId": "w2-d5-u0", "category": "mobility", "title": "Schulter-Fokus", "description": "Nach erster Paddle-Session regenerieren.", "detail": ["Schulter-Querstretch 45 sek/S","Doorway Chest Stretch","Thread the Needle (Thoraxrotation)"], "duration": 25, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 6, "weekday": "So", "date": "31. Mai",
+          "units": [
+            { "unitId": "w2-d6-u0", "category": "rad", "title": "Zone 2", "description": "Solide Zone-2-Ausfahrt.", "detail": [], "duration": 50, "completed": false },
+            { "unitId": "w2-d6-u1", "category": "kraft", "title": "Kraft A – Schulter & Core", "description": "Vollständige Einheit A.", "detail": ["Lat Pulldown 3×12","Seated Row 3×12","Push-ups 3×10 (3 sek runter)","Face Pulls 3×15","Pallof Press 3×10/S","Dead Bug 3×10/S"], "duration": 55, "completed": false }
+          ]
+        }
+      ]
+    },
+    {
+      "weekIdx": 3,
+      "phase": "Accelerate",
+      "dateRange": "1. – 7. Juni",
+      "goal": "4 km Paddeln am Stück & HIIT-Start",
+      "days": [
+        {
+          "dayIdx": 0, "weekday": "Mo", "date": "1. Juni",
+          "units": [
+            { "unitId": "w3-d0-u0", "category": "paddeln", "title": "Paddeln 3 km", "description": "Fokus: Rotation aus dem Rumpf, nicht nur Arme.", "detail": ["Warm-up 5 min an Land","Catch-Phase: Arm weit vorne, hoher Ellenbogen","Rotation aus Schulter & Rumpf","2–3 kurze Pausen erlaubt"], "duration": 40, "completed": false },
+            { "unitId": "w3-d0-u1", "category": "mobility", "title": "Nach Paddeln", "description": "Schultern & Brustwirbelsäule.", "detail": [], "duration": 20, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 1, "weekday": "Di", "date": "2. Juni",
+          "units": [
+            { "unitId": "w3-d1-u0", "category": "kraft", "title": "Kraft A – Push/Pull Oberkörper", "description": "Vollständige Einheit A.", "detail": ["Lat Pulldown 3×12","Seated Cable Row 3×12","KH Schulterpress 3×10","Face Pulls 3×15","Push-ups 3×12 (3 sek runter)","Dead Bug 3×10/S"], "duration": 55, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 2, "weekday": "Mi", "date": "3. Juni",
+          "units": [
+            { "unitId": "w3-d2-u0", "category": "rad", "title": "Zone 2", "description": "Steady-State, keine Sprints. Kannst dich noch unterhalten.", "detail": [], "duration": 60, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 3, "weekday": "Do", "date": "4. Juni",
+          "units": [
+            { "unitId": "w3-d3-u0", "category": "yoga", "title": "Sanctuary buchen", "description": "Spanisch-Tag → kurze Einheit.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 4, "weekday": "Fr", "date": "5. Juni",
+          "units": [
+            { "unitId": "w3-d4-u0", "category": "hiit", "title": "Limitlezz buchen", "description": "Erste HIIT-Session seit OP.", "detail": ["Trainer kurz über OP informieren","Intensität moderat starten","Kein Kopfunter bei Übungen"], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 5, "weekday": "Sa", "date": "6. Juni",
+          "units": [
+            { "unitId": "w3-d5-u0", "category": "erholung", "title": "Vollständige Erholung", "description": "Nach HIIT regenerieren.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 6, "weekday": "So", "date": "7. Juni",
+          "units": [
+            { "unitId": "w3-d6-u0", "category": "paddeln", "title": "Paddeln 4 km", "description": "Großer Sonntag am See.", "detail": ["Technik-Fokus: sauberer Catch, Rumpfrotation","Gleichmäßiges Tempo","Danach Schulter dehnen"], "duration": 50, "completed": false },
+            { "unitId": "w3-d6-u1", "category": "rad", "title": "Zone 2", "description": "Morgens paddeln, nachmittags Rad – oder mit 2h Pause.", "detail": [], "duration": 70, "completed": false }
+          ]
+        }
+      ]
+    },
+    {
+      "weekIdx": 4,
+      "phase": "Peak-Block",
+      "dateRange": "8. – 14. Juni",
+      "goal": "5 km Paddeln ohne langen Stopp — Peak",
+      "days": [
+        {
+          "dayIdx": 0, "weekday": "Mo", "date": "8. Juni",
+          "units": [
+            { "unitId": "w4-d0-u0", "category": "yoga", "title": "Sanctuary buchen", "description": "Nach großem Sonntag sanft erholen.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 1, "weekday": "Di", "date": "9. Juni",
+          "units": [
+            { "unitId": "w4-d1-u0", "category": "kraft", "title": "Kraft B – Beine & Core Rotation", "description": "Surf-Stabilität aufbauen.", "detail": ["Bulgarian Split Squat 3×10/S (6–8 kg)","Romanian Deadlift 3×10","Pallof Press 3×12/S","Kabelzug-Rotation 3×12/S","Side Plank + Hip Dip 3×10/S","Single Leg RDL 2×8/S"], "duration": 55, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 2, "weekday": "Mi", "date": "10. Juni",
+          "units": [
+            { "unitId": "w4-d2-u0", "category": "paddeln", "title": "Paddeln 5 km", "description": "Peak-Distanz! Langer Mittwoch am See.", "detail": ["Das ist das Hauptziel der ganzen Vorbereitung","Technik-Check: Rotation aus Rumpf","3–4 kurze Pausen erlaubt","Schulter am nächsten Tag: müde aber kein Kater = Ziel erreicht ✓"], "duration": 60, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 3, "weekday": "Do", "date": "11. Juni",
+          "units": [
+            { "unitId": "w4-d3-u0", "category": "mobility", "title": "Mobilisation", "description": "Spanisch → nur kurze Einheit.", "detail": [], "duration": 20, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 4, "weekday": "Fr", "date": "12. Juni",
+          "units": [
+            { "unitId": "w4-d4-u0", "category": "hiit", "title": "Limitlezz buchen", "description": "Zweite HIIT-Session. Intensität kann höher als beim ersten Mal.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 5, "weekday": "Sa", "date": "13. Juni",
+          "units": [
+            { "unitId": "w4-d5-u0", "category": "erholung", "title": "Erholung", "description": "Letzte richtige Ruheeinheit.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 6, "weekday": "So", "date": "14. Juni",
+          "units": [
+            { "unitId": "w4-d6-u0", "category": "rad", "title": "Zone 2/3 Mix", "description": "Letzte große Radeinheit.", "detail": ["0–30 min: Zone 2","30–50 min: 3–4 kurze Anstiege Zone 3","50–80 min: zurück Zone 2"], "duration": 80, "completed": false },
+            { "unitId": "w4-d6-u1", "category": "kraft", "title": "Kraft A – Oberkörper", "description": "Letzte vollständige Krafteinheit A.", "detail": ["Lat Pulldown 3×12","Cable Row 3×12","Push-ups 3×15 (3 sek runter)","Face Pulls 3×15","Side Plank 3×40 sek/S","Kabelzug-Rotation 3×12/S"], "duration": 55, "completed": false }
+          ]
+        }
+      ]
+    },
+    {
+      "weekIdx": 5,
+      "phase": "Tapering",
+      "dateRange": "15. – 21. Juni",
+      "goal": "Tapering & Abflug ✈️ Malediven 20. Juni",
+      "days": [
+        {
+          "dayIdx": 0, "weekday": "Mo", "date": "15. Juni",
+          "units": [
+            { "unitId": "w5-d0-u0", "category": "paddeln", "title": "Letzte große Paddle-Session – 5–6 km", "description": "Das ist dein Peak. Alles zusammenbringen.", "detail": ["Technik-Checkliste vorher durchgehen","Eigenes Tempo, kein Druck","Danach: feiern! 🎉"], "duration": 70, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 1, "weekday": "Di", "date": "16. Juni",
+          "units": [
+            { "unitId": "w5-d1-u0", "category": "kraft", "title": "Kraft C – Leicht & Erhalt", "description": "Tapering: 2 Sätze je Übung, Gewicht −20%.", "detail": ["Lat Pulldown 2×12 (leicht)","Face Pulls 2×15","Bulgarian Split Squat 2×8/S (Körpergewicht)","Dead Bug 2×10/S","Push-ups 2×10"], "duration": 35, "completed": false },
+            { "unitId": "w5-d1-u1", "category": "mobility", "title": "Mobilisation", "description": "Hüfte, Schultern, Thorax öffnen.", "detail": [], "duration": 20, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 2, "weekday": "Mi", "date": "17. Juni",
+          "units": [
+            { "unitId": "w5-d2-u0", "category": "rad", "title": "Lockere Radausfahrt · Zone 1", "description": "Beine drehen, nicht belasten. Kein Hügel.", "detail": [], "duration": 45, "completed": false },
+            { "unitId": "w5-d2-u1", "category": "kraft", "title": "Pop-up Training 2×10", "description": "Täglich bis zum Abflug: 10× explosiv auf dem Wohnzimmerboden.", "detail": ["Liegend, Hände neben Brust","Explosiv hochdrücken, beide Beine gleichzeitig vorne","Ziel: unter 1 Sekunde","Stabiler Stand nach der Landung"], "duration": 10, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 3, "weekday": "Do", "date": "18. Juni",
+          "units": [
+            { "unitId": "w5-d3-u0", "category": "yoga", "title": "Sanctuary buchen – Yin", "description": "Letzte Yoga-Einheit. Lange Haltungen, tief einatmen.", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 4, "weekday": "Fr", "date": "19. Juni",
+          "units": [
+            { "unitId": "w5-d4-u0", "category": "mobility", "title": "Packtag", "description": "Kurz mobilisieren, dann Koffer packen.", "detail": ["Schulter-Kreisen","Pigeon Pose 1 min/S","Cobra-Stretch 5×"], "duration": 15, "completed": false },
+            { "unitId": "w5-d4-u1", "category": "kraft", "title": "Pop-up Training 2×10", "description": "Letzte Einheit vor dem Abflug. Explosiv & sauber.", "detail": [], "duration": 10, "completed": false },
+            { "unitId": "w5-d4-u2", "category": "erholung", "title": "Früh ins Bett", "description": "Morgen geht's los. 🌊", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 5, "weekday": "Sa", "date": "20. Juni 🏄",
+          "units": [
+            { "unitId": "w5-d5-u0", "category": "erholung", "title": "✈️ Abflug Malediven", "description": "Du hast alles gegeben. Zeit die Wellen zu reiten!", "detail": [], "duration": 0, "completed": false }
+          ]
+        },
+        {
+          "dayIdx": 6, "weekday": "So", "date": "21. Juni",
+          "units": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDG - Surf Profil</title>
+  <link rel="stylesheet" href="../../shared/styles.css">
+</head>
+<body class="form-page">
+
+  <div class="header">
+    <div class="header-eyebrow"><a href="../../index.html">← Zurück zum Plan</a></div>
+    <h1>Dein persönliches Profil</h1>
+    <p>Definiere dein Ziel und deinen aktuellen Stand – damit der Trainingsplan genau auf dich passt.</p>
+  </div>
+
+  <!-- ============================================
+       ABSCHNITT 1: FITNESS STATUS
+       ============================================ -->
+  <section class="page-section" id="page-status">
+    <div class="page-section-header">
+      <div class="page-section-eyebrow">01 — Fitness Status</div>
+      <h2>Wo stehst du heute?</h2>
+      <p>Persönliche Daten, Trip-Ziel und deine Selbsteinschätzung.</p>
+    </div>
+
+    <!-- VIEW MODE (Read-only Darstellung) -->
+    <div class="status-view" id="status-view" hidden>
+      <div class="status-view-grid" id="status-view-grid"></div>
+      <div class="nav-bar">
+        <button class="btn btn-export" id="btn-export-view">JSON exportieren ↓</button>
+        <button class="btn btn-submit" id="btn-edit">Anpassen ✎</button>
+      </div>
+    </div>
+
+    <!-- EDIT MODE (Eingabe) -->
+    <div class="main status-edit" id="status-edit">
+
+      <!-- Persönliche Daten -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-personal">Persönliche Daten</span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="name">Name</label>
+          <input type="text" id="name" placeholder="Dein Name" autocomplete="given-name" />
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="alter">Alter</label>
+            <input type="number" id="alter" placeholder="z.B. 32" min="16" max="80" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="geschlecht">Geschlecht</label>
+            <select id="geschlecht">
+              <option value="">Auswählen</option>
+              <option value="w">Weiblich</option>
+              <option value="m">Männlich</option>
+              <option value="d">Divers</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="groesse">Größe (cm)</label>
+            <input type="number" id="groesse" placeholder="z.B. 168" min="140" max="220" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="gewicht">Gewicht (kg)</label>
+            <input type="number" id="gewicht" placeholder="z.B. 54" min="40" max="150" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Trainingserfahrung</label>
+          <div class="level-group">
+            <button class="level-btn" data-group="training" data-value="anfaenger">
+              Anfänger<div class="level-sub">sporadisch</div>
+            </button>
+            <button class="level-btn" data-group="training" data-value="intermediate">
+              Intermediate<div class="level-sub">2–3× /Wo</div>
+            </button>
+            <button class="level-btn" data-group="training" data-value="advanced">
+              Advanced<div class="level-sub">4–5× /Wo</div>
+            </button>
+            <button class="level-btn" data-group="training" data-value="pro">
+              Pro<div class="level-sub">athletisch</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Surf-Level</label>
+          <div class="level-group">
+            <button class="level-btn" data-group="surf" data-value="anfaenger">
+              Anfänger<div class="level-sub">stehe selten</div>
+            </button>
+            <button class="level-btn" data-group="surf" data-value="intermediate">
+              Intermediate<div class="level-sub">stehe regelmäßig</div>
+            </button>
+            <button class="level-btn" data-group="surf" data-value="advanced">
+              Advanced<div class="level-sub">lese Wellen</div>
+            </button>
+            <button class="level-btn" data-group="surf" data-value="pro">
+              Pro<div class="level-sub">auch große Wellen</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zieldefinition -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-goal">Zieldefinition</span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="trip-datum">Trip-Datum</label>
+          <input type="date" id="trip-datum" />
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="surf-tage">Surf-Tage am Stück</label>
+            <input type="number" id="surf-tage" placeholder="z.B. 7" min="1" max="30" />
+            <div class="field-hint">Wie viele Tage willst du aktiv surfen?</div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="surf-stunden">Stunden pro Tag</label>
+            <input type="number" id="surf-stunden" placeholder="z.B. 4" min="1" max="10" step="0.5" />
+            <div class="field-hint">Aktive Surf-Zeit täglich</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paddle Power -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-paddle">Paddle Power</span>
+          <span class="block-hint">Ausdauer, Oberkörperkraft, Cardio</span>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Paddelausdauer</div>
+              <div class="scale-desc" id="desc-paddelausdauer"></div>
+            </div>
+            <div class="scale-value accent-paddle" id="val-paddelausdauer">1</div>
+          </div>
+          <input type="range" class="range-paddle" min="1" max="5" value="1" step="1" id="range-paddelausdauer" data-key="paddelausdauer" data-category="paddle">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Oberkörperkraft</div>
+              <div class="scale-desc" id="desc-okoerper"></div>
+            </div>
+            <div class="scale-value accent-paddle" id="val-okoerper">1</div>
+          </div>
+          <input type="range" class="range-paddle" min="1" max="5" value="1" step="1" id="range-okoerper" data-key="okoerper" data-category="paddle">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Cardio-Basis</div>
+              <div class="scale-desc" id="desc-cardio"></div>
+            </div>
+            <div class="scale-value accent-paddle" id="val-cardio">1</div>
+          </div>
+          <input type="range" class="range-paddle" min="1" max="5" value="1" step="1" id="range-cardio" data-key="cardio" data-category="paddle">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+      </div>
+
+      <!-- Surf Strength -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-strength">Surf Strength</span>
+          <span class="block-hint">Pop-up & Stabilität</span>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Pop-up</div>
+              <div class="scale-desc" id="desc-popup"></div>
+            </div>
+            <div class="scale-value accent-strength" id="val-popup">1</div>
+          </div>
+          <input type="range" class="range-strength" min="1" max="5" value="1" step="1" id="range-popup" data-key="popup" data-category="strength">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Unterkörper-Stabilität</div>
+              <div class="scale-desc" id="desc-stabilitaet"></div>
+            </div>
+            <div class="scale-value accent-strength" id="val-stabilitaet">1</div>
+          </div>
+          <input type="range" class="range-strength" min="1" max="5" value="1" step="1" id="range-stabilitaet" data-key="stabilitaet" data-category="strength">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+      </div>
+
+      <!-- Mobility -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-mobility">Stabilität & Beweglichkeit</span>
+          <span class="block-hint">Mobility & Balance</span>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Beweglichkeit</div>
+              <div class="scale-desc" id="desc-beweglichkeit"></div>
+            </div>
+            <div class="scale-value accent-mobility" id="val-beweglichkeit">1</div>
+          </div>
+          <input type="range" class="range-mobility" min="1" max="5" value="1" step="1" id="range-beweglichkeit" data-key="beweglichkeit" data-category="mobility">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+
+        <div class="scale-field">
+          <div class="scale-header">
+            <div>
+              <div class="scale-name">Körpergefühl / Balance</div>
+              <div class="scale-desc" id="desc-balance"></div>
+            </div>
+            <div class="scale-value accent-mobility" id="val-balance">1</div>
+          </div>
+          <input type="range" class="range-mobility" min="1" max="5" value="1" step="1" id="range-balance" data-key="balance" data-category="mobility">
+          <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+      </div>
+
+      <!-- Garmin (optional) -->
+      <div class="status-block">
+        <div class="garmin-toggle" id="garmin-toggle-paddle">
+          <div class="garmin-toggle-label"><strong>Garmin / Sportuhr</strong> — optionale Biodaten ergänzen</div>
+          <div class="toggle-switch" id="toggle-garmin-paddle"><div class="toggle-knob"></div></div>
+        </div>
+
+        <div class="garmin-fields" id="garmin-paddle">
+          <div class="garmin-grid">
+            <div class="garmin-field">
+              <label for="vo2max">VO2max (ml/kg/min)</label>
+              <input type="number" id="vo2max" placeholder="z.B. 42" min="20" max="90" />
+            </div>
+            <div class="garmin-field">
+              <label for="ruhe-hf">Ruheherzfrequenz (bpm)</label>
+              <input type="number" id="ruhe-hf" placeholder="z.B. 58" min="30" max="100" />
+            </div>
+            <div class="garmin-field">
+              <label for="hrv">HRV (ms)</label>
+              <input type="number" id="hrv" placeholder="z.B. 45" min="10" max="200" />
+            </div>
+            <div class="garmin-field">
+              <label for="body-battery">Body Battery (0–100)</label>
+              <input type="number" id="body-battery" placeholder="z.B. 72" min="0" max="100" />
+            </div>
+            <div class="garmin-field">
+              <label for="load">Wöch. Trainingsbelastung</label>
+              <input type="number" id="load" placeholder="z.B. 320" min="0" max="2000" />
+            </div>
+            <div class="garmin-field">
+              <label for="garmin-status">Trainingsstatus</label>
+              <select id="garmin-status">
+                <option value="">Auswählen</option>
+                <option>Unproduktiv</option>
+                <option>Basis</option>
+                <option>Aerob</option>
+                <option>Spitzenform</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-export" id="btn-export">JSON exportieren ↓</button>
+        <button class="btn btn-submit" id="btn-submit">Profil speichern →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       ABSCHNITT 2: ZIELE
+       ============================================ -->
+  <section class="page-section" id="page-goals">
+    <div class="page-section-header">
+      <div class="page-section-eyebrow">02 — Ziele</div>
+      <h2>Was du bis zum Trip steigern willst</h2>
+      <p>Basierend auf deiner Selbsteinschätzung — Benchmarks pro Zielkategorie.</p>
+    </div>
+
+    <div class="goals-grid" id="goals-grid">
+      <!-- Goal cards rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ============================================
+       ABSCHNITT 3: TRAININGSPLAN
+       ============================================ -->
+  <section class="page-section" id="page-plan">
+    <div class="page-section-header">
+      <div class="page-section-eyebrow">03 — Trainingsplan</div>
+      <h2>6-Wochen-Übersicht</h2>
+      <p>Aufbau bis zum Trip — Kategorien sind farblich markiert.</p>
+    </div>
+
+    <div class="plan-overview" id="plan-overview">
+      <!-- Plan rows rendered by JS -->
+    </div>
+  </section>
+
+  <script src="pgd-inputform.js"></script>
+</body>
+</html>
