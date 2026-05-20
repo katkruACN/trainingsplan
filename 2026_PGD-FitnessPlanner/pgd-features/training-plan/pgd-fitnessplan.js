@@ -66,6 +66,172 @@ const CATEGORY_DEFAULT_TITLES = {
   erholung: 'Aktive Erholung'
 };
 
+// Vorschlags-Templates aus pgd-trainingsplan1.md – werden beim Kategorie-Wechsel ins Detail-Feld geladen
+const KRAFT_TEMPLATES = {
+  A: {
+    title: 'Kraft A – Oberkörper/Core',
+    details: [
+      'Lat Pulldown (Untergriff) 3×12 – Schulterblätter zusammenziehen',
+      'Seated Cable Row 3×12 – Ellenbogen eng, Brust vorne',
+      'KH Schulterpress 3×10 – Neutral grip',
+      'Face Pulls (Kabel) 3×15',
+      'Push-ups (3 sek runter) 3×10–15 – Hüfte gerade',
+      'Dead Bug 3×10/S',
+      'Pallof Press 3×12/S'
+    ]
+  },
+  B: {
+    title: 'Kraft B – Beine & Core Rotation',
+    details: [
+      'Bulgarian Split Squat 3×10/S (6–8 kg)',
+      'Romanian Deadlift 3×10 – hüftdominant, keine runde WS',
+      'Pallof Press 3×12/S – Anti-Rotation',
+      'Kabelzug-Rotation 3×12/S – Rotation aus Hüfte',
+      'Side Plank + Hip Dip 3×10/S',
+      'Single Leg RDL 2×8/S – Balance vor Gewicht'
+    ]
+  },
+  C: {
+    title: 'Kraft C – Leicht & Erhalt',
+    details: [
+      'Lat Pulldown 2×12 (Gewicht −20%)',
+      'Face Pulls 2×15 – kontrolliert',
+      'Bulgarian Split Squat 2×8/S (nur Körpergewicht)',
+      'Dead Bug 2×10/S – sauber',
+      'Push-ups 2×10 – langsam'
+    ]
+  }
+};
+
+function suggestKraftVariant() {
+  // Tapering-Phase (Woche 6) → C
+  if (currentWeek === 5) return 'C';
+  // Letzte abgeschlossene Kraft-Einheit suchen → die andere vorschlagen
+  let last = null;
+  for (let w = state.weeks.length - 1; w >= 0 && !last; w--) {
+    const days = state.weeks[w].days;
+    for (let d = days.length - 1; d >= 0 && !last; d--) {
+      const units = days[d].units;
+      for (let u = units.length - 1; u >= 0; u--) {
+        const unit = units[u];
+        if (!unit.completed) continue;
+        if (!['kraft', 'kraft-upper', 'kraft-lower'].includes(unit.category)) continue;
+        const t = (unit.title || '').toLowerCase();
+        if (t.includes('kraft a')) { last = 'A'; break; }
+        if (t.includes('kraft b')) { last = 'B'; break; }
+        if (t.includes('kraft c')) { last = 'C'; break; }
+        if (unit.category === 'kraft-lower' || t.includes('bein') || t.includes('lower')) { last = 'B'; break; }
+        last = 'A';
+        break;
+      }
+    }
+  }
+  if (last === 'A') return 'B';
+  if (last === 'B') return 'A';
+  if (last === 'C') return 'C';
+  return 'A'; // Noch nichts erledigt → mit A starten
+}
+
+function suggestTitleAndDetails(category, currentTitle) {
+  const t = (currentTitle || '').toLowerCase();
+
+  // Kraft mit Progression-Awareness
+  if (category === 'kraft' || category === 'kraft-upper' || category === 'kraft-lower') {
+    let variant;
+    if (t.includes('kraft c') || t.includes('tapering') || t.includes('erhalt')) variant = 'C';
+    else if (t.includes('kraft b') || t.includes('bein') || category === 'kraft-lower') variant = 'B';
+    else if (t.includes('kraft a') || t.includes('oberkörper') || category === 'kraft-upper') variant = 'A';
+    else variant = suggestKraftVariant();
+    const tpl = KRAFT_TEMPLATES[variant];
+    return { title: tpl.title, details: [...tpl.details] };
+  }
+
+  if (category === 'popup') {
+    return {
+      title: 'Pop-up Training 2×10',
+      details: [
+        'Liegend, Hände neben Brust',
+        'Explosiv hochdrücken, beide Beine gleichzeitig vorne',
+        'Ziel: unter 1 Sekunde',
+        'Stabiler Stand nach der Landung'
+      ]
+    };
+  }
+
+  if (category === 'paddeln') {
+    return {
+      title: CATEGORY_DEFAULT_TITLES.paddeln || 'Paddel-Session',
+      details: [
+        'Warm-up 5 min an Land (Armkreisen + Cobra)',
+        'Catch-Phase: Arm weit vorne, hoher Ellenbogen',
+        'Rotation aus Schulter & Rumpf',
+        '2–3 kurze Pausen erlaubt',
+        'Cool-down: Cobra + Schulter dehnen'
+      ]
+    };
+  }
+
+  if (category === 'mobility') {
+    if (t.includes('schulter')) return { title: 'Mobility – Schulter-Fokus', details: ['Schulter-Querstretch 45 sek/S', 'Doorway Chest Stretch', 'Thread the Needle (Thoraxrotation)'] };
+    if (t.includes('hüft') || t.includes('huft')) return { title: 'Mobility – Hüfte', details: ['Hip Flexor Stretch 45 sek/S', 'Pigeon Pose 1 min/S', '90/90 Hip Stretch'] };
+    if (t.includes('pack')) return { title: 'Packtag-Mobility', details: ['Schulter-Kreisen', 'Pigeon Pose 1 min/S', 'Cobra-Stretch 5×'] };
+    return {
+      title: CATEGORY_DEFAULT_TITLES.mobility || 'Mobilisation',
+      details: [
+        'Katze-Kuh 10×',
+        'Thorax-Rotation 10× je Seite',
+        'Hip Circles 10× je Seite',
+        'Schulter-Querstretch 30 sek/S',
+        'Kind-Haltung 1 min'
+      ]
+    };
+  }
+
+  if (category === 'yoga') {
+    if (t.includes('yin')) return { title: 'Yoga Yin', details: ['Lange Haltungen (3–5 min)', 'Tief einatmen', 'Pigeon, Sphinx, Reclined Twist'] };
+    return { title: 'Yoga (Sanctuary) buchen', details: [] };
+  }
+
+  if (category === 'balance') {
+    return { title: 'Balance-Training', details: ['Single Leg Balance 30 sek je Bein', 'Steigerung: Augen zu', 'Surf-Board-Simulation auf Bosu-Ball'] };
+  }
+
+  if (category === 'rad') {
+    if (t.includes('zone 2/3') || t.includes('mix')) return { title: 'Rad · Zone 2/3 Mix', details: ['0–30 min: Zone 2', '30–50 min: 3–4 kurze Anstiege Zone 3', '50–80 min: zurück Zone 2'] };
+    if (t.includes('zone 1')) return { title: 'Rad · Zone 1', details: ['Flache Strecke', 'Tempo: locker, unterhalten möglich', 'Bei Stopp ausklicken'] };
+    return { title: CATEGORY_DEFAULT_TITLES.rad || 'Radfahren Zone 2', details: ['Zone 2 steady', 'Kannst dich noch unterhalten'] };
+  }
+
+  if (category === 'laufen') {
+    return { title: 'Lauftraining', details: ['Lockere Strecke', 'Zone 2 – nasal atmen möglich'] };
+  }
+
+  if (category === 'schwimmen') {
+    return { title: 'Schwimmtraining', details: ['Brust + Kraul im Wechsel', 'Gleichmäßiges Tempo', '50 m Pausen-Schwimmen zwischen Sätzen'] };
+  }
+
+  if (category === 'hiit') {
+    return {
+      title: 'HIIT (Limitlezz) buchen',
+      details: [
+        'Limitlezz – 45 min Session',
+        'Intensität nach Tagesform',
+        'Kein Kopfunter bei Übungen (post-OP)'
+      ]
+    };
+  }
+
+  if (category === 'surfen-eisbach') return { title: 'Surfen am Eisbach', details: ['Wartezeit beachten', 'Pop-up vorher trocken üben', 'Take-off: schnell + stabil'] };
+  if (category === 'surfen-o2') return { title: 'Surfen in o2 Surftown', details: ['Vorab buchen', '60 min Slot', 'Pop-up & Take-off-Training'] };
+  if (category === 'surfen-jochen') return { title: 'Surfen bei Jochen Schweizer', details: ['Donnerstags 20–21 h', 'Anmeldung vorab', 'Pop-up-Drill am Anfang'] };
+
+  if (category === 'erholung') {
+    return { title: 'Aktive Erholung', details: [] };
+  }
+
+  return { title: CATEGORY_DEFAULT_TITLES[category] || CATEGORY_LABELS[category] || '', details: [] };
+}
+
 const CATEGORY_LOCATIONS = {
   mobility: { place: 'Zu Hause' },
   yoga: { place: 'Sanctuary Studio', note: 'buchen, 60 min Session' },
@@ -1470,6 +1636,15 @@ function renderDay(day, dayIdx) {
     empty.className = 'day-empty';
     empty.textContent = 'Frei';
     left.appendChild(empty);
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'add-unit-btn';
+    addBtn.innerHTML = '<span class="plus">+</span> Einheit hinzufügen';
+    addBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openAddUnit(currentWeek, dayIdx);
+    });
+    left.appendChild(addBtn);
   } else {
     day.units.forEach((unit, uIdx) => {
       const item = document.createElement('div');
@@ -1544,7 +1719,7 @@ function renderWorkoutRow(unit, dayIdx, uIdx) {
 
 
 function openEdit(weekIdx, dayIdx, unitIdx) {
-  editing = { weekIdx, dayIdx, unitIdx };
+  editing = { weekIdx, dayIdx, unitIdx, isNew: false };
   const day = state.weeks[weekIdx].days[dayIdx];
   const unit = day.units[unitIdx];
   const form = /** @type {any} */ (document.getElementById('edit-form'));
@@ -1552,8 +1727,27 @@ function openEdit(weekIdx, dayIdx, unitIdx) {
   form.category.value = unit.category || 'mobility';
   form.title.value = unit.title || '';
   form.duration.value = unit.duration || '';
+  if (form.detail) form.detail.value = Array.isArray(unit.detail) ? unit.detail.join('\n') : '';
   document.getElementById('edit-title').textContent = 'Einheit bearbeiten';
   document.getElementById('edit-unit-title').textContent = unit.title || '';
+  document.getElementById('delete-btn').style.display = '';
+  /** @type {HTMLDialogElement} */ (document.getElementById('edit-dialog')).showModal();
+  setTimeout(() => form.category.focus(), 0);
+}
+
+function openAddUnit(weekIdx, dayIdx) {
+  editing = { weekIdx, dayIdx, unitIdx: -1, isNew: true };
+  const form = /** @type {any} */ (document.getElementById('edit-form'));
+  const defaultCat = 'mobility';
+  const suggestion = suggestTitleAndDetails(defaultCat, '');
+  form.weekday.value = String(dayIdx);
+  form.category.value = defaultCat;
+  form.title.value = suggestion.title;
+  form.duration.value = '';
+  if (form.detail) form.detail.value = suggestion.details.join('\n');
+  document.getElementById('edit-title').textContent = 'Neue Einheit';
+  document.getElementById('edit-unit-title').textContent = '';
+  document.getElementById('delete-btn').style.display = 'none';
   /** @type {HTMLDialogElement} */ (document.getElementById('edit-dialog')).showModal();
   setTimeout(() => form.category.focus(), 0);
 }
@@ -1564,50 +1758,76 @@ function setupDialog() {
 
   form.category.addEventListener('change', () => {
     const cat = form.category.value;
-    form.title.value = CATEGORY_DEFAULT_TITLES[cat] || CATEGORY_LABELS[cat] || '';
+    const suggestion = suggestTitleAndDetails(cat, form.title.value);
+    form.title.value = suggestion.title;
+    if (form.detail) form.detail.value = suggestion.details.join('\n');
   });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!editing) return;
-    const { weekIdx, dayIdx, unitIdx } = editing;
-    const day = state.weeks[weekIdx].days[dayIdx];
-    const unit = day.units[unitIdx];
+    const { weekIdx, dayIdx, unitIdx, isNew } = editing;
     const newDayIdx = parseInt(form.weekday.value, 10);
-
-    // Alte Werte einfangen für Change-Log
-    const oldCategory = unit.category;
-    const oldTitle = unit.title;
-    const oldDuration = unit.duration;
-    const unitId = unit.unitId || `w${weekIdx}-d${dayIdx}-u${unitIdx}`;
+    const targetDayIdx = Number.isInteger(newDayIdx) ? newDayIdx : dayIdx;
 
     const newCategory = form.category.value || 'mobility';
     const newTitle = form.title.value.trim() || CATEGORY_DEFAULT_TITLES[newCategory] || '';
     const newDuration = Number(form.duration.value) || 0;
+    const newDetail = form.detail
+      ? form.detail.value.split('\n').map(s => s.trim()).filter(Boolean)
+      : [];
 
-    const changes = [];
-    if (oldCategory !== newCategory) changes.push({ unitId, field: 'category', from: oldCategory, to: newCategory, reason: 'user-edit' });
-    if (oldTitle !== newTitle) changes.push({ unitId, field: 'title', from: oldTitle, to: newTitle, reason: 'user-edit' });
-    if (oldDuration !== newDuration) changes.push({ unitId, field: 'duration', from: oldDuration, to: newDuration, reason: 'user-edit' });
-    if (Number.isInteger(newDayIdx) && newDayIdx !== dayIdx) changes.push({ unitId, field: 'dayIdx', from: dayIdx, to: newDayIdx, reason: 'user-edit' });
+    if (isNew) {
+      const targetDay = state.weeks[weekIdx].days[targetDayIdx];
+      const newUnitIdx = targetDay.units.length;
+      const newUnitId = `w${weekIdx}-d${targetDayIdx}-u${newUnitIdx}`;
+      const newUnit = {
+        unitId: newUnitId,
+        category: newCategory,
+        title: newTitle,
+        description: '',
+        detail: newDetail,
+        duration: newDuration,
+        completed: false
+      };
+      targetDay.units.push(newUnit);
+      saveState([{ unitId: newUnitId, field: 'added', from: null, to: newUnit, reason: 'user-add' }]);
+    } else {
+      const day = state.weeks[weekIdx].days[dayIdx];
+      const unit = day.units[unitIdx];
 
-    unit.category = newCategory;
-    unit.title = newTitle;
-    unit.duration = newDuration;
+      const oldCategory = unit.category;
+      const oldTitle = unit.title;
+      const oldDuration = unit.duration;
+      const oldDetail = Array.isArray(unit.detail) ? unit.detail : [];
+      const unitId = unit.unitId || `w${weekIdx}-d${dayIdx}-u${unitIdx}`;
 
-    if (Number.isInteger(newDayIdx) && newDayIdx !== dayIdx) {
-      day.units.splice(unitIdx, 1);
-      state.weeks[weekIdx].days[newDayIdx].units.push(unit);
+      const changes = [];
+      if (oldCategory !== newCategory) changes.push({ unitId, field: 'category', from: oldCategory, to: newCategory, reason: 'user-edit' });
+      if (oldTitle !== newTitle) changes.push({ unitId, field: 'title', from: oldTitle, to: newTitle, reason: 'user-edit' });
+      if (oldDuration !== newDuration) changes.push({ unitId, field: 'duration', from: oldDuration, to: newDuration, reason: 'user-edit' });
+      if (JSON.stringify(oldDetail) !== JSON.stringify(newDetail)) changes.push({ unitId, field: 'detail', from: oldDetail, to: newDetail, reason: 'user-edit' });
+      if (targetDayIdx !== dayIdx) changes.push({ unitId, field: 'dayIdx', from: dayIdx, to: targetDayIdx, reason: 'user-edit' });
+
+      unit.category = newCategory;
+      unit.title = newTitle;
+      unit.duration = newDuration;
+      unit.detail = newDetail;
+
+      if (targetDayIdx !== dayIdx) {
+        day.units.splice(unitIdx, 1);
+        state.weeks[weekIdx].days[targetDayIdx].units.push(unit);
+      }
+
+      saveState(changes);
     }
-
-    saveState(changes);
     dialog.close();
     render();
   });
   document.getElementById('cancel-btn').addEventListener('click', () => dialog.close());
 
   document.getElementById('delete-btn').addEventListener('click', () => {
-    if (!editing) return;
+    if (!editing || editing.isNew) return;
     if (!confirm('Diese Einheit wirklich löschen?')) return;
     const { weekIdx, dayIdx, unitIdx } = editing;
     const unit = state.weeks[weekIdx].days[dayIdx].units[unitIdx];
