@@ -1035,6 +1035,7 @@ async function serverLoadPlan() {
   return {
     schemaVersion: base?.meta?.schemaVersion || 4,
     phaseName: base?.meta?.phaseName || base?.phaseName || '',
+    constants: base?.constants || null,
     weeks: current.weeks
   };
 }
@@ -1259,12 +1260,17 @@ function emptyTodaySnapshot() {
 function getCurrentWeekIdx() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  for (let i = 0; i < NUM_WEEKS; i++) {
-    const weekEnd = new Date(WEEK_START_DATES[i]);
+  const stateDates = state?.constants?.weekStartDates;
+  const num = state?.weeks?.length || NUM_WEEKS;
+  const dates = (Array.isArray(stateDates) && stateDates.length === num)
+    ? stateDates.map(d => new Date(d))
+    : WEEK_START_DATES;
+  for (let i = 0; i < num; i++) {
+    const weekEnd = new Date(dates[i]);
     weekEnd.setDate(weekEnd.getDate() + 6);
     if (today < weekEnd) return i;
   }
-  return NUM_WEEKS - 1;
+  return num - 1;
 }
 
 let state = seedState(); // initialer Stand für sofortiges Rendering; bootstrap() ersetzt durch Server-Stand
@@ -1322,9 +1328,18 @@ function validateUnitCategories() {
 function render() {
   validateUnitCategories();
   const calendarWeek = getCurrentWeekIdx();
+  // Plan-Daten kommen aus state (User-spezifisch). Fallback auf hardcoded JS-Konstanten,
+  // falls state.weeks noch leer ist (vor dem ersten Server-Load).
+  const weeks = state?.weeks || [];
+  const numWeeks = weeks.length || NUM_WEEKS;
+  const constants = state?.constants || {};
+  const weekDateRange = i => weeks[i]?.dateRange || constants.weekDateRanges?.[i] || WEEK_DATE_RANGES[i] || '';
+  const weekPhaseName = i => weeks[i]?.phase || constants.weekPhaseNames?.[i] || WEEK_PHASE_NAMES[i] || '';
+  const weekGoalText = i => weeks[i]?.goal || constants.weekGoals?.[i] || WEEK_GOALS[i] || '';
+
   const tabs = document.getElementById('week-tabs');
   tabs.innerHTML = '';
-  for (let i = 0; i < NUM_WEEKS; i++) {
+  for (let i = 0; i < numWeeks; i++) {
     const btn = document.createElement('button');
     btn.type = 'button';
     let cls = 'week-tab';
@@ -1344,20 +1359,24 @@ function render() {
 
     const datesDiv = document.createElement('div');
     datesDiv.className = 'week-dates';
-    datesDiv.textContent = WEEK_DATE_RANGES[i] || '';
+    datesDiv.textContent = weekDateRange(i);
     btn.appendChild(datesDiv);
 
     const phaseDiv = document.createElement('div');
     phaseDiv.className = 'week-phase';
-    phaseDiv.textContent = WEEK_PHASE_NAMES[i] || '';
+    phaseDiv.textContent = weekPhaseName(i);
     btn.appendChild(phaseDiv);
 
     btn.addEventListener('click', () => { currentWeek = i; render(); });
     tabs.appendChild(btn);
   }
 
+  // Hauptziel-Header (oben) aus state.phaseName
+  const goalTitleEl = document.querySelector('.goal-title');
+  if (goalTitleEl && state?.phaseName) goalTitleEl.textContent = `Ziel: ${state.phaseName}`;
+
   document.getElementById('week-eyebrow').textContent = `Woche ${currentWeek + 1}`;
-  document.getElementById('week-goal').textContent = WEEK_GOALS[currentWeek] || '';
+  document.getElementById('week-goal').textContent = weekGoalText(currentWeek);
 
   const wp = document.getElementById('week-progress');
   const wDone = weekCompleted(currentWeek);

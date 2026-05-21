@@ -155,14 +155,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     # ---- POST (Claude API Proxy) -------------------------------------
     def do_POST(self):
         if self.path != '/api/generate-plan':
-            self.send_error(404, 'Nur /api/generate-plan unterstützt POST')
+            self._send_json_error(404, 'Nur /api/generate-plan unterstützt POST')
             return
         try:
             length = int(self.headers.get('Content-Length', '0'))
             body = json.loads(self.rfile.read(length))
             profile = body.get('profile')
             if not profile:
-                self.send_error(400, 'profile fehlt im Body')
+                self._send_json_error(400, 'profile fehlt im Body')
                 return
             plan = generate_plan_via_claude(profile)
             response_body = json.dumps({'plan': plan}, ensure_ascii=False).encode('utf-8')
@@ -172,14 +172,30 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(response_body)
         except RuntimeError as e:
-            self.send_error(503, str(e))
+            self._send_json_error(503, str(e))
         except urllib.error.HTTPError as e:
-            detail = e.read().decode('utf-8', errors='replace')
-            self.send_error(502, f'Claude API HTTP {e.code}: {detail[:200]}')
+            detail_raw = e.read().decode('utf-8', errors='replace')
+            try:
+                detail_json = json.loads(detail_raw)
+                anthropic_msg = detail_json.get('error', {}).get('message') or detail_raw[:300]
+            except json.JSONDecodeError:
+                anthropic_msg = detail_raw[:300]
+            self._send_json_error(502, f'Claude API ({e.code}): {anthropic_msg}')
         except json.JSONDecodeError as e:
-            self.send_error(502, f'Claude Antwort nicht parsebar: {e}')
+            self._send_json_error(502, f'Claude-Antwort konnte nicht geparst werden: {e}')
         except Exception as e:
-            self.send_error(500, f'Plan-Generierung fehlgeschlagen: {e}')
+            self._send_json_error(500, f'Plan-Generierung fehlgeschlagen: {e}')
+
+    def _send_json_error(self, status, message):
+        body = json.dumps({'error': message}, ensure_ascii=False).encode('utf-8')
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        try:
+            self.wfile.write(body)
+        except BrokenPipeError:
+            pass
 
     # ---- helpers -----------------------------------------------------
     def _validate_write_path(self):

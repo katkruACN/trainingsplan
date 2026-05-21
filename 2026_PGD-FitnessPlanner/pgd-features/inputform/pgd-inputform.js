@@ -111,6 +111,7 @@ const WEEK_OVERVIEW = [
 const CATEGORY_LABELS = {
   mobility: 'Mobility',
   yoga: 'Yoga',
+  balance: 'Balance',
   rad: 'Cardio Radfahren',
   laufen: 'Cardio Laufen',
   paddeln: 'Paddeln',
@@ -119,6 +120,10 @@ const CATEGORY_LABELS = {
   'kraft-upper': 'Kraft Upper',
   'kraft-lower': 'Kraft Lower',
   hiit: 'HIIT',
+  popup: 'Pop-up Training',
+  'surfen-eisbach': 'Surfen Eisbach',
+  'surfen-o2': 'Surfen o2 Surftown',
+  'surfen-jochen': 'Surfen Jochen Schweizer',
   erholung: 'Erholung',
 };
 
@@ -172,8 +177,17 @@ async function generatePlanV1(profile) {
     body: JSON.stringify({ profile })
   });
   if (!res.ok) {
-    const detail = await res.text().catch(() => '');
-    throw new Error(`Claude API: ${res.status} ${detail}`);
+    let msg = `HTTP ${res.status}`;
+    try {
+      const errData = await res.json();
+      if (errData?.error) msg = errData.error;
+    } catch {
+      try {
+        const text = await res.text();
+        if (text) msg = text.slice(0, 400);
+      } catch {}
+    }
+    throw new Error(msg);
   }
   const data = await res.json();
   if (!data?.plan?.weeks) throw new Error('Antwort enthält keinen gültigen Plan');
@@ -584,20 +598,49 @@ function renderGoals() {
   });
 }
 
-// ── Plan Overview ──
+// ── Plan Overview (lädt user-spezifisches plan-v1.json) ──
 
-function renderPlan() {
+async function fetchUserPlan() {
+  if (!userId) return null;
+  try {
+    const res = await fetch(userPlanPath(userId), { cache: 'no-store' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+}
+
+function uniqueCategoriesFromWeek(week) {
+  const set = new Set();
+  (week?.days || []).forEach(d => (d?.units || []).forEach(u => {
+    if (u?.category) set.add(u.category);
+  }));
+  return [...set];
+}
+
+async function renderPlan() {
   const container = document.getElementById('plan-overview');
   if (!container) return;
   container.innerHTML = '';
 
-  WEEK_OVERVIEW.forEach(week => {
+  const plan = await fetchUserPlan();
+  const weeks = plan?.weeks;
+  if (!Array.isArray(weeks) || weeks.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'field-hint';
+    empty.textContent = userId
+      ? 'Plan wird gerade generiert oder ist noch nicht angelegt.'
+      : 'Lege ein Profil an, damit dein Plan generiert werden kann.';
+    container.appendChild(empty);
+    return;
+  }
+
+  weeks.forEach((w, idx) => {
     const row = document.createElement('div');
     row.className = 'plan-row';
 
     const num = document.createElement('div');
     num.className = 'plan-week-num';
-    num.textContent = 'W' + week.num;
+    num.textContent = 'W' + (idx + 1);
     row.appendChild(num);
 
     const info = document.createElement('div');
@@ -606,22 +649,22 @@ function renderPlan() {
     phaseLine.className = 'plan-phase-line';
     const phase = document.createElement('span');
     phase.className = 'plan-phase';
-    phase.textContent = week.phase;
+    phase.textContent = w.phase || '';
     phaseLine.appendChild(phase);
     const dates = document.createElement('span');
     dates.className = 'plan-dates';
-    dates.textContent = week.dates;
+    dates.textContent = w.dateRange || '';
     phaseLine.appendChild(dates);
     info.appendChild(phaseLine);
 
     const goal = document.createElement('div');
     goal.className = 'plan-goal';
-    goal.textContent = week.goal;
+    goal.textContent = w.goal || '';
     info.appendChild(goal);
 
     const cats = document.createElement('div');
     cats.className = 'plan-cats';
-    week.cats.forEach(c => {
+    uniqueCategoriesFromWeek(w).forEach(c => {
       const badge = document.createElement('span');
       badge.className = 'category-badge ' + c;
       badge.textContent = CATEGORY_LABELS[c] || c;

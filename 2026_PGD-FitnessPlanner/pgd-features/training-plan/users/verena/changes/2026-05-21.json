@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "version": "2026-05-21",
+    "versionNumber": 1,
+    "createdAt": "2026-05-21",
+    "basedOn": "base",
+    "changedBy": "Katharina",
+    "trigger": "user-edit",
+    "summary": "",
+    "updatedAt": "2026-05-21T08:40:40.828Z"
+  },
+  "changes": [
+    {
+      "id": "c1",
+      "unitId": "w0-d3-u1",
+      "field": "removed",
+      "from": {
+        "unitId": "w0-d3-u1",
+        "category": "popup",
+        "title": "Pop-up schärfen – 3×8",
+        "description": "Explosivität und saubere Landung.",
+        "detail": [
+          "Unter 1 Sekunde – Ziel ist bereits Pflicht",
+          "Stance: sofort stabil nach Landung",
+          "Blick nach vorne, nicht runter"
+        ],
+        "duration": 10,
+        "completed": false
+      },
+      "to": null,
+      "reason": "user-delete"
+    },
+    {
+      "id": "c2",
+      "unitId": "w0-d3-u0",
+      "field": "dayIdx",
+      "from": 3,
+      "to": 6,
+      "reason": "user-edit"
+    },
+    {
+      "id": "c3",
+      "unitId": "w0-d6-u0",
+      "field": "removed",
+      "from": {
+        "unitId": "w0-d6-u0",
+        "category": "surfen-eisbach",
+        "title": "Eisbach Session",
+        "description": "Technik und Flow schärfen vor dem Trip.",
+        "detail": [
+          "Warm-up Pop-up 2×5 an Land",
+          "Fokus: Bottom Turn sauber",
+          "Mehrere kurze Sessions statt eine lange"
+        ],
+        "duration": 60,
+        "completed": false
+      },
+      "to": null,
+      "reason": "user-delete"
+    },
+    {
+      "id": "c4",
+      "unitId": "w0-d3-u0",
+      "field": "added",
+      "from": null,
+      "to": {
+        "unitId": "w0-d3-u0",
+        "category": "surfen-jochen",
+        "title": "Surfen bei Jochen Schweizer",
+        "description": "",
+        "detail": [],
+        "duration": 60,
+        "completed": false
+      },
+      "reason": "user-add"
+    }
+  ],
+  "delta": {
+    "categoryShifts": {},
+    "durationDeltaMin": 0,
+    "unitsAdded": 1,
+    "unitsRemoved": 2
+  },
+  "goalImpact": null
+}
