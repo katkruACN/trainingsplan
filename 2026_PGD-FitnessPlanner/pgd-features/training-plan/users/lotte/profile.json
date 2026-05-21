@@ -1,0 +1,41 @@
+{
+  "profile": {
+    "personal": {
+      "name": "Lotte",
+      "alter": 50,
+      "geschlecht": "w",
+      "groesse": 176,
+      "gewicht": 69,
+      "maxHF": 170,
+      "trainingLevel": "anfaenger",
+      "surfLevel": "anfaenger"
+    },
+    "goal": {
+      "tripDatum": "2026-06-20",
+      "surfTage": 8,
+      "surfStunden": 2
+    },
+    "paddlePower": {
+      "paddelausdauer": 2,
+      "okoerper": 1,
+      "cardio": 2
+    },
+    "surfStrength": {
+      "popup": 2,
+      "stabilitaet": 2
+    },
+    "stabilitaetBeweglichkeit": {
+      "beweglichkeit": 3,
+      "balance": 2
+    },
+    "garmin": {
+      "vo2max": null,
+      "ruheHF": null,
+      "hrv": null,
+      "bodyBattery": null,
+      "load": null,
+      "status": null
+    }
+  },
+  "profileUpdatedAt": "2026-05-21T07:47:56.908Z"
+}

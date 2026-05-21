@@ -955,60 +955,97 @@ function migrate(data) {
   return out;
 }
 
-// === Server-Modus (lokaler Mini-Server via start-app.command) =================
-// base.json + alle Tages-Snapshots werden via fetch() geladen. JSON-Dateien sind
-// die Wahrheit – kein localStorage mehr (außer einmalige Migration alter Daten).
-const CHANGES_PATH = 'pgd-features/training-plan/trainingsplan-changes';
+// === Server-Modus + User-Management ===========================================
+// Daten leben unter pgd-features/training-plan/users/{userId}/...
+// userId kommt aus URL (?user=) oder localStorage.lastUser.
+const USERS_BASE = 'pgd-features/training-plan/users';
+const LAST_USER_KEY = 'lastUser';
+
+function readUserId() {
+  const params = new URLSearchParams(window.location.search);
+  const fromUrl = (params.get('user') || '').trim();
+  if (fromUrl) {
+    try { localStorage.setItem(LAST_USER_KEY, fromUrl); } catch {}
+    return fromUrl;
+  }
+  try { return (localStorage.getItem(LAST_USER_KEY) || '').trim() || null; } catch { return null; }
+}
+
+let userId = readUserId();
 let serverConnected = false;
 
-async function serverFetchJSON(name) {
-  const res = await fetch(`${CHANGES_PATH}/${name}`, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`${name}: ${res.status}`);
+function userPlanPath() { return `/${USERS_BASE}/${userId}/plan-v1.json`; }
+function userProfilePath() { return `/${USERS_BASE}/${userId}/profile.json`; }
+function userChangesPath() { return `/${USERS_BASE}/${userId}/changes`; }
+function userBasePath() { return `/${USERS_BASE}/${userId}`; }
+
+async function serverGetJSON(absPath) {
+  const res = await fetch(absPath, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`${absPath}: ${res.status}`);
   return res.json();
 }
 
+async function serverPutJSON(absPath, data) {
+  const res = await fetch(absPath, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data, null, 2)
+  });
+  if (!res.ok) throw new Error(`PUT ${absPath}: ${res.status}`);
+}
+
+async function serverListUsers() {
+  try {
+    const entries = await serverGetJSON(`/${USERS_BASE}/_list`);
+    return entries.filter(e => e.endsWith('/')).map(e => e.slice(0, -1));
+  } catch (err) {
+    console.warn('User-Liste laden fehlgeschlagen:', err);
+    return [];
+  }
+}
+
 async function serverListSnapshotFiles() {
-  const res = await fetch(`${CHANGES_PATH}/_list`, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`_list: ${res.status}`);
-  const all = await res.json();
-  return all.filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f));
+  if (!userId) return [];
+  try {
+    const entries = await serverGetJSON(`${userChangesPath()}/_list`);
+    return entries.filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f));
+  } catch (err) {
+    // 404 = changes/ ordner existiert noch nicht für diesen User
+    return [];
+  }
 }
 
 async function serverPutSnapshot(snap) {
   const name = `${snap.meta.version}.json`;
-  const res = await fetch(`${CHANGES_PATH}/${name}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(snap, null, 2)
-  });
-  if (!res.ok) throw new Error(`PUT ${name}: ${res.status}`);
+  await serverPutJSON(`${userChangesPath()}/${name}`, snap);
   return name;
 }
 
 async function serverLoadPlan() {
-  const base = await serverFetchJSON('base.json');
-  if (!base?.weeks) throw new Error('base.json hat keine weeks[]');
+  if (!userId) throw new Error('Kein User ausgewählt');
+  const base = await serverGetJSON(userPlanPath());
+  if (!base?.weeks) throw new Error('plan-v1.json hat keine weeks[]');
   const files = await serverListSnapshotFiles();
   const snapshots = [];
   for (const name of files) {
-    try { snapshots.push(await serverFetchJSON(name)); }
+    try { snapshots.push(await serverGetJSON(`${userChangesPath()}/${name}`)); }
     catch (err) { console.warn(`Snapshot ${name} fehlerhaft:`, err); }
   }
   const current = applyChangesToBase(base, snapshots);
   return {
     schemaVersion: base?.meta?.schemaVersion || 4,
-    phaseName: base?.meta?.phaseName || 'Malediven Surftrip · 20. Juni 2026',
+    phaseName: base?.meta?.phaseName || base?.phaseName || '',
     weeks: current.weeks
   };
 }
 
 async function serverRecordChanges(newChanges) {
-  if (!serverConnected) return false;
+  if (!serverConnected || !userId) return false;
   if (!Array.isArray(newChanges) || !newChanges.length) return false;
   const today = todayKey();
   const name = `${today}.json`;
   let snap = null;
-  try { snap = await serverFetchJSON(name); } catch {}
+  try { snap = await serverGetJSON(`${userChangesPath()}/${name}`); } catch {}
   if (!snap || !snap.meta || !Array.isArray(snap.changes)) snap = emptyTodaySnapshot();
   const startIdx = snap.changes.length;
   newChanges.forEach((ch, i) => snap.changes.push({ id: `c${startIdx + i + 1}`, ...ch }));
@@ -1038,64 +1075,103 @@ function serverUpdateStatus(message) {
     el.className = 'fs-status warn';
     return;
   }
-  el.textContent = message || 'Synchronisiert';
+  const userSuffix = userId ? ` · User: ${userId}` : '';
+  el.textContent = (message || 'Synchronisiert') + userSuffix;
   el.className = 'fs-status on';
 }
 
-// Einmalige Migration: existierende localStorage-Plan-State in heutigen Snapshot
-// übernehmen. WICHTIG: profile-Subkey bleibt erhalten – nur weeks/schemaVersion/
-// phaseName werden gelöscht, damit nichts mehr aus localStorage gerendert wird.
-async function migrateLocalStorageOnce() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return 0;
-  let data;
-  try { data = JSON.parse(raw); } catch { return 0; }
-  if (!data || typeof data !== 'object') return 0;
-  // Completed-Flags aus alten weeks extrahieren (falls vorhanden)
-  let changes = [];
-  if (Array.isArray(data.weeks)) {
-    data.weeks.forEach((w, wIdx) => (w.days || []).forEach((d, dIdx) => (d.units || []).forEach((u, uIdx) => {
-      if (u && u.completed) {
-        const unitId = u.unitId || `w${wIdx}-d${dIdx}-u${uIdx}`;
-        changes.push({ unitId, field: 'completed', from: false, to: true, reason: 'localstorage-migration' });
+async function populateUserDropdown(users) {
+  const sel = document.getElementById('user-select');
+  if (!sel) return;
+  const list = users || await serverListUsers();
+  sel.innerHTML = '';
+  for (const u of list) {
+    const opt = document.createElement('option');
+    opt.value = u;
+    opt.textContent = u;
+    if (u === userId) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  const newOpt = document.createElement('option');
+  newOpt.value = '__new__';
+  newOpt.textContent = '+ Neuer User';
+  sel.appendChild(newOpt);
+  // sicherstellen, dass nur ein change-Listener angehängt ist
+  if (!sel.dataset.bound) {
+    sel.dataset.bound = '1';
+    sel.addEventListener('change', () => {
+      const val = sel.value;
+      if (val === '__new__') {
+        window.location.href = 'pgd-features/inputform/pgd-inputform.html?new=1';
+      } else if (val && val !== userId) {
+        try { localStorage.setItem(LAST_USER_KEY, val); } catch {}
+        window.location.href = `index.html?user=${encodeURIComponent(val)}`;
       }
-    })));
-    if (changes.length) await serverRecordChanges(changes);
+    });
   }
-  // Plan-Felder löschen, profile + profileUpdatedAt unverändert lassen
-  delete data.weeks;
-  delete data.schemaVersion;
-  delete data.phaseName;
-  const remaining = Object.keys(data).length;
-  if (remaining === 0) {
-    localStorage.removeItem(STORAGE_KEY);
-  } else {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function showEmptyState(users) {
+  const empty = document.getElementById('empty-state');
+  const week = document.querySelector('.week-view');
+  const progress = document.querySelector('.progress-section');
+  const tabs = document.querySelector('.week-tabs-wrapper');
+  if (empty) {
+    empty.hidden = false;
+    const list = empty.querySelector('#empty-user-list');
+    if (list) {
+      list.innerHTML = '';
+      if (users && users.length) {
+        const lead = document.createElement('p');
+        lead.textContent = 'Vorhandene User:';
+        list.appendChild(lead);
+        for (const u of users) {
+          const a = document.createElement('a');
+          a.className = 'btn';
+          a.href = `index.html?user=${encodeURIComponent(u)}`;
+          a.textContent = u;
+          list.appendChild(a);
+        }
+      }
+    }
   }
-  return changes.length;
+  if (week) week.style.display = 'none';
+  if (progress) progress.style.display = 'none';
+  if (tabs) tabs.style.display = 'none';
 }
 
 async function bootstrap() {
+  let users = [];
   try {
-    const plan = await serverLoadPlan();
+    users = await serverListUsers();
     serverConnected = true;
-    // Erst nach erfolgreicher Server-Verbindung: localStorage-completed übernehmen
-    const migrated = await migrateLocalStorageOnce();
-    if (migrated > 0) {
-      // Plan neu laden, damit die migrierten completed-Flags sofort sichtbar sind
-      const refreshed = await serverLoadPlan();
-      state = refreshed;
-      serverUpdateStatus(`${migrated} erledigte Einheiten aus localStorage übernommen`);
-    } else {
-      state = plan;
-      serverUpdateStatus('Synchronisiert');
-    }
-    currentWeek = getCurrentWeekIdx();
-    render();
   } catch (err) {
     serverConnected = false;
     console.error('Server-Verbindung fehlgeschlagen:', err);
     serverUpdateStatus();
+    return;
+  }
+  await populateUserDropdown(users);
+  // Falls userId nicht in der Liste → versuche localStorage-Fallback oder Empty
+  if (userId && !users.includes(userId)) {
+    console.warn(`User '${userId}' existiert nicht. Wechsle in Empty-State.`);
+    userId = null;
+    try { localStorage.removeItem(LAST_USER_KEY); } catch {}
+  }
+  if (!userId) {
+    showEmptyState(users);
+    serverUpdateStatus(users.length ? 'Wähle einen User' : 'Kein User angelegt');
+    return;
+  }
+  try {
+    state = await serverLoadPlan();
+    currentWeek = getCurrentWeekIdx();
+    render();
+    serverUpdateStatus('Synchronisiert');
+  } catch (err) {
+    console.error('Plan laden fehlgeschlagen:', err);
+    showEmptyState(users);
+    serverUpdateStatus('Plan nicht gefunden – Profil ausfüllen');
   }
 }
 

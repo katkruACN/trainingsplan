@@ -1,5 +1,4 @@
+.env
 .DS_Store
-*.log
-
-# Lokale Backups / Exports
-trainingsplan-*.json
+*.pyc
+__pycache__/

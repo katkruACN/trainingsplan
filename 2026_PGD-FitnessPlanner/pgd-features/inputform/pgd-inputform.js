@@ -1,11 +1,35 @@
 /* ============================================
    SURF FITNESS — PROFIL & PLAN ÜBERSICHT
-   Profile-Speicher: pgd-features/inputform/profile.json (via Mini-Server)
+   Profile-Speicher: pgd-features/training-plan/users/{userId}/profile.json
    ============================================ */
 
 'use strict';
 
-const PROFILE_URL = '/pgd-features/inputform/profile.json';
+const USERS_BASE = '/pgd-features/training-plan/users';
+const LAST_USER_KEY = 'lastUser';
+
+function slugifyName(name) {
+  return String(name || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '') // accents
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40);
+}
+
+function getUrlParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+let isNewUserFlow = getUrlParam('new') === '1';
+let userId = !isNewUserFlow ? (getUrlParam('user') || (() => {
+  try { return localStorage.getItem(LAST_USER_KEY); } catch { return null; }
+})()) : null;
+
+function userProfilePath(id) { return `${USERS_BASE}/${id}/profile.json`; }
+function userPlanPath(id) { return `${USERS_BASE}/${id}/plan-v1.json`; }
+function userBasePath(id) { return `${USERS_BASE}/${id}`; }
 
 const SCALE_DESCRIPTIONS = {
   paddelausdauer: ['', 'gar keine Erfahrung', 'erste kurze Versuche', '2–3 km mit Pausen', '4–5 km mit kurzen Stops', '5+ km am Stück'],
@@ -98,40 +122,39 @@ const CATEGORY_LABELS = {
   erholung: 'Erholung',
 };
 
-// ── Storage (via Mini-Server: profile.json) ──
+// ── Storage (via Mini-Server: users/{id}/profile.json) ──
 
-let serverProfileAvailable = false;
-let profileCache = null; // wird beim ersten Laden gesetzt, danach optimistisch lokal aktualisiert
+let profileCache = null;
 
 async function loadProfile() {
+  if (!userId) return null;
   try {
-    const res = await fetch(PROFILE_URL, { cache: 'no-store' });
-    if (res.status === 404) {
-      serverProfileAvailable = true;
-      profileCache = null;
-      return null;
-    }
+    const res = await fetch(userProfilePath(userId), { cache: 'no-store' });
+    if (res.status === 404) { profileCache = null; return null; }
     if (!res.ok) throw new Error(`GET profile: ${res.status}`);
     const data = await res.json();
-    serverProfileAvailable = true;
     profileCache = data?.profile || null;
     return profileCache;
   } catch (err) {
     console.warn('Profil laden fehlgeschlagen (Server läuft?):', err);
-    serverProfileAvailable = false;
-    return profileCache; // letzter bekannter Stand, falls überhaupt
+    return profileCache;
   }
 }
 
-async function saveProfile(profile) {
+async function saveProfileForUser(id, profile) {
   const payload = { profile, profileUpdatedAt: new Date().toISOString() };
+  const res = await fetch(userProfilePath(id), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload, null, 2)
+  });
+  if (!res.ok) throw new Error(`PUT profile: ${res.status}`);
+}
+
+async function saveProfile(profile) {
+  if (!userId) throw new Error('Kein userId – bitte erst Profil neu anlegen');
   try {
-    const res = await fetch(PROFILE_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload, null, 2)
-    });
-    if (!res.ok) throw new Error(`PUT profile: ${res.status}`);
+    await saveProfileForUser(userId, profile);
     profileCache = profile;
     return true;
   } catch (err) {
@@ -139,6 +162,45 @@ async function saveProfile(profile) {
     alert('Profil konnte nicht gespeichert werden. Läuft der Server (start-app.command)?');
     return false;
   }
+}
+
+// Generiert plan-v1.json via Claude API (Server-Proxy POST /api/generate-plan)
+async function generatePlanV1(profile) {
+  const res = await fetch('/api/generate-plan', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profile })
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '');
+    throw new Error(`Claude API: ${res.status} ${detail}`);
+  }
+  const data = await res.json();
+  if (!data?.plan?.weeks) throw new Error('Antwort enthält keinen gültigen Plan');
+  return data.plan;
+}
+
+async function savePlanForUser(id, plan) {
+  const res = await fetch(userPlanPath(id), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(plan, null, 2)
+  });
+  if (!res.ok) throw new Error(`PUT plan-v1: ${res.status}`);
+}
+
+async function deleteUser(id) {
+  const res = await fetch(userBasePath(id), { method: 'DELETE' });
+  if (!res.ok && res.status !== 404) throw new Error(`DELETE user: ${res.status}`);
+}
+
+async function listUsers() {
+  try {
+    const res = await fetch(`${USERS_BASE}/_list`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    const all = await res.json();
+    return all.filter(e => e.endsWith('/')).map(e => e.slice(0, -1));
+  } catch { return []; }
 }
 
 // ── Sliders ──
@@ -587,13 +649,92 @@ function exportJSON(profile) {
 
 // ── Init ──
 
+function showProgress(message) {
+  let el = document.getElementById('progress-overlay');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'progress-overlay';
+    el.className = 'progress-overlay';
+    el.innerHTML = '<div class="progress-card"><div class="spinner"></div><div class="progress-text"></div></div>';
+    document.body.appendChild(el);
+  }
+  el.querySelector('.progress-text').textContent = message;
+  el.hidden = false;
+}
+function hideProgress() {
+  const el = document.getElementById('progress-overlay');
+  if (el) el.hidden = true;
+}
+
+async function handleNewUserSubmit(profile) {
+  const name = profile?.personal?.name?.trim();
+  if (!name) { alert('Bitte gib einen Namen ein.'); return false; }
+  const newId = slugifyName(name);
+  if (!newId) { alert('Name enthält keine gültigen Zeichen.'); return false; }
+  const existing = await listUsers();
+  if (existing.includes(newId)) {
+    const overwrite = confirm(`User '${newId}' existiert bereits. Profil und Plan überschreiben?`);
+    if (!overwrite) return false;
+  }
+  showProgress(`Profil wird gespeichert …`);
+  try {
+    await saveProfileForUser(newId, profile);
+  } catch (err) {
+    hideProgress();
+    alert(`Profil speichern fehlgeschlagen: ${err.message}`);
+    return false;
+  }
+  showProgress(`Claude generiert deinen Plan – das kann 30–60 Sekunden dauern …`);
+  let plan;
+  try {
+    plan = await generatePlanV1(profile);
+  } catch (err) {
+    hideProgress();
+    alert(`Plan-Generierung fehlgeschlagen: ${err.message}\n\nProfil wurde gespeichert. Du kannst den Plan später manuell anlegen oder den .env-Key prüfen.`);
+    return false;
+  }
+  showProgress(`Plan wird gespeichert …`);
+  try {
+    await savePlanForUser(newId, plan);
+  } catch (err) {
+    hideProgress();
+    alert(`Plan speichern fehlgeschlagen: ${err.message}`);
+    return false;
+  }
+  try { localStorage.setItem(LAST_USER_KEY, newId); } catch {}
+  hideProgress();
+  window.location.href = `../../index.html?user=${encodeURIComponent(newId)}`;
+  return true;
+}
+
+async function handleExistingUserSubmit(profile) {
+  const ok = await saveProfile(profile);
+  renderGoals();
+  if (ok) await enterViewMode();
+  return ok;
+}
+
+async function handleDeleteUser() {
+  if (!userId) return;
+  if (!confirm(`User '${userId}' und Plan werden unwiderruflich gelöscht.`)) return;
+  try {
+    await deleteUser(userId);
+    try { localStorage.removeItem(LAST_USER_KEY); } catch {}
+    window.location.href = '../../index.html';
+  } catch (err) {
+    alert(`Löschen fehlgeschlagen: ${err.message}`);
+  }
+}
+
 function initButtons() {
   const submitBtn = document.getElementById('btn-submit');
   if (submitBtn) submitBtn.addEventListener('click', async () => {
     const profile = collectProfile();
-    const ok = await saveProfile(profile);
-    renderGoals();
-    if (ok) await enterViewMode();
+    if (isNewUserFlow) {
+      await handleNewUserSubmit(profile);
+    } else {
+      await handleExistingUserSubmit(profile);
+    }
   });
 
   const editBtn = document.getElementById('btn-edit');
@@ -607,6 +748,9 @@ function initButtons() {
     const p = (await loadProfile()) || collectProfile();
     exportJSON(p);
   });
+
+  const deleteBtn = document.getElementById('btn-delete-user');
+  if (deleteBtn) deleteBtn.addEventListener('click', handleDeleteUser);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -615,12 +759,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   initGarminToggle();
   initButtons();
 
-  const saved = await loadProfile();
-  if (saved) {
-    restoreForm(saved);
-    await enterViewMode();
-  } else {
+  // Submit-Button-Label je nach Flow setzen
+  const submitBtn = document.getElementById('btn-submit');
+  if (submitBtn) submitBtn.textContent = isNewUserFlow
+    ? 'Profil & Plan anlegen'
+    : 'Profil speichern';
+
+  // Delete-Button nur sichtbar wenn existierender User
+  const deleteBtn = document.getElementById('btn-delete-user');
+  if (deleteBtn) deleteBtn.hidden = isNewUserFlow || !userId;
+
+  // Header-Eyebrow je nach Flow
+  const eyebrow = document.querySelector('.header-eyebrow');
+  if (eyebrow && isNewUserFlow) {
+    eyebrow.innerHTML = '<a href="../../index.html">← Zurück</a> · Neues Profil';
+  } else if (eyebrow && userId) {
+    eyebrow.innerHTML = `<a href="../../index.html?user=${encodeURIComponent(userId)}">← Zurück zum Plan</a> · User: <strong>${userId}</strong>`;
+  }
+
+  if (isNewUserFlow) {
     enterEditMode();
+  } else {
+    const saved = await loadProfile();
+    if (saved) {
+      restoreForm(saved);
+      await enterViewMode();
+    } else {
+      enterEditMode();
+    }
   }
 
   renderGoals();

@@ -81,9 +81,113 @@
 
   .header-actions {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
     flex-wrap: wrap;
+  }
+
+  .user-picker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .user-picker-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .user-select {
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    padding: 4px 4px 4px 0;
+    cursor: pointer;
+  }
+  .user-select:focus { outline: none; }
+
+  .empty-state {
+    max-width: 600px;
+    margin: 48px auto;
+    padding: 24px;
+  }
+  .empty-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .empty-card h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  .empty-card p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .empty-user-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .empty-user-list p {
+    width: 100%;
+    margin-bottom: 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Progress-Overlay für lange Aktionen (z. B. Claude-API-Plan-Generierung) */
+  .progress-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 77, 77, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .progress-overlay[hidden] { display: none; }
+  .progress-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 28px 36px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 480px;
+  }
+  .progress-text {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 
   .fs-status {
