@@ -66,171 +66,55 @@ const CATEGORY_DEFAULT_TITLES = {
   erholung: 'Aktive Erholung'
 };
 
-// Vorschlags-Templates aus pgd-trainingsplan1.md – werden beim Kategorie-Wechsel ins Detail-Feld geladen
-const KRAFT_TEMPLATES = {
-  A: {
-    title: 'Kraft A – Oberkörper/Core',
-    details: [
-      'Lat Pulldown (Untergriff) 3×12 – Schulterblätter zusammenziehen',
-      'Seated Cable Row 3×12 – Ellenbogen eng, Brust vorne',
-      'KH Schulterpress 3×10 – Neutral grip',
-      'Face Pulls (Kabel) 3×15',
-      'Push-ups (3 sek runter) 3×10–15 – Hüfte gerade',
-      'Dead Bug 3×10/S',
-      'Pallof Press 3×12/S'
-    ]
-  },
-  B: {
-    title: 'Kraft B – Beine & Core Rotation',
-    details: [
-      'Bulgarian Split Squat 3×10/S (6–8 kg)',
-      'Romanian Deadlift 3×10 – hüftdominant, keine runde WS',
-      'Pallof Press 3×12/S – Anti-Rotation',
-      'Kabelzug-Rotation 3×12/S – Rotation aus Hüfte',
-      'Side Plank + Hip Dip 3×10/S',
-      'Single Leg RDL 2×8/S – Balance vor Gewicht'
-    ]
-  },
-  C: {
-    title: 'Kraft C – Leicht & Erhalt',
-    details: [
-      'Lat Pulldown 2×12 (Gewicht −20%)',
-      'Face Pulls 2×15 – kontrolliert',
-      'Bulgarian Split Squat 2×8/S (nur Körpergewicht)',
-      'Dead Bug 2×10/S – sauber',
-      'Push-ups 2×10 – langsam'
-    ]
-  }
+// Default-Details je Kategorie – extrahiert aus seedState() (detailreichste vorhandene Einheit pro Kategorie).
+// Wird beim Kategorie-Wechsel im Edit-Modal ins detail-Textfeld geladen. Kategorien, die in seedState
+// nicht vorkommen, haben ein leeres Array – können bei Bedarf manuell befüllt werden.
+const CATEGORY_DETAILS = {
+  mobility: [
+    'Katze-Kuh 10×',
+    'Thorax-Rotation 10× je Seite',
+    'Hip Circles 10× je Seite',
+    'Schulter-Querstretch 30 sek/S',
+    'Kind-Haltung 1 min'
+  ],
+  yoga: [],
+  balance: [],
+  rad: [
+    'Vorher: 10× Einklicken stehend an Wand üben',
+    'Nur bekannte flache Runde',
+    'Bei jedem Stopp bewusst ausklicken',
+    'Kein Hügel, keine Schnelligkeit'
+  ],
+  laufen: [],
+  paddeln: [
+    'Warm-up: Armkreisen + Cobra 5 min an Land',
+    'Board-Position: Brust auf Mittelpunkt',
+    'Entspanntes gleichmäßiges Tempo',
+    'Pause wenn Schultern brennen',
+    'Cool-down: Cobra + Schulter dehnen'
+  ],
+  schwimmen: [],
+  kraft: [
+    'Lat Pulldown 3×12',
+    'Seated Row 3×12',
+    'Push-ups 3×10 (3 sek runter)',
+    'Face Pulls 3×15',
+    'Pallof Press 3×10/S',
+    'Dead Bug 3×10/S'
+  ],
+  'kraft-upper': [],
+  'kraft-lower': [],
+  hiit: [
+    'Trainer kurz über OP informieren',
+    'Intensität moderat starten',
+    'Kein Kopfunter bei Übungen'
+  ],
+  popup: [],
+  'surfen-eisbach': [],
+  'surfen-o2': [],
+  'surfen-jochen': [],
+  erholung: []
 };
-
-function suggestKraftVariant() {
-  // Tapering-Phase (Woche 6) → C
-  if (currentWeek === 5) return 'C';
-  // Letzte abgeschlossene Kraft-Einheit suchen → die andere vorschlagen
-  let last = null;
-  for (let w = state.weeks.length - 1; w >= 0 && !last; w--) {
-    const days = state.weeks[w].days;
-    for (let d = days.length - 1; d >= 0 && !last; d--) {
-      const units = days[d].units;
-      for (let u = units.length - 1; u >= 0; u--) {
-        const unit = units[u];
-        if (!unit.completed) continue;
-        if (!['kraft', 'kraft-upper', 'kraft-lower'].includes(unit.category)) continue;
-        const t = (unit.title || '').toLowerCase();
-        if (t.includes('kraft a')) { last = 'A'; break; }
-        if (t.includes('kraft b')) { last = 'B'; break; }
-        if (t.includes('kraft c')) { last = 'C'; break; }
-        if (unit.category === 'kraft-lower' || t.includes('bein') || t.includes('lower')) { last = 'B'; break; }
-        last = 'A';
-        break;
-      }
-    }
-  }
-  if (last === 'A') return 'B';
-  if (last === 'B') return 'A';
-  if (last === 'C') return 'C';
-  return 'A'; // Noch nichts erledigt → mit A starten
-}
-
-function suggestTitleAndDetails(category, currentTitle) {
-  const t = (currentTitle || '').toLowerCase();
-
-  // Kraft mit Progression-Awareness
-  if (category === 'kraft' || category === 'kraft-upper' || category === 'kraft-lower') {
-    let variant;
-    if (t.includes('kraft c') || t.includes('tapering') || t.includes('erhalt')) variant = 'C';
-    else if (t.includes('kraft b') || t.includes('bein') || category === 'kraft-lower') variant = 'B';
-    else if (t.includes('kraft a') || t.includes('oberkörper') || category === 'kraft-upper') variant = 'A';
-    else variant = suggestKraftVariant();
-    const tpl = KRAFT_TEMPLATES[variant];
-    return { title: tpl.title, details: [...tpl.details] };
-  }
-
-  if (category === 'popup') {
-    return {
-      title: 'Pop-up Training 2×10',
-      details: [
-        'Liegend, Hände neben Brust',
-        'Explosiv hochdrücken, beide Beine gleichzeitig vorne',
-        'Ziel: unter 1 Sekunde',
-        'Stabiler Stand nach der Landung'
-      ]
-    };
-  }
-
-  if (category === 'paddeln') {
-    return {
-      title: CATEGORY_DEFAULT_TITLES.paddeln || 'Paddel-Session',
-      details: [
-        'Warm-up 5 min an Land (Armkreisen + Cobra)',
-        'Catch-Phase: Arm weit vorne, hoher Ellenbogen',
-        'Rotation aus Schulter & Rumpf',
-        '2–3 kurze Pausen erlaubt',
-        'Cool-down: Cobra + Schulter dehnen'
-      ]
-    };
-  }
-
-  if (category === 'mobility') {
-    if (t.includes('schulter')) return { title: 'Mobility – Schulter-Fokus', details: ['Schulter-Querstretch 45 sek/S', 'Doorway Chest Stretch', 'Thread the Needle (Thoraxrotation)'] };
-    if (t.includes('hüft') || t.includes('huft')) return { title: 'Mobility – Hüfte', details: ['Hip Flexor Stretch 45 sek/S', 'Pigeon Pose 1 min/S', '90/90 Hip Stretch'] };
-    if (t.includes('pack')) return { title: 'Packtag-Mobility', details: ['Schulter-Kreisen', 'Pigeon Pose 1 min/S', 'Cobra-Stretch 5×'] };
-    return {
-      title: CATEGORY_DEFAULT_TITLES.mobility || 'Mobilisation',
-      details: [
-        'Katze-Kuh 10×',
-        'Thorax-Rotation 10× je Seite',
-        'Hip Circles 10× je Seite',
-        'Schulter-Querstretch 30 sek/S',
-        'Kind-Haltung 1 min'
-      ]
-    };
-  }
-
-  if (category === 'yoga') {
-    if (t.includes('yin')) return { title: 'Yoga Yin', details: ['Lange Haltungen (3–5 min)', 'Tief einatmen', 'Pigeon, Sphinx, Reclined Twist'] };
-    return { title: 'Yoga (Sanctuary) buchen', details: [] };
-  }
-
-  if (category === 'balance') {
-    return { title: 'Balance-Training', details: ['Single Leg Balance 30 sek je Bein', 'Steigerung: Augen zu', 'Surf-Board-Simulation auf Bosu-Ball'] };
-  }
-
-  if (category === 'rad') {
-    if (t.includes('zone 2/3') || t.includes('mix')) return { title: 'Rad · Zone 2/3 Mix', details: ['0–30 min: Zone 2', '30–50 min: 3–4 kurze Anstiege Zone 3', '50–80 min: zurück Zone 2'] };
-    if (t.includes('zone 1')) return { title: 'Rad · Zone 1', details: ['Flache Strecke', 'Tempo: locker, unterhalten möglich', 'Bei Stopp ausklicken'] };
-    return { title: CATEGORY_DEFAULT_TITLES.rad || 'Radfahren Zone 2', details: ['Zone 2 steady', 'Kannst dich noch unterhalten'] };
-  }
-
-  if (category === 'laufen') {
-    return { title: 'Lauftraining', details: ['Lockere Strecke', 'Zone 2 – nasal atmen möglich'] };
-  }
-
-  if (category === 'schwimmen') {
-    return { title: 'Schwimmtraining', details: ['Brust + Kraul im Wechsel', 'Gleichmäßiges Tempo', '50 m Pausen-Schwimmen zwischen Sätzen'] };
-  }
-
-  if (category === 'hiit') {
-    return {
-      title: 'HIIT (Limitlezz) buchen',
-      details: [
-        'Limitlezz – 45 min Session',
-        'Intensität nach Tagesform',
-        'Kein Kopfunter bei Übungen (post-OP)'
-      ]
-    };
-  }
-
-  if (category === 'surfen-eisbach') return { title: 'Surfen am Eisbach', details: ['Wartezeit beachten', 'Pop-up vorher trocken üben', 'Take-off: schnell + stabil'] };
-  if (category === 'surfen-o2') return { title: 'Surfen in o2 Surftown', details: ['Vorab buchen', '60 min Slot', 'Pop-up & Take-off-Training'] };
-  if (category === 'surfen-jochen') return { title: 'Surfen bei Jochen Schweizer', details: ['Donnerstags 20–21 h', 'Anmeldung vorab', 'Pop-up-Drill am Anfang'] };
-
-  if (category === 'erholung') {
-    return { title: 'Aktive Erholung', details: [] };
-  }
-
-  return { title: CATEGORY_DEFAULT_TITLES[category] || CATEGORY_LABELS[category] || '', details: [] };
-}
 
 const CATEGORY_LOCATIONS = {
   mobility: { place: 'Zu Hause' },
@@ -1071,147 +955,162 @@ function migrate(data) {
   return out;
 }
 
-function loadState() {
+// === Server-Modus (lokaler Mini-Server via start-app.command) =================
+// base.json + alle Tages-Snapshots werden via fetch() geladen. JSON-Dateien sind
+// die Wahrheit – kein localStorage mehr (außer einmalige Migration alter Daten).
+const CHANGES_PATH = 'pgd-features/training-plan/trainingsplan-changes';
+let serverConnected = false;
+
+async function serverFetchJSON(name) {
+  const res = await fetch(`${CHANGES_PATH}/${name}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`${name}: ${res.status}`);
+  return res.json();
+}
+
+async function serverListSnapshotFiles() {
+  const res = await fetch(`${CHANGES_PATH}/_list`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`_list: ${res.status}`);
+  const all = await res.json();
+  return all.filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f));
+}
+
+async function serverPutSnapshot(snap) {
+  const name = `${snap.meta.version}.json`;
+  const res = await fetch(`${CHANGES_PATH}/${name}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(snap, null, 2)
+  });
+  if (!res.ok) throw new Error(`PUT ${name}: ${res.status}`);
+  return name;
+}
+
+async function serverLoadPlan() {
+  const base = await serverFetchJSON('base.json');
+  if (!base?.weeks) throw new Error('base.json hat keine weeks[]');
+  const files = await serverListSnapshotFiles();
+  const snapshots = [];
+  for (const name of files) {
+    try { snapshots.push(await serverFetchJSON(name)); }
+    catch (err) { console.warn(`Snapshot ${name} fehlerhaft:`, err); }
+  }
+  const current = applyChangesToBase(base, snapshots);
+  return {
+    schemaVersion: base?.meta?.schemaVersion || 4,
+    phaseName: base?.meta?.phaseName || 'Malediven Surftrip · 20. Juni 2026',
+    weeks: current.weeks
+  };
+}
+
+async function serverRecordChanges(newChanges) {
+  if (!serverConnected) return false;
+  if (!Array.isArray(newChanges) || !newChanges.length) return false;
+  const today = todayKey();
+  const name = `${today}.json`;
+  let snap = null;
+  try { snap = await serverFetchJSON(name); } catch {}
+  if (!snap || !snap.meta || !Array.isArray(snap.changes)) snap = emptyTodaySnapshot();
+  const startIdx = snap.changes.length;
+  newChanges.forEach((ch, i) => snap.changes.push({ id: `c${startIdx + i + 1}`, ...ch }));
+  snap.meta.updatedAt = new Date().toISOString();
+  const d = snap.delta || (snap.delta = { categoryShifts: {}, durationDeltaMin: 0, unitsAdded: 0, unitsRemoved: 0 });
+  d.unitsAdded = snap.changes.filter(c => c.field === 'added').length;
+  d.unitsRemoved = snap.changes.filter(c => c.field === 'removed').length;
+  d.durationDeltaMin = snap.changes
+    .filter(c => c.field === 'duration')
+    .reduce((sum, c) => sum + ((Number(c.to) || 0) - (Number(c.from) || 0)), 0);
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return seedState();
-    return migrate(JSON.parse(raw));
-  } catch {
-    return seedState();
+    await serverPutSnapshot(snap);
+    serverUpdateStatus(`Synchronisiert (${snap.changes.length} Änderungen heute)`);
+    return true;
+  } catch (err) {
+    console.warn('Snapshot schreiben fehlgeschlagen:', err);
+    serverUpdateStatus('Speicherfehler – Server erreichbar?');
+    return false;
   }
 }
 
-function saveStateLocal() {
-  let existing = {};
-  try { existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch {}
-  const merged = { ...existing, ...state };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+function serverUpdateStatus(message) {
+  const el = document.getElementById('fs-status');
+  if (!el) return;
+  if (!serverConnected) {
+    el.textContent = 'Server nicht erreichbar – bitte start-app.command starten';
+    el.className = 'fs-status warn';
+    return;
+  }
+  el.textContent = message || 'Synchronisiert';
+  el.className = 'fs-status on';
+}
+
+// Einmalige Migration: existierende localStorage-Plan-State in heutigen Snapshot
+// übernehmen. WICHTIG: profile-Subkey bleibt erhalten – nur weeks/schemaVersion/
+// phaseName werden gelöscht, damit nichts mehr aus localStorage gerendert wird.
+async function migrateLocalStorageOnce() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return 0;
+  let data;
+  try { data = JSON.parse(raw); } catch { return 0; }
+  if (!data || typeof data !== 'object') return 0;
+  // Completed-Flags aus alten weeks extrahieren (falls vorhanden)
+  let changes = [];
+  if (Array.isArray(data.weeks)) {
+    data.weeks.forEach((w, wIdx) => (w.days || []).forEach((d, dIdx) => (d.units || []).forEach((u, uIdx) => {
+      if (u && u.completed) {
+        const unitId = u.unitId || `w${wIdx}-d${dIdx}-u${uIdx}`;
+        changes.push({ unitId, field: 'completed', from: false, to: true, reason: 'localstorage-migration' });
+      }
+    })));
+    if (changes.length) await serverRecordChanges(changes);
+  }
+  // Plan-Felder löschen, profile + profileUpdatedAt unverändert lassen
+  delete data.weeks;
+  delete data.schemaVersion;
+  delete data.phaseName;
+  const remaining = Object.keys(data).length;
+  if (remaining === 0) {
+    localStorage.removeItem(STORAGE_KEY);
+  } else {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+  return changes.length;
+}
+
+async function bootstrap() {
+  try {
+    const plan = await serverLoadPlan();
+    serverConnected = true;
+    // Erst nach erfolgreicher Server-Verbindung: localStorage-completed übernehmen
+    const migrated = await migrateLocalStorageOnce();
+    if (migrated > 0) {
+      // Plan neu laden, damit die migrierten completed-Flags sofort sichtbar sind
+      const refreshed = await serverLoadPlan();
+      state = refreshed;
+      serverUpdateStatus(`${migrated} erledigte Einheiten aus localStorage übernommen`);
+    } else {
+      state = plan;
+      serverUpdateStatus('Synchronisiert');
+    }
+    currentWeek = getCurrentWeekIdx();
+    render();
+  } catch (err) {
+    serverConnected = false;
+    console.error('Server-Verbindung fehlgeschlagen:', err);
+    serverUpdateStatus();
+  }
 }
 
 function saveState(planningChanges) {
-  saveStateLocal();
   if (Array.isArray(planningChanges) && planningChanges.length) {
-    fsRecordChanges(planningChanges).catch(err => console.warn('FS-Snapshot fehlgeschlagen:', err));
-  }
-}
-
-// === File System Access API + Versioning (lädt base.json + Tages-Snapshots) ===
-const FS_DB_NAME = 'pgd-versioning';
-const FS_STORE = 'handles';
-const FS_HANDLE_KEY = 'changes-dir';
-let fsDirHandle = null;
-
-function fsSupported() {
-  return typeof window !== 'undefined' && 'showDirectoryPicker' in window;
-}
-
-function fsOpenDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(FS_DB_NAME, 1);
-    req.onupgradeneeded = () => req.result.createObjectStore(FS_STORE);
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-async function fsLoadHandle() {
-  try {
-    const db = await fsOpenDB();
-    return await new Promise(r => {
-      const tx = db.transaction(FS_STORE, 'readonly');
-      const req = tx.objectStore(FS_STORE).get(FS_HANDLE_KEY);
-      req.onsuccess = () => r(req.result || null);
-      req.onerror = () => r(null);
+    serverRecordChanges(planningChanges).catch(err => {
+      console.warn('Server-Save fehlgeschlagen:', err);
     });
-  } catch { return null; }
-}
-
-async function fsStoreHandle(handle) {
-  try {
-    const db = await fsOpenDB();
-    await new Promise(r => {
-      const tx = db.transaction(FS_STORE, 'readwrite');
-      tx.objectStore(FS_STORE).put(handle, FS_HANDLE_KEY);
-      tx.oncomplete = () => r();
-      tx.onerror = () => r();
-    });
-  } catch {}
-}
-
-async function fsHasPermission(handle, ask = false) {
-  if (!handle) return false;
-  const opts = { mode: 'readwrite' };
-  if ((await handle.queryPermission(opts)) === 'granted') return true;
-  if (ask && (await handle.requestPermission(opts)) === 'granted') return true;
-  return false;
-}
-
-async function fsConnect() {
-  if (!fsSupported()) {
-    alert('Auto-Sync funktioniert nur in Chrome oder Edge. Bitte App in einem dieser Browser öffnen.');
-    return;
-  }
-  try {
-    fsDirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-    await fsStoreHandle(fsDirHandle);
-    fsUpdateStatus('Verbunden – lade Plan …');
-    await fsBootstrap();
-    fsUpdateStatus();
-  } catch (err) {
-    console.warn('Verzeichnis-Verbindung abgebrochen:', err);
   }
 }
 
-async function fsTryReconnect() {
-  if (!fsSupported()) return false;
-  const stored = await fsLoadHandle();
-  if (!stored) return false;
-  if (await fsHasPermission(stored, false)) {
-    fsDirHandle = stored;
-    return true;
-  }
-  return false;
-}
-
+// === Plan-Operationen ========================================================
 function todayKey() {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
-async function fsReadJSON(name) {
-  const fh = await fsDirHandle.getFileHandle(name);
-  const file = await fh.getFile();
-  return JSON.parse(await file.text());
-}
-
-async function fsListChangeFiles() {
-  const files = [];
-  for await (const [name, entry] of fsDirHandle.entries()) {
-    if (entry.kind !== 'file') continue;
-    if (/^\d{4}-\d{2}-\d{2}\.json$/.test(name)) files.push({ name, entry });
-  }
-  files.sort((a, b) => a.name.localeCompare(b.name));
-  return files;
-}
-
-async function fsLoadCurrentPlan() {
-  if (!fsDirHandle) return null;
-  let base;
-  try { base = await fsReadJSON('base.json'); }
-  catch (err) { console.warn('base.json nicht lesbar:', err); return null; }
-  if (!base || !Array.isArray(base.weeks)) {
-    console.warn('base.json hat keine weeks[]');
-    return null;
-  }
-  const files = await fsListChangeFiles();
-  const changeData = [];
-  for (const f of files) {
-    try {
-      const file = await f.entry.getFile();
-      changeData.push(JSON.parse(await file.text()));
-    } catch (err) { console.warn(`Change-Datei ${f.name} fehlerhaft:`, err); }
-  }
-  return applyChangesToBase(base, changeData);
 }
 
 function parseUnitId(id) {
@@ -1245,6 +1144,7 @@ function applyChangesToBase(base, changeFiles) {
       else if (ch.field === 'title') unit.title = ch.to;
       else if (ch.field === 'duration') unit.duration = ch.to;
       else if (ch.field === 'detail') unit.detail = ch.to;
+      else if (ch.field === 'completed') unit.completed = !!ch.to;
       else if (ch.field === 'dayIdx') {
         const target = out.weeks[weekIdx]?.days?.[ch.to];
         if (target) {
@@ -1255,113 +1155,6 @@ function applyChangesToBase(base, changeFiles) {
     }
   }
   return out;
-}
-
-function mergeCompleted(target, source) {
-  if (!source || !Array.isArray(source.weeks)) return;
-  // Map alle "completed:true" Units aus source via unitId-Match auf target
-  const completedIds = new Set();
-  source.weeks.forEach(w => (w.days || []).forEach(d => (d.units || []).forEach(u => {
-    if (u.completed && u.unitId) completedIds.add(u.unitId);
-  })));
-  if (!completedIds.size) return;
-  target.weeks.forEach(w => (w.days || []).forEach(d => (d.units || []).forEach(u => {
-    if (u.unitId && completedIds.has(u.unitId)) u.completed = true;
-  })));
-}
-
-function diffPlans(expected, actual) {
-  const changes = [];
-  if (!expected?.weeks || !actual?.weeks) return changes;
-  const numWeeks = Math.min(expected.weeks.length, actual.weeks.length);
-  for (let w = 0; w < numWeeks; w++) {
-    const eDays = expected.weeks[w]?.days || [];
-    const aDays = actual.weeks[w]?.days || [];
-    for (let d = 0; d < 7; d++) {
-      const eUnits = eDays[d]?.units || [];
-      const aUnits = aDays[d]?.units || [];
-      const max = Math.max(eUnits.length, aUnits.length);
-      for (let u = 0; u < max; u++) {
-        const eU = eUnits[u];
-        const aU = aUnits[u];
-        const unitId = (eU?.unitId) || (aU?.unitId) || `w${w}-d${d}-u${u}`;
-        if (eU && !aU) {
-          changes.push({ unitId, field: 'removed', from: eU, to: null, reason: 'manual-edit-detected' });
-          continue;
-        }
-        if (!eU && aU) {
-          changes.push({ unitId, field: 'added', from: null, to: aU, reason: 'manual-edit-detected' });
-          continue;
-        }
-        if (!eU || !aU) continue;
-        if (eU.category !== aU.category) changes.push({ unitId, field: 'category', from: eU.category, to: aU.category, reason: 'manual-edit-detected' });
-        if ((eU.title || '') !== (aU.title || '')) changes.push({ unitId, field: 'title', from: eU.title, to: aU.title, reason: 'manual-edit-detected' });
-        if ((Number(eU.duration) || 0) !== (Number(aU.duration) || 0)) changes.push({ unitId, field: 'duration', from: eU.duration, to: aU.duration, reason: 'manual-edit-detected' });
-        if (JSON.stringify(eU.detail || []) !== JSON.stringify(aU.detail || [])) changes.push({ unitId, field: 'detail', from: eU.detail, to: aU.detail, reason: 'manual-edit-detected' });
-      }
-    }
-  }
-  return changes;
-}
-
-async function fsBootstrap() {
-  if (!fsDirHandle) return false;
-  let base;
-  try { base = await fsReadJSON('base.json'); }
-  catch (err) { console.warn('base.json nicht lesbar:', err); return false; }
-  if (!base || !Array.isArray(base.weeks)) return false;
-
-  const files = await fsListChangeFiles();
-  const today = todayKey();
-  const pastSnapshots = [];
-  let todaySnapshot = null;
-  for (const f of files) {
-    try {
-      const file = await f.entry.getFile();
-      const data = JSON.parse(await file.text());
-      if (f.name === `${today}.json`) todaySnapshot = data;
-      else pastSnapshots.push(data);
-    } catch (err) { console.warn(`Change-Datei ${f.name} fehlerhaft:`, err); }
-  }
-
-  // Plan-Stand laut Dateien VOR heutigen Änderungen
-  const beforeToday = applyChangesToBase(base, pastSnapshots);
-
-  // localStorage hat möglicherweise ungespeicherte UI-Edits → diffen
-  const todayChangesFromState = diffPlans(beforeToday, state);
-
-  // Mit existierenden heute's Changes mergen (Doppelte vermeiden)
-  const existingChanges = todaySnapshot?.changes || [];
-  const isAlreadyRecorded = (c) => existingChanges.some(x =>
-    x.unitId === c.unitId && x.field === c.field && JSON.stringify(x.to) === JSON.stringify(c.to)
-  );
-  const newToRecord = todayChangesFromState.filter(c => !isAlreadyRecorded(c));
-
-  if (newToRecord.length) {
-    console.info(`${newToRecord.length} ungespeicherte UI-Änderung(en) erkannt → in heute's Snapshot speichern`);
-    await fsRecordChanges(newToRecord);
-    // localStorage-Stand IST die Wahrheit, state bleibt wie er ist
-    saveStateLocal();
-    currentWeek = getCurrentWeekIdx();
-    render();
-    fsUpdateStatus(`${newToRecord.length} Änderung(en) als ${today}.json gespeichert`);
-    return true;
-  }
-
-  // Keine ungespeicherten Änderungen → lade aktuellen Stand aus Dateien
-  const allSnapshots = todaySnapshot ? [...pastSnapshots, todaySnapshot] : pastSnapshots;
-  const current = applyChangesToBase(base, allSnapshots);
-  const planState = {
-    schemaVersion: base?.meta?.schemaVersion || 4,
-    phaseName: base?.meta?.phaseName || 'Malediven Surftrip · 20. Juni 2026',
-    weeks: current.weeks
-  };
-  mergeCompleted(planState, state);
-  state = planState;
-  saveStateLocal();
-  currentWeek = getCurrentWeekIdx();
-  render();
-  return true;
 }
 
 function emptyTodaySnapshot() {
@@ -1387,55 +1180,6 @@ function emptyTodaySnapshot() {
   };
 }
 
-async function fsRecordChanges(newChanges) {
-  if (!fsDirHandle || !await fsHasPermission(fsDirHandle, false)) return false;
-  const today = todayKey();
-  const name = `${today}.json`;
-  let snap = null;
-  try { snap = await fsReadJSON(name); } catch {}
-  if (!snap || !snap.meta || !Array.isArray(snap.changes)) snap = emptyTodaySnapshot();
-  const startIdx = snap.changes.length;
-  newChanges.forEach((ch, i) => {
-    snap.changes.push({ id: `c${startIdx + i + 1}`, ...ch });
-  });
-  snap.meta.updatedAt = new Date().toISOString();
-  // Delta aktualisieren (einfach: Anzahl added/removed zählen + Dauer-Diff)
-  const d = snap.delta || (snap.delta = { categoryShifts: {}, durationDeltaMin: 0, unitsAdded: 0, unitsRemoved: 0 });
-  d.unitsAdded = snap.changes.filter(c => c.field === 'added').length;
-  d.unitsRemoved = snap.changes.filter(c => c.field === 'removed').length;
-  d.durationDeltaMin = snap.changes
-    .filter(c => c.field === 'duration')
-    .reduce((sum, c) => sum + ((Number(c.to) || 0) - (Number(c.from) || 0)), 0);
-  try {
-    const fh = await fsDirHandle.getFileHandle(name, { create: true });
-    const writable = await fh.createWritable();
-    await writable.write(JSON.stringify(snap, null, 2));
-    await writable.close();
-    fsUpdateStatus(`Gespeichert: ${name}`);
-    return true;
-  } catch (err) {
-    console.warn('Snapshot schreiben fehlgeschlagen:', err);
-    return false;
-  }
-}
-
-function fsUpdateStatus(message) {
-  const el = document.getElementById('fs-status');
-  if (!el) return;
-  if (!fsSupported()) {
-    el.textContent = 'Auto-Sync nicht verfügbar (nur Chrome/Edge)';
-    el.className = 'fs-status warn';
-    return;
-  }
-  if (!fsDirHandle) {
-    el.textContent = 'Verzeichnis nicht verbunden – Plan kommt aus localStorage';
-    el.className = 'fs-status off';
-    return;
-  }
-  el.textContent = message || `Auto-Sync aktiv: ${fsDirHandle.name}`;
-  el.className = 'fs-status on';
-}
-
 function getCurrentWeekIdx() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -1447,7 +1191,7 @@ function getCurrentWeekIdx() {
   return NUM_WEEKS - 1;
 }
 
-let state = loadState();
+let state = seedState(); // initialer Stand für sofortiges Rendering; bootstrap() ersetzt durch Server-Stand
 let currentWeek = getCurrentWeekIdx();
 let editing = null;
 let lastTripPct = null;
@@ -1680,9 +1424,16 @@ function renderWorkoutRow(unit, dayIdx, uIdx) {
   check.setAttribute('aria-label', unit.completed ? 'Als unerledigt markieren' : 'Als erledigt markieren');
   check.addEventListener('click', (e) => {
     e.stopPropagation();
-    unit.completed = !unit.completed;
-    // completed ist Progress, kein Plan-Delta → nur localStorage
-    saveStateLocal();
+    const newCompleted = !unit.completed;
+    unit.completed = newCompleted;
+    const unitId = unit.unitId || `w${currentWeek}-d${dayIdx}-u${uIdx}`;
+    saveState([{
+      unitId,
+      field: 'completed',
+      from: !newCompleted,
+      to: newCompleted,
+      reason: newCompleted ? 'user-completed' : 'user-uncompleted'
+    }]);
     render();
   });
   row.appendChild(check);
@@ -1739,12 +1490,11 @@ function openAddUnit(weekIdx, dayIdx) {
   editing = { weekIdx, dayIdx, unitIdx: -1, isNew: true };
   const form = /** @type {any} */ (document.getElementById('edit-form'));
   const defaultCat = 'mobility';
-  const suggestion = suggestTitleAndDetails(defaultCat, '');
   form.weekday.value = String(dayIdx);
   form.category.value = defaultCat;
-  form.title.value = suggestion.title;
+  form.title.value = CATEGORY_DEFAULT_TITLES[defaultCat] || CATEGORY_LABELS[defaultCat] || '';
   form.duration.value = '';
-  if (form.detail) form.detail.value = suggestion.details.join('\n');
+  if (form.detail) form.detail.value = (CATEGORY_DETAILS[defaultCat] || []).join('\n');
   document.getElementById('edit-title').textContent = 'Neue Einheit';
   document.getElementById('edit-unit-title').textContent = '';
   document.getElementById('delete-btn').style.display = 'none';
@@ -1758,9 +1508,10 @@ function setupDialog() {
 
   form.category.addEventListener('change', () => {
     const cat = form.category.value;
-    const suggestion = suggestTitleAndDetails(cat, form.title.value);
-    form.title.value = suggestion.title;
-    if (form.detail) form.detail.value = suggestion.details.join('\n');
+    form.title.value = CATEGORY_DEFAULT_TITLES[cat] || CATEGORY_LABELS[cat] || '';
+    if (form.detail) {
+      form.detail.value = (CATEGORY_DETAILS[cat] || []).join('\n');
+    }
   });
 
   form.addEventListener('submit', (e) => {
@@ -1842,12 +1593,6 @@ function setupDialog() {
 document.addEventListener('DOMContentLoaded', async () => {
   setupDialog();
   render();
-  const connectBtn = document.getElementById('fs-connect-btn');
-  if (connectBtn) connectBtn.addEventListener('click', fsConnect);
-  fsUpdateStatus();
-  // Lautlos versuchen, das verbundene Verzeichnis wiederherzustellen + Plan neu laden
-  if (await fsTryReconnect()) {
-    await fsBootstrap();
-    fsUpdateStatus();
-  }
+  serverUpdateStatus();
+  await bootstrap();
 });

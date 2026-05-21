@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "version": "2026-05-21",
+    "versionNumber": 1,
+    "createdAt": "2026-05-21",
+    "basedOn": "base",
+    "changedBy": "Katharina",
+    "trigger": "user-edit",
+    "summary": "",
+    "updatedAt": "2026-05-21T06:48:02.474Z"
+  },
+  "changes": [
+    {
+      "id": "c1",
+      "unitId": "w0-d4-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c2",
+      "unitId": "w0-d5-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c3",
+      "unitId": "w0-d6-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c4",
+      "unitId": "w1-d0-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c5",
+      "unitId": "w1-d1-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c6",
+      "unitId": "w1-d2-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c7",
+      "unitId": "w1-d3-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c8",
+      "unitId": "w1-d4-u0",
+      "field": "title",
+      "from": "Krafttraining Oberkörper oder Paddeln in FM",
+      "to": "Krafttraining Oberkörper / Paddeln in FM",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c9",
+      "unitId": "w1-d4-u0",
+      "field": "detail",
+      "from": [
+        "Kein Hügel",
+        "Tempo: locker, unterhalten möglich",
+        "Bei jedem Stopp ausklicken"
+      ],
+      "to": [],
+      "reason": "user-edit"
+    },
+    {
+      "id": "c10",
+      "unitId": "w1-d6-u0",
+      "field": "category",
+      "from": "paddeln",
+      "to": "rad",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c11",
+      "unitId": "w1-d6-u0",
+      "field": "title",
+      "from": "Paddel-Session / Nikita BBQ",
+      "to": "Abends Radfahrt mit Holger?",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c12",
+      "unitId": "w1-d6-u0",
+      "field": "duration",
+      "from": 35,
+      "to": 120,
+      "reason": "user-edit"
+    },
+    {
+      "id": "c13",
+      "unitId": "w1-d6-u0",
+      "field": "detail",
+      "from": [
+        "Zone 1–2",
+        "Ausklick-Reflex testen: kurz bremsen & sofort ausklicken"
+      ],
+      "to": [
+        "Vorher: 10× Einklicken stehend an Wand üben",
+        "Nur bekannte flache Runde",
+        "Bei jedem Stopp bewusst ausklicken",
+        "Kein Hügel, keine Schnelligkeit"
+      ],
+      "reason": "user-edit"
+    }
+  ],
+  "delta": {
+    "categoryShifts": {},
+    "durationDeltaMin": 85,
+    "unitsAdded": 0,
+    "unitsRemoved": 0
+  },
+  "goalImpact": null
+}

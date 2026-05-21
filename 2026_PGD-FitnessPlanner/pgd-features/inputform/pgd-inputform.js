@@ -1,11 +1,11 @@
 /* ============================================
    SURF FITNESS — PROFIL & PLAN ÜBERSICHT
-   localStorage key: trainingsplan-v2 (profile sub-key)
+   Profile-Speicher: pgd-features/inputform/profile.json (via Mini-Server)
    ============================================ */
 
 'use strict';
 
-const LS_KEY = 'trainingsplan-v2';
+const PROFILE_URL = '/pgd-features/inputform/profile.json';
 
 const SCALE_DESCRIPTIONS = {
   paddelausdauer: ['', 'gar keine Erfahrung', 'erste kurze Versuche', '2–3 km mit Pausen', '4–5 km mit kurzen Stops', '5+ km am Stück'],
@@ -98,21 +98,47 @@ const CATEGORY_LABELS = {
   erholung: 'Erholung',
 };
 
-// ── Storage ──
+// ── Storage (via Mini-Server: profile.json) ──
 
-function loadStorage() {
-  try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; }
+let serverProfileAvailable = false;
+let profileCache = null; // wird beim ersten Laden gesetzt, danach optimistisch lokal aktualisiert
+
+async function loadProfile() {
+  try {
+    const res = await fetch(PROFILE_URL, { cache: 'no-store' });
+    if (res.status === 404) {
+      serverProfileAvailable = true;
+      profileCache = null;
+      return null;
+    }
+    if (!res.ok) throw new Error(`GET profile: ${res.status}`);
+    const data = await res.json();
+    serverProfileAvailable = true;
+    profileCache = data?.profile || null;
+    return profileCache;
+  } catch (err) {
+    console.warn('Profil laden fehlgeschlagen (Server läuft?):', err);
+    serverProfileAvailable = false;
+    return profileCache; // letzter bekannter Stand, falls überhaupt
+  }
 }
 
-function saveProfile(profile) {
-  const data = loadStorage();
-  data.profile = profile;
-  data.profileUpdatedAt = new Date().toISOString();
-  localStorage.setItem(LS_KEY, JSON.stringify(data));
-}
-
-function loadProfile() {
-  return loadStorage().profile || null;
+async function saveProfile(profile) {
+  const payload = { profile, profileUpdatedAt: new Date().toISOString() };
+  try {
+    const res = await fetch(PROFILE_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload, null, 2)
+    });
+    if (!res.ok) throw new Error(`PUT profile: ${res.status}`);
+    profileCache = profile;
+    return true;
+  } catch (err) {
+    console.warn('Profil speichern fehlgeschlagen (Server läuft?):', err);
+    alert('Profil konnte nicht gespeichert werden. Läuft der Server (start-app.command)?');
+    return false;
+  }
 }
 
 // ── Sliders ──
@@ -398,8 +424,8 @@ function renderStatusView(profile) {
   grid.appendChild(mobilityRow);
 }
 
-function enterViewMode() {
-  const profile = loadProfile();
+async function enterViewMode() {
+  const profile = profileCache !== null ? profileCache : await loadProfile();
   if (!profile) { enterEditMode(); return; }
   renderStatusView(profile);
   document.getElementById('status-view').hidden = false;
@@ -563,11 +589,11 @@ function exportJSON(profile) {
 
 function initButtons() {
   const submitBtn = document.getElementById('btn-submit');
-  if (submitBtn) submitBtn.addEventListener('click', () => {
+  if (submitBtn) submitBtn.addEventListener('click', async () => {
     const profile = collectProfile();
-    saveProfile(profile);
+    const ok = await saveProfile(profile);
     renderGoals();
-    enterViewMode();
+    if (ok) await enterViewMode();
   });
 
   const editBtn = document.getElementById('btn-edit');
@@ -577,22 +603,22 @@ function initButtons() {
   if (exportBtn) exportBtn.addEventListener('click', () => exportJSON(collectProfile()));
 
   const exportViewBtn = document.getElementById('btn-export-view');
-  if (exportViewBtn) exportViewBtn.addEventListener('click', () => {
-    const p = loadProfile() || collectProfile();
+  if (exportViewBtn) exportViewBtn.addEventListener('click', async () => {
+    const p = (await loadProfile()) || collectProfile();
     exportJSON(p);
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initSliders();
   initLevelButtons();
   initGarminToggle();
   initButtons();
 
-  const saved = loadProfile();
+  const saved = await loadProfile();
   if (saved) {
     restoreForm(saved);
-    enterViewMode();
+    await enterViewMode();
   } else {
     enterEditMode();
   }

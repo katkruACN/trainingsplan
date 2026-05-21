@@ -1,0 +1,41 @@
+{
+  "profile": {
+    "personal": {
+      "name": "Katharina",
+      "alter": 44,
+      "geschlecht": "w",
+      "groesse": 168,
+      "gewicht": 54,
+      "maxHF": 176,
+      "trainingLevel": "advanced",
+      "surfLevel": "intermediate"
+    },
+    "goal": {
+      "tripDatum": "2026-06-20",
+      "surfTage": 5,
+      "surfStunden": 2.5
+    },
+    "paddlePower": {
+      "paddelausdauer": 3,
+      "okoerper": 3,
+      "cardio": 3
+    },
+    "surfStrength": {
+      "popup": 3,
+      "stabilitaet": 4
+    },
+    "stabilitaetBeweglichkeit": {
+      "beweglichkeit": 3,
+      "balance": 3
+    },
+    "garmin": {
+      "vo2max": null,
+      "ruheHF": null,
+      "hrv": null,
+      "bodyBattery": null,
+      "load": null,
+      "status": null
+    }
+  },
+  "profileUpdatedAt": "2026-05-21T06:55:22.884Z"
+}

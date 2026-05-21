@@ -5,6 +5,7 @@
 
 Jede Änderung am Trainingsplan wird als **Tages-Snapshot** gespeichert.  
 Der Basisplan bleibt immer unverändert als Referenz erhalten.  
+In der Applikation wird immer der Snapshot mit den letzten Änderungen des Users gespeichert.
 Die KI analysiert das Delta zwischen Basis und aktueller Version.
 
 ---
@@ -143,6 +144,7 @@ Beispiele: `w0-d4-u0`, `w1-d2-u0`, `w3-d6-u1`
 | `title` | Titel der Einheit geändert |
 | `duration` | Dauer in Minuten geändert |
 | `detail` | Detailliste geändert |
+| `completed` | Erledigt-Häkchen toggle (Boolean, Progress-Tracking) |
 | `dayIdx` | Einheit auf anderen Wochentag verschoben (0=Mo … 6=So) |
 | `removed` | Einheit entfernt (`to: null`) |
 | `added` | Neue Einheit hinzugefügt (`from: null`) |
@@ -151,11 +153,25 @@ Beispiele: `w0-d4-u0`, `w1-d2-u0`, `w3-d6-u1`
 
 ## App-Logik (für Cursor)
 
+### Server-Setup (Pflicht)
+Die App wird über `start-app.command` (Doppelklick) gestartet. Das ruft `server.py` auf, der einen kleinen HTTP-Server auf `http://localhost:8765` startet und Chrome/Safari öffnet.
+
+- **GET** `/pgd-features/training-plan/trainingsplan-changes/base.json` → liefert base.json
+- **GET** `/pgd-features/training-plan/trainingsplan-changes/_list` → JSON-Array aller Snapshot-Dateien
+- **PUT** `/pgd-features/training-plan/trainingsplan-changes/YYYY-MM-DD.json` → schreibt Snapshot (base.json gesperrt)
+- **DELETE** `/pgd-features/training-plan/trainingsplan-changes/YYYY-MM-DD.json` → löscht Snapshot
+
+**Kein localStorage mehr** — JSON-Dateien sind die Wahrheit. Sobald die App lädt, holt sie base.json + alle YYYY-MM-DD.json und rendert das Ergebnis.
+
 ### Aktuellen Plan laden
 ```js
-const base = await loadJSON('versions/base.json')
-const changes = await loadAllChanges('versions/') // alle YYYY-MM-DD.json, sortiert
-const current = applyChanges(base, changes)
+const base = await fetch(`${CHANGES_PATH}/base.json`).then(r => r.json())
+const files = await fetch(`${CHANGES_PATH}/_list`).then(r => r.json())
+const snapshots = await Promise.all(
+  files.filter(n => /^\d{4}-\d{2}-\d{2}\.json$/.test(n))
+       .map(n => fetch(`${CHANGES_PATH}/${n}`).then(r => r.json()))
+)
+const current = applyChanges(base, snapshots)
 renderPlan(current)
 ```
 
