@@ -94,10 +94,26 @@ const SCALE_LABELS = {
   okoerper: 'Oberkörperkraft',
   cardio: 'Cardio-Basis',
   popup: 'Pop-up',
-  stabilitaet: 'Unterkörper-Stabilität',
+  stabilitaet: 'Unterkörperkraft',
   beweglichkeit: 'Beweglichkeit',
-  balance: 'Körpergefühl / Balance',
+  balance: 'Balance',
 };
+
+const EQUIPMENT_LABELS = {
+  studio: 'Fitness Studio',
+  home: 'Training zu Hause',
+  rad: 'Radfahren',
+  joggen: 'Joggen',
+  schwimmen: 'Schwimmen',
+  paddeln: 'Paddeltraining',
+  surfen: 'Surfen',
+  hiit: 'HIIT / Zirkel',
+  yoga: 'Yoga / Pilates',
+};
+
+const WEEKDAY_LABELS = { mo: 'Mo', di: 'Di', mi: 'Mi', do: 'Do', fr: 'Fr', sa: 'Sa', so: 'So' };
+
+const DATUM_FLEX_LABELS = { fix: 'Fix', flexibel: 'Flexibel' };
 
 const WEEK_OVERVIEW = [
   { num: 1, phase: 'Slow Start',  dates: '12. – 18. Mai',       goal: 'Sanfter Wiedereinstieg — erste Rad-Runde',           cats: ['mobility', 'erholung', 'rad', 'yoga'] },
@@ -258,6 +274,28 @@ function initLevelButtons() {
   });
 }
 
+// ── Chip Groups (Multi-Select) ──
+
+function initChipGroups() {
+  document.querySelectorAll('.chip-group .chip').forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      e.preventDefault();
+      chip.classList.toggle('selected');
+    });
+  });
+}
+
+function getChipValues(groupId) {
+  return [...document.querySelectorAll(`#${groupId} .chip.selected`)].map(c => c.dataset.value);
+}
+
+function setChipValues(groupId, values) {
+  const set = new Set(Array.isArray(values) ? values : []);
+  document.querySelectorAll(`#${groupId} .chip`).forEach(c => {
+    c.classList.toggle('selected', set.has(c.dataset.value));
+  });
+}
+
 // ── Garmin Toggle ──
 
 function initGarminToggle() {
@@ -279,9 +317,11 @@ function getScale(key) {
 
 function collectProfile() {
   const get = id => document.getElementById(id)?.value || '';
+  const getTrim = id => (document.getElementById(id)?.value || '').trim();
   const getNum = id => parseFloat(get(id)) || null;
   const getSelected = group =>
     document.querySelector(`[data-group="${group}"][class*="selected"]`)?.dataset.value || null;
+  const getChecked = id => !!document.getElementById(id)?.checked;
 
   const alter = getNum('alter');
 
@@ -298,8 +338,10 @@ function collectProfile() {
     },
     goal: {
       tripDatum: get('trip-datum'),
+      datumFlex: getSelected('datum-flex'),
       surfTage: getNum('surf-tage'),
       surfStunden: getNum('surf-stunden'),
+      anderesZiel: getTrim('anderes-ziel'),
     },
     paddlePower: {
       paddelausdauer: getScale('paddelausdauer'),
@@ -314,6 +356,16 @@ function collectProfile() {
       beweglichkeit: getScale('beweglichkeit'),
       balance: getScale('balance'),
     },
+    equipment: {
+      activities: getChipValues('chip-group-equipment'),
+      sonstiges: getTrim('equipment-sonstiges'),
+    },
+    routinen: {
+      noSportWeekdays: getChipValues('chip-group-weekdays'),
+      biweekly: getChecked('weekdays-biweekly'),
+      praeferenzen: getTrim('praeferenzen'),
+      verletzungen: getTrim('verletzungen'),
+    },
     garmin: {
       vo2max: getNum('vo2max'),
       ruheHF: getNum('ruhe-hf'),
@@ -327,11 +379,20 @@ function collectProfile() {
 
 function restoreForm(profile) {
   if (!profile) return;
-  const { personal, goal, paddlePower, surfStrength, stabilitaetBeweglichkeit, garmin } = profile;
+  const { personal, goal, paddlePower, surfStrength, stabilitaetBeweglichkeit, equipment, routinen, garmin } = profile;
 
   const set = (id, val) => {
     const el = document.getElementById(id);
     if (el && val !== null && val !== undefined) el.value = val;
+  };
+  const setChecked = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.checked = !!val;
+  };
+  const setLevel = (group, value) => {
+    if (!value) return;
+    const btn = document.querySelector(`[data-group="${group}"][data-value="${value}"]`);
+    if (btn) btn.classList.add('selected-personal');
   };
   const setScale = (key, val) => {
     const el = document.getElementById('range-' + key);
@@ -344,19 +405,15 @@ function restoreForm(profile) {
     set('geschlecht', personal.geschlecht);
     set('groesse', personal.groesse);
     set('gewicht', personal.gewicht);
-    if (personal.trainingLevel) {
-      const btn = document.querySelector(`[data-group="training"][data-value="${personal.trainingLevel}"]`);
-      if (btn) btn.classList.add('selected-personal');
-    }
-    if (personal.surfLevel) {
-      const btn = document.querySelector(`[data-group="surf"][data-value="${personal.surfLevel}"]`);
-      if (btn) btn.classList.add('selected-personal');
-    }
+    setLevel('training', personal.trainingLevel);
+    setLevel('surf', personal.surfLevel);
   }
   if (goal) {
     set('trip-datum', goal.tripDatum);
+    setLevel('datum-flex', goal.datumFlex);
     set('surf-tage', goal.surfTage);
     set('surf-stunden', goal.surfStunden);
+    set('anderes-ziel', goal.anderesZiel);
   }
   if (paddlePower) {
     setScale('paddelausdauer', paddlePower.paddelausdauer);
@@ -370,6 +427,16 @@ function restoreForm(profile) {
   if (stabilitaetBeweglichkeit) {
     setScale('beweglichkeit', stabilitaetBeweglichkeit.beweglichkeit);
     setScale('balance', stabilitaetBeweglichkeit.balance);
+  }
+  if (equipment) {
+    setChipValues('chip-group-equipment', equipment.activities);
+    set('equipment-sonstiges', equipment.sonstiges);
+  }
+  if (routinen) {
+    setChipValues('chip-group-weekdays', routinen.noSportWeekdays);
+    setChecked('weekdays-biweekly', routinen.biweekly);
+    set('praeferenzen', routinen.praeferenzen);
+    set('verletzungen', routinen.verletzungen);
   }
   if (garmin) {
     set('vo2max', garmin.vo2max);
@@ -450,6 +517,8 @@ function renderStatusView(profile) {
   const pp = profile.paddlePower || {};
   const ss = profile.surfStrength || {};
   const sb = profile.stabilitaetBeweglichkeit || {};
+  const eq = profile.equipment || {};
+  const rt = profile.routinen || {};
 
   // Personal group
   grid.appendChild(viewGroupHeader('Persönliche Daten', 'tag-personal'));
@@ -461,21 +530,34 @@ function renderStatusView(profile) {
   personalRow.appendChild(viewItem('Größe', p.groesse ? p.groesse + ' cm' : null));
   personalRow.appendChild(viewItem('Gewicht', p.gewicht ? p.gewicht + ' kg' : null));
   personalRow.appendChild(viewItem('Max HF', p.maxHF ? p.maxHF + ' bpm' : null));
-  personalRow.appendChild(viewItem('Training', LEVEL_LABELS[p.trainingLevel] || p.trainingLevel));
-  personalRow.appendChild(viewItem('Surf-Level', LEVEL_LABELS[p.surfLevel] || p.surfLevel));
   grid.appendChild(personalRow);
 
   // Goal group
   grid.appendChild(viewGroupHeader('Zieldefinition', 'tag-goal'));
   const goalRow = document.createElement('div');
   goalRow.className = 'view-row';
-  goalRow.appendChild(viewItem('Trip-Datum', g.tripDatum ? new Date(g.tripDatum).toLocaleDateString('de-DE') : null));
+  goalRow.appendChild(viewItem('Ziel-Datum', g.tripDatum ? new Date(g.tripDatum).toLocaleDateString('de-DE') : null));
+  goalRow.appendChild(viewItem('Datum ist', DATUM_FLEX_LABELS[g.datumFlex] || g.datumFlex));
   goalRow.appendChild(viewItem('Surf-Tage', g.surfTage));
   goalRow.appendChild(viewItem('Std./Tag', g.surfStunden));
   grid.appendChild(goalRow);
+  if (g.anderesZiel) {
+    const anderesRow = document.createElement('div');
+    anderesRow.className = 'view-row';
+    anderesRow.appendChild(viewItem('Anderes Ziel', g.anderesZiel));
+    grid.appendChild(anderesRow);
+  }
+
+  // Selbsteinschätzung — Levels
+  grid.appendChild(viewGroupHeader('Fitness-Status — Selbsteinschätzung', 'tag-personal'));
+  const levelRow = document.createElement('div');
+  levelRow.className = 'view-row';
+  levelRow.appendChild(viewItem('Training', LEVEL_LABELS[p.trainingLevel] || p.trainingLevel));
+  levelRow.appendChild(viewItem('Surf-Level', LEVEL_LABELS[p.surfLevel] || p.surfLevel));
+  grid.appendChild(levelRow);
 
   // Paddle
-  grid.appendChild(viewGroupHeader('Paddle Power', 'tag-paddle'));
+  grid.appendChild(viewGroupHeader('Aktuelle Paddle Power', 'tag-paddle'));
   const paddleRow = document.createElement('div');
   paddleRow.className = 'view-row';
   paddleRow.appendChild(viewScaleItem('Paddelausdauer', pp.paddelausdauer || 1, 'var(--cat-paddeln)'));
@@ -484,20 +566,57 @@ function renderStatusView(profile) {
   grid.appendChild(paddleRow);
 
   // Strength
-  grid.appendChild(viewGroupHeader('Surf Strength', 'tag-strength'));
+  grid.appendChild(viewGroupHeader('Aktuelle Surf Strength', 'tag-strength'));
   const strengthRow = document.createElement('div');
   strengthRow.className = 'view-row';
   strengthRow.appendChild(viewScaleItem('Pop-up', ss.popup || 1, 'var(--cat-kraft)'));
-  strengthRow.appendChild(viewScaleItem('Unterkörper-Stab.', ss.stabilitaet || 1, 'var(--cat-kraft)'));
+  strengthRow.appendChild(viewScaleItem('Unterkörperkraft', ss.stabilitaet || 1, 'var(--cat-kraft)'));
   grid.appendChild(strengthRow);
 
   // Mobility
-  grid.appendChild(viewGroupHeader('Stabilität & Beweglichkeit', 'tag-mobility'));
+  grid.appendChild(viewGroupHeader('Aktuelle Mobilität', 'tag-mobility'));
   const mobilityRow = document.createElement('div');
   mobilityRow.className = 'view-row';
   mobilityRow.appendChild(viewScaleItem('Beweglichkeit', sb.beweglichkeit || 1, 'var(--cat-mobility)'));
-  mobilityRow.appendChild(viewScaleItem('Körpergefühl / Balance', sb.balance || 1, 'var(--cat-mobility)'));
+  mobilityRow.appendChild(viewScaleItem('Balance', sb.balance || 1, 'var(--cat-mobility)'));
   grid.appendChild(mobilityRow);
+
+  // Equipment & Aktivitäten
+  const eqActivities = Array.isArray(eq.activities) ? eq.activities : [];
+  if (eqActivities.length || eq.sonstiges) {
+    grid.appendChild(viewGroupHeader('Equipment & Aktivitäten', 'tag-personal'));
+    const eqRow = document.createElement('div');
+    eqRow.className = 'view-row';
+    const labels = eqActivities.map(v => EQUIPMENT_LABELS[v] || v);
+    if (eq.sonstiges) labels.push(eq.sonstiges);
+    eqRow.appendChild(viewItem('Aktivitäten', labels.length ? labels.join(', ') : null));
+    grid.appendChild(eqRow);
+  }
+
+  // Wöchentliche Routinen
+  const weekdays = Array.isArray(rt.noSportWeekdays) ? rt.noSportWeekdays : [];
+  if (weekdays.length || rt.praeferenzen || rt.verletzungen) {
+    grid.appendChild(viewGroupHeader('Wöchentliche Routinen', 'tag-personal'));
+    const rtRow = document.createElement('div');
+    rtRow.className = 'view-row';
+    if (weekdays.length) {
+      const wdLabel = weekdays.map(v => WEEKDAY_LABELS[v] || v).join(', ') + (rt.biweekly ? ' (bi-weekly)' : '');
+      rtRow.appendChild(viewItem('Sport nicht möglich', wdLabel));
+    }
+    if (rt.praeferenzen) rtRow.appendChild(viewItem('Präferenzen', rt.praeferenzen));
+    if (rt.verletzungen) rtRow.appendChild(viewItem('Verletzungen', rt.verletzungen));
+    grid.appendChild(rtRow);
+  }
+}
+
+function setGoalsNavVisible(visible) {
+  const nav = document.getElementById('goals-nav-bar');
+  if (!nav) return;
+  nav.hidden = !visible;
+  if (visible) {
+    const deleteBtn = document.getElementById('btn-delete-user');
+    if (deleteBtn) deleteBtn.hidden = isNewUserFlow || !userId;
+  }
 }
 
 async function enterViewMode() {
@@ -506,11 +625,13 @@ async function enterViewMode() {
   renderStatusView(profile);
   document.getElementById('status-view').hidden = false;
   document.getElementById('status-edit').hidden = true;
+  setGoalsNavVisible(true);
 }
 
 function enterEditMode() {
   document.getElementById('status-view').hidden = true;
   document.getElementById('status-edit').hidden = false;
+  setGoalsNavVisible(false);
 }
 
 // ── Goals Section (live) ──
@@ -627,9 +748,7 @@ async function renderPlan() {
   if (!Array.isArray(weeks) || weeks.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'field-hint';
-    empty.textContent = userId
-      ? 'Plan wird gerade generiert oder ist noch nicht angelegt.'
-      : 'Lege ein Profil an, damit dein Plan generiert werden kann.';
+    empty.textContent = 'Trainingsplan wird erstellt.';
     container.appendChild(empty);
     return;
   }
@@ -675,6 +794,518 @@ async function renderPlan() {
     row.appendChild(info);
     container.appendChild(row);
   });
+}
+
+// ── PDF Export ──
+
+const WEEKDAYS_FULL_DE = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+const PDF_PROGRESS_EXCLUDED = new Set(['erholung']);
+
+function planTripStats(plan) {
+  let planned = 0, done = 0;
+  (plan?.weeks || []).forEach(w => (w.days || []).forEach(d => (d.units || []).forEach(u => {
+    if (PDF_PROGRESS_EXCLUDED.has(u.category)) return;
+    planned++;
+    if (u.completed) done++;
+  })));
+  return { planned, done, pct: planned ? Math.round((done / planned) * 100) : 0 };
+}
+
+function pdfItem(label, value, parent) {
+  const item = document.createElement('div');
+  item.className = 'pdf-profile-item';
+  const l = document.createElement('div');
+  l.className = 'pdf-profile-label';
+  l.textContent = label;
+  const v = document.createElement('div');
+  v.className = 'pdf-profile-value';
+  v.textContent = (value === null || value === undefined || value === '') ? '–' : value;
+  item.appendChild(l);
+  item.appendChild(v);
+  if (parent) parent.appendChild(item);
+  return item;
+}
+
+function pdfScaleItem(label, val, accent, parent) {
+  const item = document.createElement('div');
+  item.className = 'pdf-profile-item';
+  const l = document.createElement('div');
+  l.className = 'pdf-profile-label';
+  l.textContent = label;
+  const scale = document.createElement('div');
+  scale.className = 'pdf-profile-scale';
+  const bar = document.createElement('div');
+  bar.className = 'pdf-profile-scale-bar';
+  const fill = document.createElement('div');
+  fill.className = 'pdf-profile-scale-fill';
+  fill.style.width = ((val - 1) / 4 * 100) + '%';
+  fill.style.background = accent;
+  bar.appendChild(fill);
+  const v = document.createElement('span');
+  v.className = 'pdf-profile-value';
+  v.textContent = val + ' / 5';
+  v.style.color = accent;
+  v.style.fontSize = '11px';
+  scale.appendChild(bar);
+  scale.appendChild(v);
+  item.appendChild(l);
+  item.appendChild(scale);
+  if (parent) parent.appendChild(item);
+  return item;
+}
+
+function pdfSection(parent, title) {
+  const h3 = document.createElement('h3');
+  h3.textContent = title;
+  parent.appendChild(h3);
+}
+
+function buildPdfPage1Profile(profile) {
+  const page = document.createElement('section');
+  page.className = 'pdf-page';
+
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'pdf-eyebrow';
+  eyebrow.textContent = '01 — Meine Fitnessdaten';
+  page.appendChild(eyebrow);
+
+  const h1 = document.createElement('h1');
+  h1.textContent = profile?.personal?.name ? `Profil: ${profile.personal.name}` : 'Profil';
+  page.appendChild(h1);
+
+  const sub = document.createElement('div');
+  sub.className = 'pdf-subtitle';
+  sub.textContent = 'Persönliche Angaben und Ziele';
+  page.appendChild(sub);
+
+  const p = profile?.personal || {};
+  const g = profile?.goal || {};
+  const pp = profile?.paddlePower || {};
+  const ss = profile?.surfStrength || {};
+  const sb = profile?.stabilitaetBeweglichkeit || {};
+  const eq = profile?.equipment || {};
+  const rt = profile?.routinen || {};
+
+  // Persönliche Daten
+  pdfSection(page, 'Persönliche Daten');
+  const pGrid = document.createElement('div');
+  pGrid.className = 'pdf-profile-grid';
+  pdfItem('Name', p.name, pGrid);
+  pdfItem('Alter', p.alter ? p.alter + ' J' : null, pGrid);
+  pdfItem('Geschlecht', GESCHLECHT_LABELS[p.geschlecht] || p.geschlecht, pGrid);
+  pdfItem('Größe', p.groesse ? p.groesse + ' cm' : null, pGrid);
+  pdfItem('Gewicht', p.gewicht ? p.gewicht + ' kg' : null, pGrid);
+  pdfItem('Max HF', p.maxHF ? p.maxHF + ' bpm' : null, pGrid);
+  pdfItem('Training', LEVEL_LABELS[p.trainingLevel] || p.trainingLevel, pGrid);
+  pdfItem('Surf-Level', LEVEL_LABELS[p.surfLevel] || p.surfLevel, pGrid);
+  page.appendChild(pGrid);
+
+  // Zieldefinition
+  pdfSection(page, 'Zieldefinition');
+  const gGrid = document.createElement('div');
+  gGrid.className = 'pdf-profile-grid';
+  pdfItem('Ziel-Datum', g.tripDatum ? new Date(g.tripDatum).toLocaleDateString('de-DE') : null, gGrid);
+  pdfItem('Datum ist', DATUM_FLEX_LABELS[g.datumFlex] || g.datumFlex, gGrid);
+  pdfItem('Surf-Tage', g.surfTage, gGrid);
+  pdfItem('Std./Tag', g.surfStunden, gGrid);
+  page.appendChild(gGrid);
+  if (g.anderesZiel) {
+    const aGrid = document.createElement('div');
+    aGrid.className = 'pdf-profile-grid full-col';
+    pdfItem('Anderes Ziel', g.anderesZiel, aGrid);
+    page.appendChild(aGrid);
+  }
+
+  // Selbsteinschätzung — Skalen
+  pdfSection(page, 'Selbsteinschätzung — Paddle Power');
+  const pdGrid = document.createElement('div');
+  pdGrid.className = 'pdf-profile-grid three-col';
+  pdfScaleItem('Paddelausdauer', pp.paddelausdauer || 1, 'var(--cat-paddeln)', pdGrid);
+  pdfScaleItem('Oberkörperkraft', pp.okoerper || 1, 'var(--cat-paddeln)', pdGrid);
+  pdfScaleItem('Cardio-Basis', pp.cardio || 1, 'var(--cat-paddeln)', pdGrid);
+  page.appendChild(pdGrid);
+
+  pdfSection(page, 'Selbsteinschätzung — Surf Strength & Mobilität');
+  const smGrid = document.createElement('div');
+  smGrid.className = 'pdf-profile-grid';
+  pdfScaleItem('Pop-up', ss.popup || 1, 'var(--cat-kraft)', smGrid);
+  pdfScaleItem('Unterkörperkraft', ss.stabilitaet || 1, 'var(--cat-kraft)', smGrid);
+  pdfScaleItem('Beweglichkeit', sb.beweglichkeit || 1, 'var(--cat-mobility)', smGrid);
+  pdfScaleItem('Balance', sb.balance || 1, 'var(--cat-mobility)', smGrid);
+  page.appendChild(smGrid);
+
+  // Equipment & Routinen
+  const eqActivities = Array.isArray(eq.activities) ? eq.activities : [];
+  if (eqActivities.length || eq.sonstiges) {
+    pdfSection(page, 'Equipment & Aktivitäten');
+    const eqGrid = document.createElement('div');
+    eqGrid.className = 'pdf-profile-grid full-col';
+    const labels = eqActivities.map(v => EQUIPMENT_LABELS[v] || v);
+    if (eq.sonstiges) labels.push(eq.sonstiges);
+    pdfItem('Aktivitäten', labels.join(', '), eqGrid);
+    page.appendChild(eqGrid);
+  }
+
+  const weekdays = Array.isArray(rt.noSportWeekdays) ? rt.noSportWeekdays : [];
+  if (weekdays.length || rt.praeferenzen || rt.verletzungen) {
+    pdfSection(page, 'Wöchentliche Routinen');
+    const rGrid = document.createElement('div');
+    rGrid.className = 'pdf-profile-grid full-col';
+    if (weekdays.length) {
+      const wdLabel = weekdays.map(v => WEEKDAY_LABELS[v] || v).join(', ') + (rt.biweekly ? ' (bi-weekly)' : '');
+      pdfItem('Sport nicht möglich', wdLabel, rGrid);
+    }
+    if (rt.praeferenzen) pdfItem('Präferenzen', rt.praeferenzen, rGrid);
+    if (rt.verletzungen) pdfItem('Verletzungen', rt.verletzungen, rGrid);
+    page.appendChild(rGrid);
+  }
+
+  return page;
+}
+
+function buildPdfPage2Overview(plan) {
+  const page = document.createElement('section');
+  page.className = 'pdf-page';
+
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'pdf-eyebrow';
+  eyebrow.textContent = '02 — Kurzfassung Trainingsplan';
+  page.appendChild(eyebrow);
+
+  const h1 = document.createElement('h1');
+  h1.textContent = 'Trainingsplan im Überblick';
+  page.appendChild(h1);
+
+  const sub = document.createElement('div');
+  sub.className = 'pdf-subtitle';
+  sub.textContent = plan?.phaseName || 'Aufbau bis zum Trip — Phasen & Schwerpunkte je Woche';
+  page.appendChild(sub);
+
+  const weeks = plan?.weeks || [];
+  if (!weeks.length) {
+    const empty = document.createElement('p');
+    empty.textContent = 'Trainingsplan wird erstellt.';
+    page.appendChild(empty);
+    return page;
+  }
+
+  const list = document.createElement('div');
+  list.className = 'pdf-plan-list';
+  weeks.forEach((w, i) => {
+    const row = document.createElement('div');
+    row.className = 'pdf-plan-row';
+
+    const num = document.createElement('div');
+    num.className = 'pdf-plan-week-num';
+    num.textContent = 'W' + (i + 1);
+    row.appendChild(num);
+
+    const info = document.createElement('div');
+    info.className = 'pdf-plan-week-info';
+    const phaseLine = document.createElement('div');
+    phaseLine.className = 'pdf-plan-phase-line';
+    const phase = document.createElement('span');
+    phase.className = 'pdf-plan-phase';
+    phase.textContent = w.phase || '';
+    phaseLine.appendChild(phase);
+    const dates = document.createElement('span');
+    dates.className = 'pdf-plan-dates';
+    dates.textContent = w.dateRange || '';
+    phaseLine.appendChild(dates);
+    info.appendChild(phaseLine);
+
+    const goal = document.createElement('div');
+    goal.className = 'pdf-plan-goal';
+    goal.textContent = w.goal || '';
+    info.appendChild(goal);
+
+    const cats = document.createElement('div');
+    cats.className = 'pdf-plan-cats';
+    uniqueCategoriesFromWeek(w).forEach(c => {
+      const badge = document.createElement('span');
+      badge.className = 'category-badge ' + c;
+      badge.textContent = CATEGORY_LABELS[c] || c;
+      cats.appendChild(badge);
+    });
+    info.appendChild(cats);
+
+    row.appendChild(info);
+    list.appendChild(row);
+  });
+  page.appendChild(list);
+  return page;
+}
+
+function buildPdfPhaseStrip(weeks, currentIdx) {
+  const strip = document.createElement('div');
+  strip.className = 'pdf-phase-strip';
+  weeks.forEach((w, i) => {
+    const tab = document.createElement('div');
+    tab.className = 'pdf-phase-tab' + (i === currentIdx ? ' current' : '');
+    const num = document.createElement('div');
+    num.className = 'pdf-phase-num';
+    num.textContent = 'W' + (i + 1) + (w.dateRange ? ' · ' + w.dateRange : '');
+    const name = document.createElement('div');
+    name.className = 'pdf-phase-name';
+    name.textContent = w.phase || '';
+    tab.appendChild(num);
+    tab.appendChild(name);
+    strip.appendChild(tab);
+  });
+  return strip;
+}
+
+function buildPdfWeekContent(week, weekIdx) {
+  const wrapper = document.createElement('div');
+
+  const header = document.createElement('div');
+  header.className = 'pdf-week-header';
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'pdf-week-eyebrow';
+  eyebrow.textContent = `Woche ${weekIdx + 1}` + (week.dateRange ? ` · ${week.dateRange}` : '');
+  header.appendChild(eyebrow);
+  const goal = document.createElement('div');
+  goal.className = 'pdf-week-goal';
+  goal.textContent = week.goal || '';
+  header.appendChild(goal);
+  wrapper.appendChild(header);
+
+  const table = document.createElement('table');
+  table.className = 'pdf-day-table';
+  const thead = document.createElement('thead');
+  thead.innerHTML = '<tr><th>Tag</th><th>Einheiten</th></tr>';
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  (week.days || []).forEach((day, di) => {
+    const tr = document.createElement('tr');
+    const tdDate = document.createElement('td');
+    tdDate.className = 'pdf-day-date';
+    tdDate.textContent = day.date ? `${WEEKDAYS_FULL_DE[di]} ${day.date}` : WEEKDAYS_FULL_DE[di];
+    tr.appendChild(tdDate);
+    const tdCells = document.createElement('td');
+    const cells = document.createElement('div');
+    cells.className = 'pdf-day-cells';
+    const units = day.units || [];
+    if (!units.length) {
+      const empty = document.createElement('div');
+      empty.className = 'pdf-day-empty';
+      empty.textContent = 'Frei';
+      cells.appendChild(empty);
+    } else {
+      units.forEach(u => {
+        const block = document.createElement('div');
+        block.className = 'pdf-day-unit';
+
+        const row = document.createElement('div');
+        row.className = 'pdf-day-row';
+        const badge = document.createElement('span');
+        badge.className = 'category-badge ' + (u.category || '');
+        badge.textContent = CATEGORY_LABELS[u.category] || u.category || '';
+        const title = document.createElement('span');
+        title.className = 'pdf-day-title';
+        title.textContent = (u.completed ? '✓ ' : '') + (u.title || '(ohne Titel)');
+        const dur = document.createElement('span');
+        dur.className = 'pdf-day-duration';
+        dur.textContent = u.duration ? `${u.duration} Min` : '';
+        row.appendChild(badge);
+        row.appendChild(title);
+        row.appendChild(dur);
+        block.appendChild(row);
+
+        if (Array.isArray(u.detail) && u.detail.length) {
+          const details = document.createElement('ul');
+          details.className = 'pdf-day-details';
+          u.detail.forEach(d => {
+            const li = document.createElement('li');
+            li.textContent = d;
+            details.appendChild(li);
+          });
+          block.appendChild(details);
+        }
+
+        cells.appendChild(block);
+      });
+    }
+    tdCells.appendChild(cells);
+    tr.appendChild(tdCells);
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrapper.appendChild(table);
+
+  return wrapper;
+}
+
+function buildPdfPage3Detail(profile, plan) {
+  const page = document.createElement('section');
+  page.className = 'pdf-page';
+
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'pdf-eyebrow';
+  eyebrow.textContent = '03 — Detail Trainingsplan';
+  page.appendChild(eyebrow);
+
+  const name = profile?.personal?.name || (userId || 'Profil');
+
+  const header = document.createElement('div');
+  header.className = 'pdf-detail-header';
+  const title = document.createElement('div');
+  title.className = 'pdf-detail-goal-title';
+  title.textContent = `Ziel: ${plan?.phaseName || 'Surf Trip'}`;
+  header.appendChild(title);
+
+  const meta = document.createElement('div');
+  meta.className = 'pdf-detail-goal-meta';
+  const userSpan = document.createElement('span');
+  userSpan.textContent = `User: ${name}`;
+  meta.appendChild(userSpan);
+  const tripDate = profile?.goal?.tripDatum;
+  if (tripDate) {
+    const dateSpan = document.createElement('span');
+    dateSpan.textContent = `Bis ${new Date(tripDate).toLocaleDateString('de-DE')}`;
+    meta.appendChild(dateSpan);
+  }
+  header.appendChild(meta);
+
+  const stats = planTripStats(plan);
+  const bar = document.createElement('div');
+  bar.className = 'pdf-detail-progress';
+  const fill = document.createElement('div');
+  fill.className = 'pdf-detail-progress-fill';
+  fill.style.width = stats.pct + '%';
+  bar.appendChild(fill);
+  header.appendChild(bar);
+  const label = document.createElement('div');
+  label.className = 'pdf-detail-progress-label';
+  label.textContent = stats.planned
+    ? `${stats.pct} % Trip-Ready · ${stats.done} / ${stats.planned} Einheiten erledigt`
+    : 'Noch keine Einheiten geplant';
+  header.appendChild(label);
+  page.appendChild(header);
+
+  const weeks = plan?.weeks || [];
+  page.appendChild(buildPdfPhaseStrip(weeks, 0));
+
+  if (weeks[0]) page.appendChild(buildPdfWeekContent(weeks[0], 0));
+  return page;
+}
+
+function buildPdfPageWeek(week, weekIdx, allWeeks) {
+  const page = document.createElement('section');
+  page.className = 'pdf-page';
+
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'pdf-eyebrow';
+  eyebrow.textContent = `Detail Trainingsplan · Woche ${weekIdx + 1}`;
+  page.appendChild(eyebrow);
+
+  page.appendChild(buildPdfPhaseStrip(allWeeks, weekIdx));
+  page.appendChild(buildPdfWeekContent(week, weekIdx));
+  return page;
+}
+
+function buildPdfPrintRoot(profile, plan) {
+  const root = document.getElementById('pdf-print-root');
+  if (!root) return;
+  root.innerHTML = '';
+
+  root.appendChild(buildPdfPage1Profile(profile || {}));
+  root.appendChild(buildPdfPage2Overview(plan || {}));
+
+  const weeks = plan?.weeks || [];
+  if (weeks.length) {
+    root.appendChild(buildPdfPage3Detail(profile || {}, plan));
+    for (let i = 1; i < weeks.length; i++) {
+      root.appendChild(buildPdfPageWeek(weeks[i], i, weeks));
+    }
+  }
+}
+
+function applyPdfChanges(base, snapshots) {
+  const out = JSON.parse(JSON.stringify(base));
+  const sorted = [...snapshots].sort((a, b) =>
+    (a?.meta?.version || '').localeCompare(b?.meta?.version || ''));
+  for (const file of sorted) {
+    if (!Array.isArray(file.changes)) continue;
+    for (const ch of file.changes) {
+      const m = String(ch.unitId || '').match(/^w(\d+)-d(\d+)-u(\d+)$/);
+      if (!m) continue;
+      const weekIdx = +m[1], dayIdx = +m[2], unitIdx = +m[3];
+      const day = out.weeks?.[weekIdx]?.days?.[dayIdx];
+      if (!day) continue;
+      if (ch.field === 'removed') {
+        if (day.units[unitIdx]) day.units.splice(unitIdx, 1);
+        continue;
+      }
+      if (ch.field === 'added' && ch.to) {
+        day.units.splice(Math.min(unitIdx, day.units.length), 0, ch.to);
+        continue;
+      }
+      const unit = day.units[unitIdx];
+      if (!unit) continue;
+      if (ch.field === 'category') unit.category = ch.to;
+      else if (ch.field === 'title') unit.title = ch.to;
+      else if (ch.field === 'duration') unit.duration = ch.to;
+      else if (ch.field === 'detail') unit.detail = ch.to;
+      else if (ch.field === 'completed') unit.completed = !!ch.to;
+      else if (ch.field === 'dayIdx') {
+        const target = out.weeks[weekIdx]?.days?.[ch.to];
+        if (target) {
+          const [moved] = day.units.splice(unitIdx, 1);
+          target.units.push(moved);
+        }
+      }
+    }
+  }
+  return out;
+}
+
+async function fetchUserPlanMerged() {
+  if (!userId) return null;
+  let base;
+  try {
+    const res = await fetch(userPlanPath(userId), { cache: 'no-store' });
+    if (!res.ok) return null;
+    base = await res.json();
+  } catch { return null; }
+  if (!base?.weeks) return null;
+
+  let snapshotFiles = [];
+  try {
+    const listRes = await fetch(`${userBasePath(userId)}/changes/_list`, { cache: 'no-store' });
+    if (listRes.ok) {
+      const entries = await listRes.json();
+      snapshotFiles = entries.filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f));
+    }
+  } catch {}
+
+  const snapshots = [];
+  for (const name of snapshotFiles) {
+    try {
+      const r = await fetch(`${userBasePath(userId)}/changes/${name}`, { cache: 'no-store' });
+      if (r.ok) snapshots.push(await r.json());
+    } catch {}
+  }
+
+  const merged = applyPdfChanges(base, snapshots);
+  return {
+    phaseName: base?.meta?.phaseName || base?.phaseName || '',
+    weeks: merged.weeks || [],
+  };
+}
+
+async function exportPDF() {
+  try {
+    const profile = profileCache !== null ? profileCache : await loadProfile();
+    const plan = await fetchUserPlanMerged();
+    buildPdfPrintRoot(profile, plan);
+    // Layout-Tick abwarten, dann Druckdialog öffnen
+    await new Promise(r => setTimeout(r, 50));
+    window.print();
+  } catch (err) {
+    console.warn('PDF-Export fehlgeschlagen:', err);
+    alert(`PDF-Export fehlgeschlagen: ${err.message}`);
+  }
 }
 
 // ── Export ──
@@ -792,6 +1423,9 @@ function initButtons() {
     exportJSON(p);
   });
 
+  const exportPdfBtn = document.getElementById('btn-export-pdf');
+  if (exportPdfBtn) exportPdfBtn.addEventListener('click', exportPDF);
+
   const deleteBtn = document.getElementById('btn-delete-user');
   if (deleteBtn) deleteBtn.addEventListener('click', handleDeleteUser);
 }
@@ -799,6 +1433,7 @@ function initButtons() {
 document.addEventListener('DOMContentLoaded', async () => {
   initSliders();
   initLevelButtons();
+  initChipGroups();
   initGarminToggle();
   initButtons();
 
@@ -807,10 +1442,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (submitBtn) submitBtn.textContent = isNewUserFlow
     ? 'Profil & Plan anlegen'
     : 'Profil speichern';
-
-  // Delete-Button nur sichtbar wenn existierender User
-  const deleteBtn = document.getElementById('btn-delete-user');
-  if (deleteBtn) deleteBtn.hidden = isNewUserFlow || !userId;
 
   // Header-Eyebrow je nach Flow
   const eyebrow = document.querySelector('.header-eyebrow');

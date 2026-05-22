@@ -4,20 +4,22 @@
       "name": "Verena",
       "alter": 35,
       "geschlecht": "w",
-      "groesse": 165,
-      "gewicht": 57,
+      "groesse": 163,
+      "gewicht": 55,
       "maxHF": 185,
       "trainingLevel": "advanced",
-      "surfLevel": "advanced"
+      "surfLevel": "intermediate"
     },
     "goal": {
       "tripDatum": "2026-06-06",
+      "datumFlex": "fix",
       "surfTage": 5,
-      "surfStunden": 4
+      "surfStunden": 2,
+      "anderesZiel": ""
     },
     "paddlePower": {
       "paddelausdauer": 3,
-      "okoerper": 3,
+      "okoerper": 4,
       "cardio": 4
     },
     "surfStrength": {
@@ -28,6 +30,22 @@
       "beweglichkeit": 4,
       "balance": 4
     },
+    "equipment": {
+      "activities": [
+        "home",
+        "rad",
+        "paddeln",
+        "surfen",
+        "yoga"
+      ],
+      "sonstiges": ""
+    },
+    "routinen": {
+      "noSportWeekdays": [],
+      "biweekly": false,
+      "praeferenzen": "",
+      "verletzungen": ""
+    },
     "garmin": {
       "vo2max": null,
       "ruheHF": null,
@@ -37,5 +55,5 @@
       "status": null
     }
   },
-  "profileUpdatedAt": "2026-05-21T08:34:26.829Z"
+  "profileUpdatedAt": "2026-05-21T15:24:13.085Z"
 }

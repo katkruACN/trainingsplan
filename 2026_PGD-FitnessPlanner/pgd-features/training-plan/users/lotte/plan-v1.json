@@ -3,273 +3,1125 @@
     "version": "base",
     "schemaVersion": 4,
     "createdAt": "2026-05-21",
-    "source": "Manuell generiert aus profile.json · Lotte",
-    "phaseName": "Malediven Surftrip · 20. Juni 2026",
-    "note": "Readonly. Nie überschreiben. Jede Änderung geht in changes/YYYY-MM-DD.json",
-    "profileSummary": "Anfänger · 50 J · Berlin · Calisthenics YouTube · Schwimmen statt Paddeln · Muskelkater-sensitiv · Ziel: Trip durchhalten ohne Schmerzen"
+    "source": "surf-profil-v2.json + trainingsplan_lotte.md · v3",
+    "phaseName": "Malediven Surftrip · 21. Juni 2026",
+    "note": "Readonly. Nie überschreiben.",
+    "profileSummary": "Anfänger Training · Intermediate Surf · 50 J · Berlin · Schwimmen + Yoga + Calisthenics · Reisetag 13. Juni · Himmafuji 21. Juni"
   },
   "constants": {
     "storageKey": "trainingsplan-lotte",
     "numWeeks": 5,
-    "weekStartDates": ["2026-05-18","2026-05-25","2026-06-01","2026-06-08","2026-06-15"],
-    "weekDateRanges": ["18. – 24. Mai","25. – 31. Mai","1. – 7. Juni","8. – 14. Juni","15. – 21. Juni"],
-    "weekPhaseNames": ["Ankommen","Bewegung aufbauen","Schwimm-Start","Aufbau & Stabilität","Tapering"],
+    "weekStartDates": [
+      "2026-05-18",
+      "2026-05-25",
+      "2026-06-01",
+      "2026-06-08",
+      "2026-06-15"
+    ],
+    "weekDateRanges": [
+      "18. – 24. Mai",
+      "25. – 31. Mai",
+      "1. – 7. Juni",
+      "8. – 14. Juni",
+      "15. – 21. Juni"
+    ],
+    "weekPhaseNames": [
+      "Adaptation",
+      "Grundlagenaufbau",
+      "Progression",
+      "Stabilisierung & Taper",
+      "Malediven"
+    ],
     "weekGoals": [
-      "Erste Bewegung ab Do 21. Mai – sanft starten, kein Muskelkater. Pop-up kennenlernen.",
-      "3× pro Woche aktiv. Erste Schwimm-Session im Freibad.",
-      "30 min Schwimmen am Stück. Pop-up täglich üben.",
-      "40 min Schwimmen. Stabilität und Balance wachsen.",
-      "Kein neues Training. Beweglich bleiben, ausruhen, ankommen."
+      "Körper an regelmäßige Bewegung gewöhnen. Kein Muskelkater. Pop-up kennenlernen.",
+      "3–4× pro Woche aktiv. Erste Schwimm-Session. Calisthenics Oberkörper.",
+      "25–30 min Schwimmen. Balance & Core intensivieren. Pop-up täglich.",
+      "Volumen runter. Beweglich bleiben. Sa 13./So 14. Reisetage.",
+      "Mo–Fr sanftes Training auf den Malediven. Sa 20. Erholung. So 21. Anreise Himmafuji."
     ]
   },
-  "categories": {
-    "mobility":  { "label": "Mobility",        "subGoal": "mobility",    "location": { "place": "Zu Hause" } },
-    "yoga":      { "label": "Yoga",            "subGoal": "mobility",    "location": { "place": "Online / Studio" } },
-    "balance":   { "label": "Balance",         "subGoal": "mobility",    "location": { "place": "Zu Hause" } },
-    "laufen":    { "label": "Cardio Laufen",   "subGoal": "paddlePower", "location": { "place": "Draussen / Park" } },
-    "schwimmen": { "label": "Schwimmen",       "subGoal": "paddlePower", "location": { "place": "Berliner Bäder", "note": "z.B. Stadtbad Neukölln, Sommerbad Kreuzberg" } },
-    "kraft":     { "label": "Calisthenics",    "subGoal": "paddlePower", "location": { "place": "Zu Hause", "note": "YouTube Workout" } },
-    "popup":     { "label": "Pop-up Training", "subGoal": "surfStrength","location": { "place": "Zu Hause" } },
-    "erholung":  { "label": "Erholung",        "subGoal": null,          "location": null }
+  "targetComponents": {
+    "paddelkraft": {
+      "label": "Paddelkraft",
+      "color": "#1A4A6B",
+      "description": "Schultern, Rücken, Trizeps",
+      "activities": [
+        "schwimmen",
+        "kraft"
+      ]
+    },
+    "surfStrength": {
+      "label": "Surf Strength",
+      "color": "#8A2A18",
+      "description": "Pop-up, Unterkörper, Board-Stabilität",
+      "activities": [
+        "popup",
+        "kraft"
+      ]
+    },
+    "mobility": {
+      "label": "Mobility",
+      "color": "#1A6B55",
+      "description": "Beweglichkeit, Dehnung, Yoga",
+      "activities": [
+        "mobility",
+        "yoga"
+      ]
+    },
+    "balance": {
+      "label": "Balance & Core",
+      "color": "#7A4A10",
+      "description": "Gleichgewicht, Rumpfstabilität",
+      "activities": [
+        "balance",
+        "kraft"
+      ]
+    },
+    "ausdauer": {
+      "label": "Ausdauer",
+      "color": "#1A5A2A",
+      "description": "Cardio-Basis",
+      "activities": [
+        "schwimmen",
+        "laufen"
+      ]
+    }
   },
-  "subGoals": [
-    { "id": "paddlePower",  "title": "Paddel Power",               "categories": ["schwimmen","laufen","kraft"] },
-    { "id": "surfStrength", "title": "Surf Strength",              "categories": ["popup","kraft"] },
-    { "id": "mobility",     "title": "Stabilität & Beweglichkeit", "categories": ["mobility","yoga","balance"] }
-  ],
+  "categories": {
+    "mobility": {
+      "label": "Mobility",
+      "targetComponent": "mobility",
+      "location": {
+        "place": "Zu Hause"
+      }
+    },
+    "yoga": {
+      "label": "Yoga",
+      "targetComponent": "mobility",
+      "location": {
+        "place": "Online / Studio"
+      }
+    },
+    "balance": {
+      "label": "Balance & Core",
+      "targetComponent": "balance",
+      "location": {
+        "place": "Zu Hause"
+      }
+    },
+    "laufen": {
+      "label": "Spazieren/Gehen",
+      "targetComponent": "ausdauer",
+      "location": {
+        "place": "Park / Draussen"
+      }
+    },
+    "schwimmen": {
+      "label": "Schwimmen",
+      "targetComponent": "paddelkraft",
+      "location": {
+        "place": "Berliner Bäder"
+      }
+    },
+    "kraft": {
+      "label": "Calisthenics",
+      "targetComponent": "paddelkraft",
+      "location": {
+        "place": "Zu Hause",
+        "note": "YouTube Workout"
+      }
+    },
+    "popup": {
+      "label": "Pop-up Training",
+      "targetComponent": "surfStrength",
+      "location": {
+        "place": "Zu Hause"
+      }
+    },
+    "erholung": {
+      "label": "Erholung",
+      "targetComponent": null,
+      "location": null
+    }
+  },
   "weeks": [
     {
       "weekIdx": 0,
-      "phase": "Ankommen",
+      "phase": "Adaptation",
       "dateRange": "18. – 24. Mai",
-      "goal": "Erste Bewegung ab Do 21. Mai – sanft starten, kein Muskelkater. Pop-up kennenlernen.",
+      "goal": "Körper an regelmäßige Bewegung gewöhnen. Kein Muskelkater. Pop-up kennenlernen.",
+      "focusComponents": [
+        "mobility",
+        "surfStrength"
+      ],
       "days": [
-        { "dayIdx": 0, "weekday": "Mo", "date": "18. Mai", "units": [] },
-        { "dayIdx": 1, "weekday": "Di", "date": "19. Mai", "units": [] },
-        { "dayIdx": 2, "weekday": "Mi", "date": "20. Mai", "units": [] },
         {
-          "dayIdx": 3, "weekday": "Do", "date": "21. Mai",
+          "dayIdx": 0,
+          "weekday": "Mo",
+          "date": "18. Mai",
+          "units": []
+        },
+        {
+          "dayIdx": 1,
+          "weekday": "Di",
+          "date": "19. Mai",
+          "units": []
+        },
+        {
+          "dayIdx": 2,
+          "weekday": "Mi",
+          "date": "20. Mai",
+          "units": []
+        },
+        {
+          "dayIdx": 3,
+          "weekday": "Do",
+          "date": "21. Mai",
           "units": [
-            { "unitId": "w0-d3-u0", "category": "mobility", "title": "Erste Mobilisation 20 min", "description": "Heute starten – sanft, kein Schwitzen, kein Muskelkater.", "detail": ["Katze-Kuh 10×","Hip Circles 10× je Seite","Schulter-Querstretch 30 sek/S","Kind-Haltung 1 min","Cobra-Stretch 5× halten 3 sek"], "duration": 20, "completed": false }
+            {
+              "unitId": "w0-d3-u0",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Ganzkörper-Mobilisation",
+              "description": "Sanft starten. Kein Schwitzen.",
+              "duration": 20,
+              "intensity": "niedrig",
+              "detail": [
+                "Katze-Kuh: auf Händen und Knien, Rücken rund – dann durchhängen. 10×.",
+                "Hip Circles: Hüfte in großen Kreisen drehen. 10× je Seite.",
+                "Schulter-Querstretch: Arm quer vor Körper, sanft drücken. 30 sek je Seite.",
+                "Kind-Haltung: Knie breit, Po Richtung Fersen, Arme nach vorne. 1 min.",
+                "Cobra-Stretch: Bauch am Boden, Hände neben Brust, Oberkörper hochdrücken. 5× halten 3 sek."
+              ],
+              "muscleGroups": [
+                "Wirbelsäule",
+                "Hüfte",
+                "Schultern"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 4, "weekday": "Fr", "date": "22. Mai",
+          "dayIdx": 4,
+          "weekday": "Fr",
+          "date": "22. Mai",
           "units": [
-            { "unitId": "w0-d4-u0", "category": "popup", "title": "Pop-up kennenlernen – 2×5", "description": "Auf dem Wohnzimmerboden liegend. Technik lernen, nicht Fitness.", "detail": ["Liegend, Hände neben Brust","Langsam hochdrücken – beide Beine gleichzeitig vorne","Welcher Fuß fühlt sich vorne natürlicher an?","Pause zwischen jedem Pop-up – kein Hetzen"], "duration": 10, "completed": false }
+            {
+              "unitId": "w0-d4-u0",
+              "category": "popup",
+              "targetComponent": "surfStrength",
+              "title": "Pop-up kennenlernen – 2×5",
+              "description": "Auf dem Boden. Technik lernen, keine Fitness.",
+              "duration": 10,
+              "intensity": "niedrig",
+              "detail": [
+                "Ausgangsposition: flach auf dem Bauch, Hände neben der Brust.",
+                "Bewegung: beide Beine gleichzeitig nach vorne schwingen – in Stand kommen.",
+                "Stance testen: welcher Fuß vorne fühlt sich natürlicher an?",
+                "Langsam und bewusst. Pause nach jedem Pop-up.",
+                "Danach: Cobra-Stretch 5×."
+              ],
+              "muscleGroups": [
+                "Trizeps",
+                "Brust",
+                "Core",
+                "Beine"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 5, "weekday": "Sa", "date": "23. Mai",
+          "dayIdx": 5,
+          "weekday": "Sa",
+          "date": "23. Mai",
           "units": [
-            { "unitId": "w0-d5-u0", "category": "laufen", "title": "Spazieren 30 min", "description": "Locker im Park – kein Joggen, kein Tempo.", "detail": ["Eigenes Tempo","Tiergarten, Treptower Park o.ä.","Einfach bewegen und Spaß haben"], "duration": 30, "completed": false },
-            { "unitId": "w0-d5-u1", "category": "mobility", "title": "Mobility danach 15 min", "description": "Hüfte und Waden dehnen.", "detail": ["Calf Stretch 30 sek/S","Hip Flexor Stretch 45 sek/S","Kind-Haltung 1 min"], "duration": 15, "completed": false }
+            {
+              "unitId": "w0-d5-u0",
+              "category": "laufen",
+              "targetComponent": "ausdauer",
+              "title": "Spazieren im Park",
+              "description": "30 min locker – kein Joggen.",
+              "duration": 30,
+              "intensity": "niedrig",
+              "detail": [
+                "Eigenes Tempo.",
+                "Tiergarten oder Treptower Park.",
+                "Tief atmen."
+              ],
+              "muscleGroups": [],
+              "completed": false
+            },
+            {
+              "unitId": "w0-d5-u1",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Mobility danach – 15 min",
+              "description": "Waden und Hüfte dehnen.",
+              "duration": 15,
+              "intensity": "niedrig",
+              "detail": [
+                "Calf Stretch an Wand: Fuß gegen Wand stemmen, Körper nach vorne. 30 sek je Seite.",
+                "Hip Flexor Stretch: ein Knie am Boden, Hüfte nach vorne. 45 sek je Seite.",
+                "Kind-Haltung: 1 min."
+              ],
+              "muscleGroups": [
+                "Waden",
+                "Hüftbeuger"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 6, "weekday": "So", "date": "24. Mai",
+          "dayIdx": 6,
+          "weekday": "So",
+          "date": "24. Mai",
           "units": [
-            { "unitId": "w0-d6-u0", "category": "erholung", "title": "Erholung", "description": "Ausruhen – erste Woche geschafft!", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w0-d6-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "Erholung",
+              "description": "Erste Woche geschafft!",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         }
       ]
     },
     {
       "weekIdx": 1,
-      "phase": "Bewegung aufbauen",
+      "phase": "Grundlagenaufbau",
       "dateRange": "25. – 31. Mai",
-      "goal": "3× pro Woche aktiv. Erste Schwimm-Session im Berliner Bad.",
+      "goal": "3–4× pro Woche aktiv. Erste Schwimm-Session. Calisthenics Oberkörper.",
+      "focusComponents": [
+        "paddelkraft",
+        "mobility"
+      ],
       "days": [
         {
-          "dayIdx": 0, "weekday": "Mo", "date": "25. Mai",
+          "dayIdx": 0,
+          "weekday": "Mo",
+          "date": "25. Mai",
           "units": [
-            { "unitId": "w1-d0-u0", "category": "kraft", "title": "Calisthenics – Oberkörper leicht", "description": "YouTube Anfänger-Video, max. 20 min. Kein Bein-Workout diese Woche.", "detail": ["Push-ups auf Knien 3×8","Superman 2×10 – stärkt Rücken fürs Schwimmen","Dead Bug 2×8/S – Lendenwirbel am Boden halten","Kein seitliches Beinheben – Muskelkater-Risiko!","Danach Schultern ausschütteln und dehnen"], "duration": 20, "completed": false }
+            {
+              "unitId": "w1-d0-u0",
+              "category": "kraft",
+              "targetComponent": "paddelkraft",
+              "title": "Calisthenics – Oberkörper leicht",
+              "description": "YouTube Anfänger, 20 min. Kein Bein-Workout.",
+              "duration": 20,
+              "intensity": "mittel",
+              "detail": [
+                "Push-ups auf Knien: Hände schulterbreit, langsam runter (3 sek). 3×8.",
+                "Superman: Bauch am Boden, Arme + Beine heben, 2 sek halten. 2×10.",
+                "Dead Bug: Rücken am Boden, Gegenarm + Gegenbein strecken, Rücken bleibt unten. 2×8/S.",
+                "Kein seitliches Beinheben – Muskelkater-Risiko!",
+                "Danach: Schulter-Querstretch 30 sek je Seite."
+              ],
+              "muscleGroups": [
+                "Brust",
+                "Schultern",
+                "Rücken",
+                "Core"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 1, "weekday": "Di", "date": "26. Mai",
+          "dayIdx": 1,
+          "weekday": "Di",
+          "date": "26. Mai",
           "units": [
-            { "unitId": "w1-d1-u0", "category": "popup", "title": "Pop-up üben – 2×6", "description": "Technik festigen.", "detail": ["Stance merken: welcher Fuß vorne?","Etwas schneller als letzte Woche","Cobra-Stretch danach 5×"], "duration": 10, "completed": false }
+            {
+              "unitId": "w1-d1-u0",
+              "category": "popup",
+              "targetComponent": "surfStrength",
+              "title": "Pop-up üben – 2×6",
+              "description": "Technik festigen.",
+              "duration": 10,
+              "intensity": "niedrig",
+              "detail": [
+                "Stance merken: gleicher Fuß immer vorne.",
+                "Etwas schneller als Woche 1.",
+                "Cobra-Stretch danach 5×."
+              ],
+              "muscleGroups": [
+                "Trizeps",
+                "Core",
+                "Beine"
+              ],
+              "completed": false
+            }
           ]
         },
-        { "dayIdx": 2, "weekday": "Mi", "date": "27. Mai", "units": [] },
         {
-          "dayIdx": 3, "weekday": "Do", "date": "28. Mai",
+          "dayIdx": 2,
+          "weekday": "Mi",
+          "date": "27. Mai",
+          "units": []
+        },
+        {
+          "dayIdx": 3,
+          "weekday": "Do",
+          "date": "28. Mai",
           "units": [
-            { "unitId": "w1-d3-u0", "category": "mobility", "title": "Mobilisation 20 min", "description": "Schultern und Hüfte vorbereiten.", "detail": ["Pigeon Pose 1 min/S","World's Greatest Stretch 5×/S","90/90 Hip Stretch","Cobra-Stretch 5× halten 3 sek"], "duration": 20, "completed": false }
+            {
+              "unitId": "w1-d3-u0",
+              "category": "yoga",
+              "targetComponent": "mobility",
+              "title": "Yoga – Hüfte & Schultern",
+              "description": "YouTube 30 min.",
+              "duration": 30,
+              "intensity": "niedrig",
+              "detail": [
+                "YouTube: 'Yoga für Surfer Anfänger'.",
+                "Pigeon Pose, Downward Dog, Cobra, Child's Pose.",
+                "Kein Hot Yoga."
+              ],
+              "muscleGroups": [
+                "Hüfte",
+                "Schultern",
+                "Wirbelsäule"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 4, "weekday": "Fr", "date": "29. Mai",
+          "dayIdx": 4,
+          "weekday": "Fr",
+          "date": "29. Mai",
           "units": [
-            { "unitId": "w1-d4-u0", "category": "schwimmen", "title": "Erste Schwimm-Session – 20 min", "description": "Erstes Mal im Berliner Bad. Entspannt, kein Leistungsdruck.", "detail": ["Kraul oder Brust – was dir leichter fällt","Gleichmäßiges ruhiges Tempo","Pausen am Rand ok","Fokus: Schultern locker lassen, langer Zug","Nach dem Schwimmen: Schulter-Querstretch 45 sek/S"], "duration": 20, "completed": false }
+            {
+              "unitId": "w1-d4-u0",
+              "category": "schwimmen",
+              "targetComponent": "paddelkraft",
+              "title": "Erste Schwimm-Session – 20 min",
+              "description": "Berliner Bad. Entspannt.",
+              "duration": 20,
+              "intensity": "niedrig",
+              "detail": [
+                "Kraul oder Brust – was leichter fällt.",
+                "Kraul-Tipp: Arm weit vorne einstechen, langs am Körper durchziehen.",
+                "Schultern locker lassen.",
+                "Pausen am Rand ok.",
+                "Danach: Schulter-Querstretch 45 sek je Seite."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Rücken",
+                "Trizeps"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 5, "weekday": "Sa", "date": "30. Mai",
+          "dayIdx": 5,
+          "weekday": "Sa",
+          "date": "30. Mai",
           "units": [
-            { "unitId": "w1-d5-u0", "category": "mobility", "title": "Schulter-Fokus 15 min", "description": "Nach Schwimm-Session regenerieren.", "detail": ["Schulter-Querstretch 45 sek/S","Doorway Chest Stretch 30 sek/S","Arm-Kreisen locker 30 sek"], "duration": 15, "completed": false }
+            {
+              "unitId": "w1-d5-u0",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Schulter-Fokus – 15 min",
+              "description": "Nach Schwimmen regenerieren.",
+              "duration": 15,
+              "intensity": "niedrig",
+              "detail": [
+                "Schulter-Querstretch 45 sek je Seite.",
+                "Doorway Chest Stretch 30 sek.",
+                "Arm-Kreisen locker: 20× vor, 20× zurück."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Brust"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 6, "weekday": "So", "date": "31. Mai",
+          "dayIdx": 6,
+          "weekday": "So",
+          "date": "31. Mai",
           "units": [
-            { "unitId": "w1-d6-u0", "category": "erholung", "title": "Erholung", "description": "Nach erster Schwimm-Session gut erholen.", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w1-d6-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "Erholung",
+              "description": "Nach erster Schwimm-Session erholen.",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         }
       ]
     },
     {
       "weekIdx": 2,
-      "phase": "Schwimm-Start",
+      "phase": "Progression",
       "dateRange": "1. – 7. Juni",
-      "goal": "30 min Schwimmen am Stück. Pop-up täglich üben.",
+      "goal": "25–30 min Schwimmen. Balance & Core intensivieren. Pop-up täglich.",
+      "focusComponents": [
+        "paddelkraft",
+        "balance",
+        "surfStrength"
+      ],
       "days": [
         {
-          "dayIdx": 0, "weekday": "Mo", "date": "1. Juni",
+          "dayIdx": 0,
+          "weekday": "Mo",
+          "date": "1. Juni",
           "units": [
-            { "unitId": "w2-d0-u0", "category": "kraft", "title": "Calisthenics – Oberkörper & erste Beine", "description": "Erste Beinübung – sehr vorsichtig dosieren!", "detail": ["Push-ups 3×10 auf Knien","Superman 3×10","Glute Bridge 2×12 – kein seitliches Beinheben!","Single Leg Balance 20 sek/S – wichtig für Board-Stand","Oberschenkel dehnen 45 sek/S danach"], "duration": 25, "completed": false }
+            {
+              "unitId": "w2-d0-u0",
+              "category": "kraft",
+              "targetComponent": "paddelkraft",
+              "title": "Calisthenics – Oberkörper & erste Beine",
+              "description": "Erste Beinübung – sehr vorsichtig!",
+              "duration": 25,
+              "intensity": "mittel",
+              "detail": [
+                "Push-ups auf Knien: 3×10 (3 sek runter).",
+                "Superman: 3×10.",
+                "Glute Bridge: Rücken am Boden, Knie gebeugt, Hüfte hochdrücken, 2 sek halten. 2×12. Kein seitliches Beinheben!",
+                "Single Leg Balance: auf einem Bein, Wand in der Nähe. 20 sek je Seite.",
+                "Danach: Oberschenkel dehnen 45 sek je Seite."
+              ],
+              "muscleGroups": [
+                "Brust",
+                "Rücken",
+                "Gesäß",
+                "Core"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 1, "weekday": "Di", "date": "2. Juni",
+          "dayIdx": 1,
+          "weekday": "Di",
+          "date": "2. Juni",
           "units": [
-            { "unitId": "w2-d1-u0", "category": "popup", "title": "Pop-up täglich – 2×8", "description": "Ab jetzt täglich bis zum Trip. 5 Minuten morgens.", "detail": ["Morgens nach dem Aufstehen","Beide Beine gleichzeitig vorne","Ziel: flüssiger Bewegungsablauf","Stance festigen"], "duration": 10, "completed": false },
-            { "unitId": "w2-d1-u1", "category": "mobility", "title": "Mobility 20 min", "description": "Hüfte und Schultern.", "detail": ["Pigeon Pose 1 min/S","World's Greatest Stretch 5×/S","Cobra-Stretch 5×"], "duration": 20, "completed": false }
+            {
+              "unitId": "w2-d1-u0",
+              "category": "popup",
+              "targetComponent": "surfStrength",
+              "title": "Pop-up täglich – 2×8",
+              "description": "Ab jetzt täglich bis zur Abreise.",
+              "duration": 10,
+              "intensity": "niedrig",
+              "detail": [
+                "Morgens nach dem Aufstehen – 5 min reichen.",
+                "Beide Beine gleichzeitig vorne.",
+                "Stance festigen."
+              ],
+              "muscleGroups": [
+                "Trizeps",
+                "Core",
+                "Beine"
+              ],
+              "completed": false
+            },
+            {
+              "unitId": "w2-d1-u1",
+              "category": "balance",
+              "targetComponent": "balance",
+              "title": "Balance & Core – 15 min",
+              "description": "Board-Stabilität aufbauen.",
+              "duration": 15,
+              "intensity": "mittel",
+              "detail": [
+                "Single Leg Balance Augen zu: 20 sek je Seite. Wand in der Nähe.",
+                "Side Plank: auf Unterarm, Hüfte heben. 20 sek je Seite.",
+                "Dead Bug: 3×8/S, langsam.",
+                "Pigeon Pose 1 min je Seite."
+              ],
+              "muscleGroups": [
+                "Core",
+                "Hüfte",
+                "Schultern"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 2, "weekday": "Mi", "date": "3. Juni",
+          "dayIdx": 2,
+          "weekday": "Mi",
+          "date": "3. Juni",
           "units": [
-            { "unitId": "w2-d2-u0", "category": "erholung", "title": "Erholung", "description": "Aktiv erholen – Spazieren ok.", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w2-d2-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "Erholung",
+              "description": "Aktive Erholung – Spazieren ok.",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 3, "weekday": "Do", "date": "4. Juni",
+          "dayIdx": 3,
+          "weekday": "Do",
+          "date": "4. Juni",
           "units": [
-            { "unitId": "w2-d3-u0", "category": "laufen", "title": "Spazieren / leichtes Gehen 30 min", "description": "Cardio-Basis aufbauen.", "detail": ["Eigenes Tempo","Park oder entlang der Spree"], "duration": 30, "completed": false }
+            {
+              "unitId": "w2-d3-u0",
+              "category": "schwimmen",
+              "targetComponent": "paddelkraft",
+              "title": "Schwimmen – 25–30 min",
+              "description": "Wochenziel!",
+              "duration": 30,
+              "intensity": "mittel",
+              "detail": [
+                "Kraul-Fokus: langer Arm-Zug wie beim Paddeln.",
+                "Rotation aus der Schulter.",
+                "Schultern locker.",
+                "2 kurze Pausen erlaubt.",
+                "Danach: Schulter-Querstretch 45 sek je Seite."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Rücken",
+                "Trizeps",
+                "Core"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 4, "weekday": "Fr", "date": "5. Juni",
+          "dayIdx": 4,
+          "weekday": "Fr",
+          "date": "5. Juni",
           "units": [
-            { "unitId": "w2-d4-u0", "category": "schwimmen", "title": "Schwimmen – 30 min", "description": "Wochenziel! Gleichmäßiges Tempo, technisch sauber.", "detail": ["Kraul-Fokus: langer Arm-Zug wie beim Paddeln","Schultern locker – nicht hochziehen","2 kurze Pausen erlaubt","Danach: Schulter-Querstretch 45 sek/S"], "duration": 30, "completed": false }
+            {
+              "unitId": "w2-d4-u0",
+              "category": "yoga",
+              "targetComponent": "mobility",
+              "title": "Yoga – Regeneration",
+              "description": "Nach Schwimmen. YouTube 30 min.",
+              "duration": 30,
+              "intensity": "niedrig",
+              "detail": [
+                "YouTube: 'Yin Yoga Schultern'.",
+                "Lange Haltungen – je 1–2 min.",
+                "Reine Dehnung."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Hüfte",
+                "Wirbelsäule"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 5, "weekday": "Sa", "date": "6. Juni",
+          "dayIdx": 5,
+          "weekday": "Sa",
+          "date": "6. Juni",
           "units": [
-            { "unitId": "w2-d5-u0", "category": "yoga", "title": "Yoga 30 min", "description": "Regeneration nach Schwimm-Session.", "detail": ["YouTube: Yoga für Surfer Anfänger","Fokus Schultern und Hüfte","Kein Hot Yoga"], "duration": 30, "completed": false }
+            {
+              "unitId": "w2-d5-u0",
+              "category": "laufen",
+              "targetComponent": "ausdauer",
+              "title": "Spazieren 30 min",
+              "description": "Cardio-Basis halten.",
+              "duration": 30,
+              "intensity": "niedrig",
+              "detail": [
+                "Eigenes Tempo."
+              ],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 6, "weekday": "So", "date": "7. Juni",
+          "dayIdx": 6,
+          "weekday": "So",
+          "date": "7. Juni",
           "units": [
-            { "unitId": "w2-d6-u0", "category": "erholung", "title": "Vollständige Erholung", "description": "Heute wirklich ausruhen.", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w2-d6-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "Vollständige Erholung",
+              "description": "Heute wirklich ausruhen.",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         }
       ]
     },
     {
       "weekIdx": 3,
-      "phase": "Aufbau & Stabilität",
+      "phase": "Stabilisierung & Taper",
       "dateRange": "8. – 14. Juni",
-      "goal": "40 min Schwimmen. Stabilität und Balance wachsen.",
+      "goal": "Volumen runter. Beweglich bleiben. Sa 13./So 14. Reisetage.",
+      "focusComponents": [
+        "mobility",
+        "surfStrength"
+      ],
       "days": [
         {
-          "dayIdx": 0, "weekday": "Mo", "date": "8. Juni",
+          "dayIdx": 0,
+          "weekday": "Mo",
+          "date": "8. Juni",
           "units": [
-            { "unitId": "w3-d0-u0", "category": "kraft", "title": "Calisthenics – Ganzkörper leicht", "description": "Bekannte Übungen, kein neues Risiko.", "detail": ["Push-ups 3×10","Superman 3×12","Glute Bridge 3×12","Single Leg Balance 25 sek/S – Board-Stand üben","Kein seitliches Beinheben"], "duration": 25, "completed": false }
+            {
+              "unitId": "w3-d0-u0",
+              "category": "schwimmen",
+              "targetComponent": "paddelkraft",
+              "title": "Schwimmen – 30 min locker",
+              "description": "Letzte richtige Schwimm-Session.",
+              "duration": 30,
+              "intensity": "niedrig",
+              "detail": [
+                "Entspanntes Tempo – genießen.",
+                "Kraul: langer gleichmäßiger Zug.",
+                "Schultern morgen müde = Ziel erreicht ✓"
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Rücken",
+                "Trizeps"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 1, "weekday": "Di", "date": "9. Juni",
+          "dayIdx": 1,
+          "weekday": "Di",
+          "date": "9. Juni",
           "units": [
-            { "unitId": "w3-d1-u0", "category": "popup", "title": "Pop-up – 3×8", "description": "Schneller werden. Ziel: unter 2 Sekunden.", "detail": ["Explosiver als letzte Woche","Stance stabil – kein Wackeln nach Landung","5 min morgens reichen"], "duration": 10, "completed": false },
-            { "unitId": "w3-d1-u1", "category": "mobility", "title": "Mobility 20 min", "description": "Schultern und Thorax öffnen.", "detail": ["Thread the Needle 10×/S","Doorway Chest Stretch 30 sek/S","Pigeon Pose 1 min/S"], "duration": 20, "completed": false }
+            {
+              "unitId": "w3-d1-u0",
+              "category": "popup",
+              "targetComponent": "surfStrength",
+              "title": "Pop-up – 3×8",
+              "description": "Schärfer. Ziel: unter 2 Sekunden.",
+              "duration": 10,
+              "intensity": "niedrig",
+              "detail": [
+                "Explosiver als letzte Woche.",
+                "Stance stabil – kein Wackeln nach Landung."
+              ],
+              "muscleGroups": [
+                "Trizeps",
+                "Core",
+                "Beine"
+              ],
+              "completed": false
+            },
+            {
+              "unitId": "w3-d1-u1",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Mobilisation – 20 min",
+              "description": "Schultern und Thorax öffnen.",
+              "duration": 20,
+              "intensity": "niedrig",
+              "detail": [
+                "Thread the Needle: Arm unter Körper durchschieben, Schulter zum Boden. 10×/S.",
+                "Doorway Chest Stretch 30 sek.",
+                "Pigeon Pose 1 min je Seite."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Brustwirbelsäule",
+                "Hüfte"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 2, "weekday": "Mi", "date": "10. Juni",
+          "dayIdx": 2,
+          "weekday": "Mi",
+          "date": "10. Juni",
           "units": [
-            { "unitId": "w3-d2-u0", "category": "erholung", "title": "Erholung", "description": "Ausruhen.", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w3-d2-u0",
+              "category": "yoga",
+              "targetComponent": "mobility",
+              "title": "Yin Yoga – 30 min",
+              "description": "Lange Haltungen. Alles loslassen.",
+              "duration": 30,
+              "intensity": "niedrig",
+              "detail": [
+                "YouTube: 'Yin Yoga vor Reise'.",
+                "Pigeon Pose 2 min je Seite.",
+                "Reine Regeneration."
+              ],
+              "muscleGroups": [
+                "Hüfte",
+                "Schultern",
+                "Wirbelsäule"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 3, "weekday": "Do", "date": "11. Juni",
+          "dayIdx": 3,
+          "weekday": "Do",
+          "date": "11. Juni",
           "units": [
-            { "unitId": "w3-d3-u0", "category": "schwimmen", "title": "Schwimmen – 40 min", "description": "Peak-Session für Lotte. Ruhig und technisch sauber.", "detail": ["Kraul-Fokus: Rotation aus Schulter und Rumpf","Langer gleichmäßiger Zug","3 kurze Pausen erlaubt","Schultern am nächsten Tag: müde ok – kein Schmerz = Ziel erreicht ✓"], "duration": 40, "completed": false }
+            {
+              "unitId": "w3-d3-u0",
+              "category": "popup",
+              "targetComponent": "surfStrength",
+              "title": "Pop-up – 2×8",
+              "description": "Einprägen.",
+              "duration": 10,
+              "intensity": "niedrig",
+              "detail": [
+                "Sauber und bewusst.",
+                "Stance einprägen."
+              ],
+              "muscleGroups": [
+                "Trizeps",
+                "Core",
+                "Beine"
+              ],
+              "completed": false
+            },
+            {
+              "unitId": "w3-d3-u1",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Mobility – 15 min",
+              "description": "Kurz und gut.",
+              "duration": 15,
+              "intensity": "niedrig",
+              "detail": [
+                "Schulter-Kreisen: 20× vor, 20× zurück.",
+                "Hip Flexor Stretch 45 sek je Seite.",
+                "Kind-Haltung 1 min."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Hüftbeuger"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 4, "weekday": "Fr", "date": "12. Juni",
+          "dayIdx": 4,
+          "weekday": "Fr",
+          "date": "12. Juni",
           "units": [
-            { "unitId": "w3-d4-u0", "category": "mobility", "title": "Schulter-Fokus 20 min", "description": "Nach Schwimm-Session regenerieren.", "detail": ["Schulter-Querstretch 45 sek/S","Arm-Kreisen locker","Cobra-Stretch 5×"], "duration": 20, "completed": false }
+            {
+              "unitId": "w3-d4-u0",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Packtag – Mobilisation 10 min",
+              "description": "Kurz mobilisieren, dann packen.",
+              "duration": 10,
+              "intensity": "niedrig",
+              "detail": [
+                "Schulter-Kreisen.",
+                "Cobra-Stretch 5×.",
+                "Pigeon Pose 45 sek je Seite."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Hüfte"
+              ],
+              "completed": false
+            },
+            {
+              "unitId": "w3-d4-u1",
+              "category": "popup",
+              "targetComponent": "surfStrength",
+              "title": "Pop-up – 1×5",
+              "description": "Letzte Einheit vor der Reise.",
+              "duration": 5,
+              "intensity": "niedrig",
+              "detail": [
+                "Einmal sauber durchgehen.",
+                "Stance merken."
+              ],
+              "muscleGroups": [
+                "Trizeps",
+                "Core",
+                "Beine"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 5, "weekday": "Sa", "date": "13. Juni",
+          "dayIdx": 5,
+          "weekday": "Sa",
+          "date": "13. Juni ✈️",
           "units": [
-            { "unitId": "w3-d5-u0", "category": "yoga", "title": "Yoga 30 min", "description": "Letzte richtige Trainingseinheit vor Tapering.", "detail": ["YouTube: Yoga für Anfänger","Alles was sich gut anfühlt"], "duration": 30, "completed": false }
+            {
+              "unitId": "w3-d5-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "Reisetag – kein Sport",
+              "description": "Flugreise Berlin → Malediven. Ausruhen, trinken, ankommen.",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 6, "weekday": "So", "date": "14. Juni",
+          "dayIdx": 6,
+          "weekday": "So",
+          "date": "14. Juni",
           "units": [
-            { "unitId": "w3-d6-u0", "category": "erholung", "title": "Erholung", "description": "Woche war gut – jetzt ausruhen.", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w3-d6-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "Ankunftstag – Erholung",
+              "description": "Ankommen, eingewöhnen, viel Wasser trinken.",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         }
       ]
     },
     {
       "weekIdx": 4,
-      "phase": "Tapering",
+      "phase": "Malediven",
       "dateRange": "15. – 21. Juni",
-      "goal": "Kein neues Training. Beweglich bleiben, ausruhen, ankommen.",
+      "goal": "Mo–Fr sanftes Training vor Ort. Sa 20. Erholung. So 21. Anreise Himmafuji – Planende.",
+      "focusComponents": [
+        "mobility",
+        "surfStrength",
+        "paddelkraft"
+      ],
       "days": [
         {
-          "dayIdx": 0, "weekday": "Mo", "date": "15. Juni",
+          "dayIdx": 0,
+          "weekday": "Mo",
+          "date": "15. Juni",
           "units": [
-            { "unitId": "w4-d0-u0", "category": "mobility", "title": "Sanfte Mobilisation 20 min", "description": "Letzte Woche – nur noch locker halten.", "detail": ["Katze-Kuh 10×","Pigeon Pose 1 min/S","Cobra-Stretch 5×","Schulter-Querstretch"], "duration": 20, "completed": false }
+            {
+              "unitId": "w4-d0-u0",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Sanfte Mobilisation am Strand",
+              "description": "Erste Bewegung vor Ort.",
+              "duration": 20,
+              "intensity": "niedrig",
+              "detail": [
+                "Katze-Kuh auf dem Handtuch: 10×.",
+                "Cobra-Stretch: 5× halten 3 sek.",
+                "Pigeon Pose: 1 min je Seite.",
+                "Single Leg Balance im Sand: 20 sek je Bein – Sand macht es schwieriger!"
+              ],
+              "muscleGroups": [
+                "Wirbelsäule",
+                "Hüfte",
+                "Schultern"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 1, "weekday": "Di", "date": "16. Juni",
+          "dayIdx": 1,
+          "weekday": "Di",
+          "date": "16. Juni",
           "units": [
-            { "unitId": "w4-d1-u0", "category": "popup", "title": "Pop-up – 2×8", "description": "Letzte reguläre Pop-up Einheit.", "detail": ["Ruhig und sauber","Stance festigen","Kein Druck – du hast es drauf"], "duration": 10, "completed": false },
-            { "unitId": "w4-d1-u1", "category": "mobility", "title": "Mobilisation 15 min", "description": "Kurz und gut.", "detail": ["Schulter-Kreisen","Hip Flexor Stretch 45 sek/S","Kind-Haltung 1 min"], "duration": 15, "completed": false }
+            {
+              "unitId": "w4-d1-u0",
+              "category": "popup",
+              "targetComponent": "surfStrength",
+              "title": "Pop-up im Sand – 3×8",
+              "description": "Im Sand üben – weicher und realistischer.",
+              "duration": 10,
+              "intensity": "niedrig",
+              "detail": [
+                "Im Sand liegend – gleiche Bewegung wie zu Hause.",
+                "Sand macht Landung weicher.",
+                "Stance nochmals bewusst spüren."
+              ],
+              "muscleGroups": [
+                "Trizeps",
+                "Core",
+                "Beine"
+              ],
+              "completed": false
+            },
+            {
+              "unitId": "w4-d1-u1",
+              "category": "schwimmen",
+              "targetComponent": "paddelkraft",
+              "title": "Schwimmen im Meer – 20 min",
+              "description": "Erste Einheit im offenen Wasser.",
+              "duration": 20,
+              "intensity": "niedrig",
+              "detail": [
+                "Flaches ruhiges Wasser.",
+                "Gleichmäßiges Kraul-Tempo.",
+                "Salzwasser trägt mehr – fühlt sich leichter an.",
+                "Nicht in der Mittagshitze."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Rücken",
+                "Trizeps"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 2, "weekday": "Mi", "date": "17. Juni",
+          "dayIdx": 2,
+          "weekday": "Mi",
+          "date": "17. Juni",
           "units": [
-            { "unitId": "w4-d2-u0", "category": "schwimmen", "title": "Schwimmen – 20 min locker", "description": "Letzte Schwimm-Einheit. Locker, kein Druck.", "detail": ["Eigenes Tempo","Schultern locker lassen","Genießen"], "duration": 20, "completed": false },
-            { "unitId": "w4-d2-u1", "category": "popup", "title": "Pop-up – 2×5", "description": "Kurz einprägen.", "detail": ["5 min – nicht mehr","Sauber und bewusst"], "duration": 5, "completed": false }
+            {
+              "unitId": "w4-d2-u0",
+              "category": "yoga",
+              "targetComponent": "mobility",
+              "title": "Yoga am Strand – 30 min",
+              "description": "Morgens früh, vor der Hitze.",
+              "duration": 30,
+              "intensity": "niedrig",
+              "detail": [
+                "Barfuß im Sand.",
+                "Cobra, Downward Dog, Pigeon Pose.",
+                "Kein Training in der Mittagshitze."
+              ],
+              "muscleGroups": [
+                "Hüfte",
+                "Schultern",
+                "Wirbelsäule"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 3, "weekday": "Do", "date": "18. Juni",
+          "dayIdx": 3,
+          "weekday": "Do",
+          "date": "18. Juni",
           "units": [
-            { "unitId": "w4-d3-u0", "category": "yoga", "title": "Yin Yoga 30 min", "description": "Letzte Yoga-Einheit. Lang halten, tief atmen.", "detail": ["YouTube: Yin Yoga vor Reise","Fokus: alles loslassen","Kein Leistungsdruck"], "duration": 30, "completed": false }
+            {
+              "unitId": "w4-d3-u0",
+              "category": "schwimmen",
+              "targetComponent": "paddelkraft",
+              "title": "Schwimmen im Meer – 25 min",
+              "description": "Etwas länger als Dienstag.",
+              "duration": 25,
+              "intensity": "niedrig",
+              "detail": [
+                "Kraul-Fokus: Rotation aus der Schulter.",
+                "Ruhiges Tempo.",
+                "Danach: Schulter-Querstretch 45 sek je Seite."
+              ],
+              "muscleGroups": [
+                "Schultern",
+                "Rücken",
+                "Core"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 4, "weekday": "Fr", "date": "19. Juni",
+          "dayIdx": 4,
+          "weekday": "Fr",
+          "date": "19. Juni",
           "units": [
-            { "unitId": "w4-d4-u0", "category": "mobility", "title": "Packtag – kurze Mobilisation", "description": "10 min – dann Koffer packen.", "detail": ["Schulter-Kreisen","Cobra-Stretch 5×","Pigeon Pose 45 sek/S"], "duration": 10, "completed": false },
-            { "unitId": "w4-d4-u1", "category": "popup", "title": "Pop-up – 1×5", "description": "Letzte Einheit. Du bist bereit.", "detail": ["Einmal sauber durchgehen","Stance merken – das ist dein Fuß vorne"], "duration": 5, "completed": false },
-            { "unitId": "w4-d4-u2", "category": "erholung", "title": "Früh ins Bett!", "description": "Morgen geht's los. 🌊", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w4-d4-u0",
+              "category": "mobility",
+              "targetComponent": "mobility",
+              "title": "Mobility & Erholung – 20 min",
+              "description": "Locker bleiben.",
+              "duration": 20,
+              "intensity": "niedrig",
+              "detail": [
+                "Sanfte Dehnübungen nach Gefühl.",
+                "Single Leg Balance im Sand.",
+                "Cobra-Stretch 5×."
+              ],
+              "muscleGroups": [
+                "Hüfte",
+                "Schultern"
+              ],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 5, "weekday": "Sa", "date": "20. Juni 🏄",
+          "dayIdx": 5,
+          "weekday": "Sa",
+          "date": "20. Juni",
           "units": [
-            { "unitId": "w4-d5-u0", "category": "erholung", "title": "✈️ Abflug Malediven", "description": "Du hast alles gegeben. 8 Tage Surfen – genieß jeden Moment!", "detail": [], "duration": 0, "completed": false }
+            {
+              "unitId": "w4-d5-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "Erholung vor Weiterreise",
+              "description": "Morgen Anreise Himmafuji. Ausruhen und genießen.",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
           ]
         },
         {
-          "dayIdx": 6, "weekday": "So", "date": "21. Juni",
-          "units": []
+          "dayIdx": 6,
+          "weekday": "So",
+          "date": "21. Juni 🏝️",
+          "units": [
+            {
+              "unitId": "w4-d6-u0",
+              "category": "erholung",
+              "targetComponent": null,
+              "title": "🏝️ Anreise Himmafuji – Planende",
+              "description": "Du hast alles gegeben. Jetzt ist Surfen dran!",
+              "duration": 0,
+              "intensity": "keine",
+              "detail": [],
+              "muscleGroups": [],
+              "completed": false
+            }
+          ]
         }
       ]
     }

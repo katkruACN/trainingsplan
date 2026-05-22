@@ -7,7 +7,7 @@
     "changedBy": "Katharina",
     "trigger": "user-edit",
     "summary": "",
-    "updatedAt": "2026-05-21T06:48:02.474Z"
+    "updatedAt": "2026-05-21T15:54:16.183Z"
   },
   "changes": [
     {
@@ -125,11 +125,65 @@
         "Kein Hügel, keine Schnelligkeit"
       ],
       "reason": "user-edit"
+    },
+    {
+      "id": "c14",
+      "unitId": "w1-d4-u0",
+      "field": "category",
+      "from": "kraft-upper",
+      "to": "paddeln",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c15",
+      "unitId": "w1-d4-u0",
+      "field": "title",
+      "from": "Krafttraining Oberkörper / Paddeln in FM",
+      "to": "Paddel-Session 3 km im See",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c16",
+      "unitId": "w1-d4-u0",
+      "field": "duration",
+      "from": 20,
+      "to": 30,
+      "reason": "user-edit"
+    },
+    {
+      "id": "c17",
+      "unitId": "w1-d4-u0",
+      "field": "detail",
+      "from": [],
+      "to": [
+        "Warm-up: Armkreisen + Cobra 5 min an Land",
+        "Board-Position: Brust auf Mittelpunkt",
+        "Entspanntes gleichmäßiges Tempo",
+        "Pause wenn Schultern brennen",
+        "Cool-down: Cobra + Schulter dehnen"
+      ],
+      "reason": "user-edit"
+    },
+    {
+      "id": "c18",
+      "unitId": "w3-d5-u0",
+      "field": "title",
+      "from": "Surfen in o2 Surftown",
+      "to": "o2 Surftown - intermediate left 12.45",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c19",
+      "unitId": "w2-d6-u0",
+      "field": "title",
+      "from": "Surfen in o2 Surftown",
+      "to": "o2 Surftown - intermediate right 11:45",
+      "reason": "user-edit"
     }
   ],
   "delta": {
     "categoryShifts": {},
-    "durationDeltaMin": 85,
+    "durationDeltaMin": 95,
     "unitsAdded": 0,
     "unitsRemoved": 0
   },

@@ -3,10 +3,10 @@
     "version": "base",
     "schemaVersion": 4,
     "createdAt": "2026-05-21",
-    "source": "Manuell generiert aus profile.json · Verena",
+    "source": "Aktualisiert aus surf-profil.json v2 · Verena",
     "phaseName": "Surftrip · 6. Juni 2026",
     "note": "Readonly. Nie überschreiben. Jede Änderung geht in changes/YYYY-MM-DD.json",
-    "profileSummary": "Advanced · 35 J · München · Rennrad + Paddeln + Surfen · 16 Tage bis Trip · Ziel: 5 Tage × 4h Surfen"
+    "profileSummary": "Advanced Training · Intermediate Surf · 35 J · München · Rennrad + Paddeln + Surfen + Yoga · Kraft zu Hause · 16 Tage bis Trip · Ziel: 5 Tage × 2h Surfen"
   },
   "constants": {
     "storageKey": "trainingsplan-verena",
@@ -16,25 +16,24 @@
     "weekPhaseNames": ["Aktivierung","Peak-Aufbau","Tapering"],
     "weekGoals": [
       "Paddle-Kondition aktivieren. Rennrad Zone 2–3. Pop-up täglich schärfen.",
-      "Paddle-Peak: 4 km am Stück. Rad-Intensität steigern. Kraft-Fokus Oberkörper.",
+      "Paddle-Peak: 4 km am Stück. Eisbach Session. Kraft zu Hause.",
       "Tapering – kein neues Volumen. Beweglich und frisch in den Trip."
     ]
   },
   "categories": {
-    "mobility":        { "label": "Mobility",              "subGoal": "mobility",    "location": { "place": "Zu Hause" } },
-    "yoga":            { "label": "Yoga",                  "subGoal": "mobility",    "location": { "place": "Studio" } },
-    "rad":             { "label": "Rennrad",               "subGoal": "paddlePower", "location": { "place": "Draussen", "note": "Isar, Starnberger See, Ammersee" } },
-    "paddeln":         { "label": "Paddeln",               "subGoal": "paddlePower", "location": { "place": "Feldmoching / Starnberger See" } },
-    "kraft":           { "label": "Kraft",                 "subGoal": "paddlePower", "location": { "place": "Fitnessstudio" } },
-    "hiit":            { "label": "HIIT",                  "subGoal": "surfStrength","location": { "place": "Studio / Draussen" } },
-    "popup":           { "label": "Pop-up Training",       "subGoal": "surfStrength","location": { "place": "Zu Hause" } },
-    "surfen-eisbach":  { "label": "Surfen Eisbach",        "subGoal": "surfStrength","location": { "place": "Eisbach" } },
-    "surfen-jochen":   { "label": "Surfen Jochen Schweizer","subGoal": "surfStrength","location": { "place": "Jochen Schweizer", "note": "buchen" } },
-    "erholung":        { "label": "Erholung",              "subGoal": null,          "location": null }
+    "mobility":       { "label": "Mobility",        "subGoal": "mobility",    "location": { "place": "Zu Hause" } },
+    "yoga":           { "label": "Yoga",            "subGoal": "mobility",    "location": { "place": "Zu Hause / Studio" } },
+    "rad":            { "label": "Rennrad",         "subGoal": "paddlePower", "location": { "place": "Draussen", "note": "Isar, Starnberger See, Ammersee" } },
+    "paddeln":        { "label": "Paddeln",         "subGoal": "paddlePower", "location": { "place": "Feldmoching / Starnberger See" } },
+    "kraft":          { "label": "Kraft",           "subGoal": "paddlePower", "location": { "place": "Zu Hause", "note": "Körpergewicht + Bänder" } },
+    "hiit":           { "label": "HIIT",            "subGoal": "surfStrength","location": { "place": "Zu Hause / Draussen" } },
+    "popup":          { "label": "Pop-up Training", "subGoal": "surfStrength","location": { "place": "Zu Hause" } },
+    "surfen-eisbach": { "label": "Surfen Eisbach",  "subGoal": "surfStrength","location": { "place": "Eisbach" } },
+    "erholung":       { "label": "Erholung",        "subGoal": null,          "location": null }
   },
   "subGoals": [
     { "id": "paddlePower",  "title": "Paddel Power",               "categories": ["paddeln","rad","kraft"] },
-    { "id": "surfStrength", "title": "Surf Strength",              "categories": ["hiit","popup","surfen-eisbach","surfen-jochen"] },
+    { "id": "surfStrength", "title": "Surf Strength",              "categories": ["hiit","popup","surfen-eisbach"] },
     { "id": "mobility",     "title": "Stabilität & Beweglichkeit", "categories": ["mobility","yoga"] }
   ],
   "weeks": [
@@ -50,27 +49,28 @@
         {
           "dayIdx": 3, "weekday": "Do", "date": "21. Mai",
           "units": [
-            { "unitId": "w0-d3-u0", "category": "paddeln", "title": "Paddle-Aktivierung – 2 km", "description": "Erste Session, Technik fokussieren.", "detail": ["Warm-up: Armkreisen + Cobra 5 min an Land", "Catch: hoher Ellenbogen, Arm weit vorne", "Rotation aus Schulter & Rumpf – nicht nur Arme", "Gleichmäßiges Tempo, keine Sprints", "Cool-down: Schulter-Querstretch 45 sek/S"], "duration": 40, "completed": false },
-            { "unitId": "w0-d3-u1", "category": "popup", "title": "Pop-up schärfen – 3×8", "description": "Explosivität und saubere Landung.", "detail": ["Unter 1 Sekunde – Ziel ist bereits Pflicht", "Stance: sofort stabil nach Landung", "Blick nach vorne, nicht runter"], "duration": 10, "completed": false }
+            { "unitId": "w0-d3-u0", "category": "paddeln", "title": "Paddle-Aktivierung – 2 km", "description": "Erste Session, Technik fokussieren.", "detail": ["Warm-up: Armkreisen + Cobra 5 min an Land", "Catch: hoher Ellenbogen, Arm weit vorne", "Rotation aus Schulter & Rumpf", "Gleichmäßiges Tempo, keine Sprints", "Cool-down: Schulter-Querstretch 45 sek/S"], "duration": 40, "completed": false },
+            { "unitId": "w0-d3-u1", "category": "popup", "title": "Pop-up schärfen – 3×8", "description": "Explosivität und saubere Landung.", "detail": ["Unter 1 Sekunde", "Stance sofort stabil nach Landung", "Blick nach vorne"], "duration": 10, "completed": false }
           ]
         },
         {
           "dayIdx": 4, "weekday": "Fr", "date": "22. Mai",
           "units": [
-            { "unitId": "w0-d4-u0", "category": "kraft", "title": "Kraft A – Oberkörper Push/Pull", "description": "Schultern, Rücken, Core für Paddeln.", "detail": ["Lat Pulldown 3×12", "Seated Cable Row 3×12", "Face Pulls 3×15", "Push-ups 3×15 (3 sek runter)", "Dead Bug 3×10/S", "Pallof Press 3×12/S"], "duration": 55, "completed": false }
+            { "unitId": "w0-d4-u0", "category": "kraft", "title": "Kraft A – Oberkörper zu Hause", "description": "Schultern, Rücken, Core – kein Studio nötig.", "detail": ["Push-ups 4×12 (3 sek runter)", "Superman 3×12", "Dead Bug 3×10/S", "Renegade Row mit KH 3×8/S", "Side Plank 3×40 sek/S", "Pallof Press mit Band 3×12/S"], "duration": 45, "completed": false }
           ]
         },
         {
           "dayIdx": 5, "weekday": "Sa", "date": "23. Mai",
           "units": [
-            { "unitId": "w0-d5-u0", "category": "rad", "title": "Rennrad – 75 min Zone 2/3", "description": "Solide Grundlagenausfahrt Richtung Starnberger See.", "detail": ["0–30 min: Zone 2 einrollen", "30–55 min: Zone 3, kontrolliert", "55–75 min: Zone 2 abrollen", "HF max 165 bpm in Zone 3"], "duration": 75, "completed": false },
-            { "unitId": "w0-d5-u1", "category": "mobility", "title": "Mobility nach Rad – 20 min", "description": "Hüfte und Schultern öffnen.", "detail": ["Hip Flexor Stretch 45 sek/S", "Pigeon Pose 1 min/S", "Thorax-Rotation 10× je Seite"], "duration": 20, "completed": false }
+            { "unitId": "w0-d5-u0", "category": "rad", "title": "Rennrad – 75 min Zone 2/3", "description": "Solide Grundlagenausfahrt.", "detail": ["0–30 min: Zone 2 einrollen", "30–55 min: Zone 3 kontrolliert", "55–75 min: Zone 2 abrollen", "HF max 165 bpm in Zone 3"], "duration": 75, "completed": false },
+            { "unitId": "w0-d5-u1", "category": "mobility", "title": "Mobility nach Rad – 20 min", "description": "Hüfte und Schultern öffnen.", "detail": ["Hip Flexor Stretch 45 sek/S", "Pigeon Pose 1 min/S", "Thorax-Rotation 10×/S"], "duration": 20, "completed": false }
           ]
         },
         {
           "dayIdx": 6, "weekday": "So", "date": "24. Mai",
           "units": [
-            { "unitId": "w0-d6-u0", "category": "surfen-eisbach", "title": "Eisbach Session", "description": "Technik und Flow schärfen vor dem Trip.", "detail": ["Warm-up Pop-up 2×5 an Land", "Fokus: Bottom Turn sauber", "Mehrere kurze Sessions statt eine lange"], "duration": 60, "completed": false }
+            { "unitId": "w0-d6-u0", "category": "surfen-eisbach", "title": "Eisbach Session", "description": "Technik und Flow vor dem Trip schärfen.", "detail": ["Warm-up Pop-up 2×5 an Land", "Fokus: Wellenlesen und Timing", "Mehrere kurze Sessions statt eine lange"], "duration": 60, "completed": false },
+            { "unitId": "w0-d6-u1", "category": "yoga", "title": "Yoga nach Eisbach – 30 min", "description": "Schultern und Hüfte regenerieren.", "detail": ["Yin oder Hatha", "Pigeon Pose 2 min/S", "Thorax-Rotation 15×/S"], "duration": 30, "completed": false }
           ]
         }
       ]
@@ -79,31 +79,31 @@
       "weekIdx": 1,
       "phase": "Peak-Aufbau",
       "dateRange": "25. – 31. Mai",
-      "goal": "Paddle-Peak: 4 km am Stück. Rad-Intensität steigern. Kraft-Fokus Oberkörper.",
+      "goal": "Paddle-Peak: 4 km am Stück. Eisbach Session. Kraft zu Hause.",
       "days": [
         {
           "dayIdx": 0, "weekday": "Mo", "date": "25. Mai",
           "units": [
-            { "unitId": "w1-d0-u0", "category": "paddeln", "title": "Paddeln – 3 km", "description": "Distanz-Aufbau. Technik sauber halten.", "detail": ["Warm-up 5 min an Land", "Gleichmäßiges Tempo – kein Sprint", "Catch-Phase: Arm weit vorne, hoher Ellenbogen", "Rotation aus Rumpf – nicht nur Schultern", "2 kurze Pausen erlaubt"], "duration": 55, "completed": false },
-            { "unitId": "w1-d0-u1", "category": "popup", "title": "Pop-up – 3×8", "description": "Täglich bis zum Trip.", "detail": ["Explosiv, unter 1 Sek", "Direkt nach Paddeln – Ermüdungs-Simulation"], "duration": 10, "completed": false }
+            { "unitId": "w1-d0-u0", "category": "paddeln", "title": "Paddeln – 3 km", "description": "Distanz-Aufbau. Technik sauber halten.", "detail": ["Warm-up 5 min an Land", "Gleichmäßiges Tempo", "Catch-Phase: Arm weit vorne, hoher Ellenbogen", "Rotation aus Rumpf", "2 kurze Pausen erlaubt"], "duration": 55, "completed": false },
+            { "unitId": "w1-d0-u1", "category": "popup", "title": "Pop-up – 3×8", "description": "Täglich bis zum Trip.", "detail": ["Explosiv unter 1 Sek", "Nach Paddeln – Ermüdungs-Simulation"], "duration": 10, "completed": false }
           ]
         },
         {
           "dayIdx": 1, "weekday": "Di", "date": "26. Mai",
           "units": [
-            { "unitId": "w1-d1-u0", "category": "kraft", "title": "Kraft B – Beine & Core Rotation", "description": "Surf-Stabilität und Board-Kontrolle.", "detail": ["Bulgarian Split Squat 3×10/S (8–10 kg)", "Romanian Deadlift 3×10", "Kabelzug-Rotation 3×12/S", "Pallof Press 3×12/S", "Side Plank + Hip Dip 3×12/S", "Single Leg RDL 3×8/S"], "duration": 55, "completed": false }
+            { "unitId": "w1-d1-u0", "category": "kraft", "title": "Kraft B – Beine & Core zu Hause", "description": "Surf-Stabilität, kein Studio nötig.", "detail": ["Bulgarian Split Squat 3×10/S (Körpergewicht)", "Single Leg RDL 3×8/S", "Kabelzug-Rotation mit Band 3×12/S", "Side Plank + Hip Dip 3×12/S", "Glute Bridge einbeinig 3×10/S", "Dead Bug 3×10/S"], "duration": 45, "completed": false }
           ]
         },
         {
           "dayIdx": 2, "weekday": "Mi", "date": "27. Mai",
           "units": [
-            { "unitId": "w1-d2-u0", "category": "rad", "title": "Rennrad – 60 min Zone 2", "description": "Aktive Erholung nach Kraft gestern.", "detail": ["Reines Zone 2 – kein Hügel nötig", "HF max 155 bpm", "Beine drehen, nicht pressen"], "duration": 60, "completed": false }
+            { "unitId": "w1-d2-u0", "category": "rad", "title": "Rennrad – 60 min Zone 2", "description": "Aktive Erholung nach Kraft.", "detail": ["Reines Zone 2", "HF max 155 bpm", "Flache Strecke, Beine drehen"], "duration": 60, "completed": false }
           ]
         },
         {
           "dayIdx": 3, "weekday": "Do", "date": "28. Mai",
           "units": [
-            { "unitId": "w1-d3-u0", "category": "hiit", "title": "HIIT – 45 min", "description": "Surf-spezifische Explosivität und Erholungsfähigkeit.", "detail": ["Fokus: kurze explosive Intervalle", "Sprint → Pause = Welle-Erwischen-Simulation", "Letzte Runde muss genauso stark sein wie die erste"], "duration": 45, "completed": false }
+            { "unitId": "w1-d3-u0", "category": "hiit", "title": "HIIT – 30 min zu Hause", "description": "Surf-spezifische Explosivität.", "detail": ["Burpees 5×10 – simuliert Welle-Erwischen", "Jump Squats 4×10", "Mountain Climbers 4×20", "Pause: 45 sek zwischen Sätzen", "Letzte Runde genauso stark wie erste"], "duration": 30, "completed": false }
           ]
         },
         {
@@ -115,15 +115,15 @@
         {
           "dayIdx": 5, "weekday": "Sa", "date": "30. Mai",
           "units": [
-            { "unitId": "w1-d5-u0", "category": "paddeln", "title": "Paddeln – 4 km", "description": "Peak-Distanz. Alles zusammenbringen.", "detail": ["Warm-up 5 min an Land", "Technik-Checkliste: Catch, Rotation, Exit sauber", "Gleichmäßiges Tempo die ganzen 4 km", "Schultern am nächsten Tag: müde aber kein Kater = Ziel erreicht ✓"], "duration": 70, "completed": false },
-            { "unitId": "w1-d5-u1", "category": "rad", "title": "Rennrad – 90 min Zone 2/3", "description": "Langer Samstag – Paddeln morgens, Rad nachmittags.", "detail": ["Mind. 2h Pause nach Paddeln", "0–40 min Zone 2", "40–70 min Zone 3 mit Hügeln", "70–90 min Zone 2 abrollen"], "duration": 90, "completed": false }
+            { "unitId": "w1-d5-u0", "category": "paddeln", "title": "Paddeln – 4 km", "description": "Peak-Distanz. Alles zusammenbringen.", "detail": ["Warm-up 5 min an Land", "Technik: Catch, Rotation, Exit sauber", "Gleichmäßiges Tempo", "Schultern am nächsten Tag müde = Ziel erreicht ✓"], "duration": 70, "completed": false },
+            { "unitId": "w1-d5-u1", "category": "rad", "title": "Rennrad – 75 min Zone 2/3", "description": "Nachmittags – mind. 2h Pause nach Paddeln.", "detail": ["0–35 min Zone 2", "35–60 min Zone 3 mit Hügeln", "60–75 min Zone 2 abrollen"], "duration": 75, "completed": false }
           ]
         },
         {
           "dayIdx": 6, "weekday": "So", "date": "31. Mai",
           "units": [
-            { "unitId": "w1-d6-u0", "category": "surfen-eisbach", "title": "Eisbach Session", "description": "Letzte lange Surf-Session vor dem Trip.", "detail": ["Fokus: Wellenlesen und Timing", "Pop-up aus dem Wasser heraus üben", "Mehrere kurze Sessions – nicht überpaddeln"], "duration": 90, "completed": false },
-            { "unitId": "w1-d6-u1", "category": "yoga", "title": "Yoga nach Eisbach – 30 min", "description": "Schultern und Hüfte regenerieren.", "detail": ["Yin oder Hatha", "Pigeon Pose 2 min/S", "Thorax-Rotation 15×/S"], "duration": 30, "completed": false }
+            { "unitId": "w1-d6-u0", "category": "surfen-eisbach", "title": "Eisbach Session", "description": "Letzte große Surf-Session vor dem Trip.", "detail": ["Fokus: Wellenlesen und Timing", "Pop-up aus dem Wasser üben", "Mehrere kurze Sessions"], "duration": 90, "completed": false },
+            { "unitId": "w1-d6-u1", "category": "yoga", "title": "Yoga nach Eisbach – 30 min", "description": "Schultern und Hüfte regenerieren.", "detail": ["Yin oder Hatha", "Pigeon Pose 2 min/S"], "duration": 30, "completed": false }
           ]
         }
       ]
@@ -137,41 +137,41 @@
         {
           "dayIdx": 0, "weekday": "Mo", "date": "1. Juni",
           "units": [
-            { "unitId": "w2-d0-u0", "category": "kraft", "title": "Kraft C – Leicht & Erhalt", "description": "Tapering: 2 Sätze, Gewicht −20%.", "detail": ["Lat Pulldown 2×12 (leicht)", "Face Pulls 2×15", "Bulgarian Split Squat 2×8/S (Körpergewicht)", "Dead Bug 2×10/S", "Push-ups 2×10"], "duration": 30, "completed": false },
-            { "unitId": "w2-d0-u1", "category": "mobility", "title": "Mobility 20 min", "description": "Hüfte, Schultern, Thorax öffnen.", "detail": ["Pigeon Pose 1 min/S", "Cobra-Stretch 5×", "Schulter-Querstretch 45 sek/S"], "duration": 20, "completed": false }
+            { "unitId": "w2-d0-u0", "category": "kraft", "title": "Kraft C – Leicht & Erhalt", "description": "Tapering: 2 Sätze, leicht.", "detail": ["Push-ups 2×10", "Dead Bug 2×8/S", "Side Plank 2×30 sek/S", "Bulgarian Split Squat 2×8/S (KG)"], "duration": 25, "completed": false },
+            { "unitId": "w2-d0-u1", "category": "mobility", "title": "Mobility 20 min", "description": "Hüfte, Schultern, Thorax.", "detail": ["Pigeon Pose 1 min/S", "Cobra-Stretch 5×", "Schulter-Querstretch 45 sek/S"], "duration": 20, "completed": false }
           ]
         },
         {
           "dayIdx": 1, "weekday": "Di", "date": "2. Juni",
           "units": [
-            { "unitId": "w2-d1-u0", "category": "rad", "title": "Rennrad – 45 min locker Zone 1", "description": "Beine drehen, nicht belasten.", "detail": ["Flache Strecke", "HF max 145 bpm", "Keine Hügel, kein Druck"], "duration": 45, "completed": false },
+            { "unitId": "w2-d1-u0", "category": "rad", "title": "Rennrad – 45 min Zone 1", "description": "Locker drehen, nicht belasten.", "detail": ["HF max 145 bpm", "Flache Strecke", "Kein Druck"], "duration": 45, "completed": false },
             { "unitId": "w2-d1-u1", "category": "popup", "title": "Pop-up – 2×8", "description": "Scharf halten.", "detail": ["Explosiv und sauber", "Stance festigen"], "duration": 10, "completed": false }
           ]
         },
         {
           "dayIdx": 2, "weekday": "Mi", "date": "3. Juni",
           "units": [
-            { "unitId": "w2-d2-u0", "category": "paddeln", "title": "Paddeln – 2 km locker", "description": "Letzte Paddle-Session. Technik genießen, kein Druck.", "detail": ["Entspanntes Tempo", "Technik-Checkliste kurz durchgehen", "Schultern danach gut dehnen"], "duration": 35, "completed": false }
+            { "unitId": "w2-d2-u0", "category": "paddeln", "title": "Paddeln – 2 km locker", "description": "Letzte Paddle-Session. Kein Druck.", "detail": ["Entspanntes Tempo", "Technik genießen", "Schultern danach gut dehnen"], "duration": 35, "completed": false }
           ]
         },
         {
           "dayIdx": 3, "weekday": "Do", "date": "4. Juni",
           "units": [
-            { "unitId": "w2-d3-u0", "category": "yoga", "title": "Yoga – Yin 30 min", "description": "Letzte Yoga-Einheit. Lange Haltungen, tief einatmen.", "detail": ["Pigeon Pose 2 min/S", "Thorax-Rotation", "Alles loslassen – du bist bereit"], "duration": 30, "completed": false },
+            { "unitId": "w2-d3-u0", "category": "yoga", "title": "Yoga – Yin 30 min", "description": "Lange Haltungen, tief atmen.", "detail": ["Pigeon Pose 2 min/S", "Thorax-Rotation", "Alles loslassen – du bist bereit"], "duration": 30, "completed": false },
             { "unitId": "w2-d3-u1", "category": "popup", "title": "Pop-up – 1×8", "description": "Kurz einprägen.", "detail": ["Sauber und bewusst", "Stance merken"], "duration": 5, "completed": false }
           ]
         },
         {
           "dayIdx": 4, "weekday": "Fr", "date": "5. Juni",
           "units": [
-            { "unitId": "w2-d4-u0", "category": "mobility", "title": "Mobilisation – Packtag 15 min", "description": "Kurz mobilisieren, dann Koffer packen.", "detail": ["Schulter-Kreisen", "Pigeon Pose 1 min/S", "Cobra-Stretch 5×"], "duration": 15, "completed": false },
+            { "unitId": "w2-d4-u0", "category": "mobility", "title": "Packtag – Mobilisation 15 min", "description": "Kurz mobilisieren, dann Koffer packen.", "detail": ["Schulter-Kreisen", "Pigeon Pose 1 min/S", "Cobra-Stretch 5×"], "duration": 15, "completed": false },
             { "unitId": "w2-d4-u1", "category": "erholung", "title": "Früh ins Bett!", "description": "Morgen geht's los. 🌊", "detail": [], "duration": 0, "completed": false }
           ]
         },
         {
           "dayIdx": 5, "weekday": "Sa", "date": "6. Juni 🏄",
           "units": [
-            { "unitId": "w2-d5-u0", "category": "erholung", "title": "✈️ Abflug – Surftrip!", "description": "Du hast alles gegeben. 5 Tage × 4h Surfen – los geht's!", "detail": [], "duration": 0, "completed": false }
+            { "unitId": "w2-d5-u0", "category": "erholung", "title": "✈️ Abflug – Surftrip!", "description": "Du hast alles gegeben. 5 Tage × 2h Surfen – los geht's!", "detail": [], "duration": 0, "completed": false }
           ]
         },
         { "dayIdx": 6, "weekday": "So", "date": "7. Juni", "units": [] }

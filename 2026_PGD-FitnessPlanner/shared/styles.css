@@ -1149,7 +1149,8 @@
   body.form-page input[type="text"],
   body.form-page input[type="number"],
   body.form-page input[type="date"],
-  body.form-page select {
+  body.form-page select,
+  body.form-page textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--border);
@@ -1161,11 +1162,91 @@
     transition: border-color 0.15s, box-shadow 0.15s;
   }
 
+  body.form-page textarea {
+    resize: vertical;
+    line-height: 1.4;
+    min-height: 60px;
+  }
+
   body.form-page input:focus,
-  body.form-page select:focus {
+  body.form-page select:focus,
+  body.form-page textarea:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* Chip-Gruppen (Multi-Select für Equipment & Wochentage) */
+  .chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+  }
+
+  .chip:hover {
+    border-color: var(--accent);
+  }
+
+  .chip.selected {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .chip-sub {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--muted);
+    opacity: 0.85;
+  }
+
+  .chip.selected .chip-sub {
+    color: var(--accent);
+    opacity: 0.85;
+  }
+
+  .chip-day {
+    min-width: 44px;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  .checkbox-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+  }
+
+  .level-group-2 {
+    grid-template-columns: 1fr 1fr;
   }
 
   .divider {
@@ -1805,4 +1886,331 @@
     .goals-grid { grid-template-columns: 1fr; }
     .plan-row { flex-direction: column; gap: 8px; }
     .plan-week-num { border-right: none; padding-right: 0; min-width: auto; justify-content: flex-start; }
+  }
+
+  /* ===================================
+     PDF EXPORT
+     Druck-Layout: 1 Seite je Block
+     =================================== */
+  #pdf-print-root { display: none; }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  @media print {
+    body.form-page > *:not(#pdf-print-root) { display: none !important; }
+    body.form-page {
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: none !important;
+      background: #ffffff !important;
+    }
+    #pdf-print-root { display: block; }
+
+    .pdf-page {
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      padding: 14mm 14mm 12mm;
+      box-sizing: border-box;
+      height: 297mm;
+      width: 210mm;
+      overflow: hidden;
+      color: var(--text);
+      font-size: 10.5px;
+      line-height: 1.4;
+    }
+    .pdf-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+  }
+
+  .pdf-page h1 {
+    font-size: 22px;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .pdf-page h2 {
+    font-size: 15px;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .pdf-page h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 10px 0 6px;
+  }
+  .pdf-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .pdf-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* PDF Page 1: Profil */
+  .pdf-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .pdf-profile-grid.two-col { grid-template-columns: 1fr 1fr; }
+  .pdf-profile-grid.three-col { grid-template-columns: repeat(3, 1fr); }
+  .pdf-profile-grid.full-col { grid-template-columns: 1fr; }
+  .pdf-profile-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 8px;
+  }
+  .pdf-profile-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .pdf-profile-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .pdf-profile-scale {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 3px;
+  }
+  .pdf-profile-scale-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .pdf-profile-scale-fill {
+    height: 100%;
+    border-radius: 999px;
+  }
+
+  /* PDF Page 2: Kurzfassung Trainingsplan */
+  .pdf-plan-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pdf-plan-row {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .pdf-plan-week-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pdf-plan-week-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .pdf-plan-phase-line {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .pdf-plan-phase {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .pdf-plan-dates {
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .pdf-plan-goal {
+    font-size: 11px;
+    color: var(--text);
+  }
+  .pdf-plan-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-top: 2px;
+  }
+  .pdf-plan-cats .category-badge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  /* PDF Pages 3+: Detail Trainingsplan */
+  .pdf-detail-header {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    background: var(--bg);
+  }
+  .pdf-detail-goal-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .pdf-detail-goal-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .pdf-detail-progress {
+    height: 6px;
+    background: var(--accent-soft);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .pdf-detail-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), #059669);
+  }
+  .pdf-detail-progress-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .pdf-phase-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .pdf-phase-tab {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 6px;
+    text-align: center;
+    background: var(--surface);
+  }
+  .pdf-phase-tab.current {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .pdf-phase-num {
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .pdf-phase-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .pdf-phase-tab.current .pdf-phase-name { color: var(--accent); }
+  .pdf-week-header {
+    margin: 6px 0 8px;
+  }
+  .pdf-week-eyebrow {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .pdf-week-goal {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .pdf-day-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
+  .pdf-day-table th,
+  .pdf-day-table td {
+    border-bottom: 1px solid var(--border);
+    padding: 4px 6px;
+    vertical-align: top;
+    text-align: left;
+  }
+  .pdf-day-table th {
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .pdf-day-date {
+    font-weight: 700;
+    color: var(--text);
+    width: 22%;
+    white-space: nowrap;
+  }
+  .pdf-day-cells {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pdf-day-unit {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .pdf-day-row {
+    display: grid;
+    grid-template-columns: minmax(90px, max-content) 1fr 50px;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .pdf-day-row .category-badge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+  .pdf-day-title {
+    color: var(--text);
+  }
+  .pdf-day-duration {
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .pdf-day-details {
+    margin: 0;
+    padding: 0 0 0 110px;
+    list-style: disc;
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .pdf-day-details li {
+    margin-bottom: 1px;
+  }
+  .pdf-day-empty {
+    color: var(--muted);
+    font-style: italic;
   }

@@ -27,20 +27,16 @@
     <!-- VIEW MODE (Read-only Darstellung) -->
     <div class="status-view" id="status-view" hidden>
       <div class="status-view-grid" id="status-view-grid"></div>
-      <div class="nav-bar">
-        <button class="btn btn-danger" id="btn-delete-user" hidden>User löschen 🗑</button>
-        <button class="btn btn-export" id="btn-export-view">JSON exportieren ↓</button>
-        <button class="btn btn-submit" id="btn-edit">Anpassen ✎</button>
-      </div>
     </div>
 
     <!-- EDIT MODE (Eingabe) -->
     <div class="main status-edit" id="status-edit">
 
-      <!-- Persönliche Daten -->
+      <!-- 1. Persönliche Daten -->
       <div class="status-block">
         <div class="block-header">
           <span class="block-tag tag-personal">Persönliche Daten</span>
+          <span class="block-hint">Gib uns ein paar Eckdaten</span>
         </div>
 
         <div class="field-group">
@@ -73,6 +69,55 @@
             <label class="field-label" for="gewicht">Gewicht (kg)</label>
             <input type="number" id="gewicht" placeholder="z.B. 54" min="40" max="150" />
           </div>
+        </div>
+      </div>
+
+      <!-- 2. Zieldefinition -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-goal">Zieldefinition</span>
+          <span class="block-hint">Was möchtest du erreichen?</span>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="trip-datum">Ziel-Datum</label>
+            <input type="date" id="trip-datum" />
+            <div class="field-hint">Heute + Anzahl Wochen → Plan-Dauer</div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Datum ist …</label>
+            <div class="level-group level-group-2">
+              <button class="level-btn" data-group="datum-flex" data-value="fix">Fix<div class="level-sub">Trip / Event</div></button>
+              <button class="level-btn" data-group="datum-flex" data-value="flexibel">Flexibel<div class="level-sub">Richtwert</div></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="surf-tage">Surf-Tage am Stück</label>
+            <input type="number" id="surf-tage" placeholder="z.B. 7" min="1" max="30" />
+            <div class="field-hint">Wie viele Tage willst du aktiv surfen?</div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="surf-stunden">Stunden pro Tag</label>
+            <input type="number" id="surf-stunden" placeholder="z.B. 4" min="1" max="10" step="0.5" />
+            <div class="field-hint">Aktive Surf-Zeit täglich</div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="anderes-ziel">Anderes Ziel</label>
+          <textarea id="anderes-ziel" rows="2" placeholder="Optional: weitere persönliche Ziele für deinen Trip"></textarea>
+        </div>
+      </div>
+
+      <!-- 3. Fitness-Status — Selbsteinschätzung -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-personal">Fitness-Status — Selbsteinschätzung</span>
+          <span class="block-hint">1–5</span>
         </div>
 
         <div class="field-group">
@@ -112,35 +157,10 @@
         </div>
       </div>
 
-      <!-- Zieldefinition -->
+      <!-- Aktuelle Paddle Power -->
       <div class="status-block">
         <div class="block-header">
-          <span class="block-tag tag-goal">Zieldefinition</span>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label" for="trip-datum">Trip-Datum</label>
-          <input type="date" id="trip-datum" />
-        </div>
-
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label" for="surf-tage">Surf-Tage am Stück</label>
-            <input type="number" id="surf-tage" placeholder="z.B. 7" min="1" max="30" />
-            <div class="field-hint">Wie viele Tage willst du aktiv surfen?</div>
-          </div>
-          <div class="field-group">
-            <label class="field-label" for="surf-stunden">Stunden pro Tag</label>
-            <input type="number" id="surf-stunden" placeholder="z.B. 4" min="1" max="10" step="0.5" />
-            <div class="field-hint">Aktive Surf-Zeit täglich</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Paddle Power -->
-      <div class="status-block">
-        <div class="block-header">
-          <span class="block-tag tag-paddle">Paddle Power</span>
+          <span class="block-tag tag-paddle">Aktuelle Paddle Power</span>
           <span class="block-hint">Ausdauer, Oberkörperkraft, Cardio</span>
         </div>
 
@@ -181,11 +201,11 @@
         </div>
       </div>
 
-      <!-- Surf Strength -->
+      <!-- Aktuelle Surf Strength -->
       <div class="status-block">
         <div class="block-header">
-          <span class="block-tag tag-strength">Surf Strength</span>
-          <span class="block-hint">Pop-up & Stabilität</span>
+          <span class="block-tag tag-strength">Aktuelle Surf Strength</span>
+          <span class="block-hint">Pop-up & Unterkörperkraft</span>
         </div>
 
         <div class="scale-field">
@@ -203,7 +223,7 @@
         <div class="scale-field">
           <div class="scale-header">
             <div>
-              <div class="scale-name">Unterkörper-Stabilität</div>
+              <div class="scale-name">Unterkörperkraft</div>
               <div class="scale-desc" id="desc-stabilitaet"></div>
             </div>
             <div class="scale-value accent-strength" id="val-stabilitaet">1</div>
@@ -213,11 +233,11 @@
         </div>
       </div>
 
-      <!-- Mobility -->
+      <!-- Aktuelle Mobilität -->
       <div class="status-block">
         <div class="block-header">
-          <span class="block-tag tag-mobility">Stabilität & Beweglichkeit</span>
-          <span class="block-hint">Mobility & Balance</span>
+          <span class="block-tag tag-mobility">Aktuelle Mobilität</span>
+          <span class="block-hint">Beweglichkeit & Balance</span>
         </div>
 
         <div class="scale-field">
@@ -235,13 +255,75 @@
         <div class="scale-field">
           <div class="scale-header">
             <div>
-              <div class="scale-name">Körpergefühl / Balance</div>
+              <div class="scale-name">Balance</div>
               <div class="scale-desc" id="desc-balance"></div>
             </div>
             <div class="scale-value accent-mobility" id="val-balance">1</div>
           </div>
           <input type="range" class="range-mobility" min="1" max="5" value="1" step="1" id="range-balance" data-key="balance" data-category="mobility">
           <div class="scale-ticks"><span class="scale-tick">1</span><span class="scale-tick">2</span><span class="scale-tick">3</span><span class="scale-tick">4</span><span class="scale-tick">5</span></div>
+        </div>
+      </div>
+
+      <!-- Equipment, Routinen & Präferenzen -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-personal">Equipment & Aktivitäten</span>
+          <span class="block-hint">Was liegt dir? Wie kannst du trainieren? (Mehrfachauswahl)</span>
+        </div>
+
+        <div class="field-group">
+          <div class="chip-group" id="chip-group-equipment">
+            <button class="chip" data-value="studio">Fitness Studio<span class="chip-sub">volles Equipment</span></button>
+            <button class="chip" data-value="home">Training zu Hause<span class="chip-sub">kein–Basic Equipment</span></button>
+            <button class="chip" data-value="rad">Radfahren<span class="chip-sub">sportlich</span></button>
+            <button class="chip" data-value="joggen">Joggen</button>
+            <button class="chip" data-value="schwimmen">Schwimmen</button>
+            <button class="chip" data-value="paddeln">Paddeltraining<span class="chip-sub">See, Fluss</span></button>
+            <button class="chip" data-value="surfen">Surfen<span class="chip-sub">Wavepark, Fluss</span></button>
+            <button class="chip" data-value="hiit">HIIT / Zirkeltraining</button>
+            <button class="chip" data-value="yoga">Yoga / Pilates</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="equipment-sonstiges">Sonstiges</label>
+          <input type="text" id="equipment-sonstiges" placeholder="z.B. Klettern, Bouldern, Tennis …" />
+        </div>
+      </div>
+
+      <!-- Wöchentliche Routinen -->
+      <div class="status-block">
+        <div class="block-header">
+          <span class="block-tag tag-personal">Wöchentliche Routinen</span>
+          <span class="block-hint">Präferenzen, Termine & Verletzungen</span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Wochentag(e), an denen Sport nicht möglich ist</label>
+          <div class="chip-group" id="chip-group-weekdays">
+            <button class="chip chip-day" data-value="mo">Mo</button>
+            <button class="chip chip-day" data-value="di">Di</button>
+            <button class="chip chip-day" data-value="mi">Mi</button>
+            <button class="chip chip-day" data-value="do">Do</button>
+            <button class="chip chip-day" data-value="fr">Fr</button>
+            <button class="chip chip-day" data-value="sa">Sa</button>
+            <button class="chip chip-day" data-value="so">So</button>
+          </div>
+          <label class="checkbox-row">
+            <input type="checkbox" id="weekdays-biweekly" />
+            <span>Diese Einschränkung gilt nur bi-weekly</span>
+          </label>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="praeferenzen">Präferenzen & Verpflichtungen</label>
+          <textarea id="praeferenzen" rows="2" placeholder="Z.B. Familienverpflichtungen, bevorzugte Trainingszeit, fester Yoga-Kurs …"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="verletzungen">Verletzungen</label>
+          <textarea id="verletzungen" rows="2" placeholder="Optional: aktuelle oder alte Verletzungen, Einschränkungen"></textarea>
         </div>
       </div>
 
@@ -308,6 +390,13 @@
     <div class="goals-grid" id="goals-grid">
       <!-- Goal cards rendered by JS -->
     </div>
+
+    <div class="nav-bar" id="goals-nav-bar" hidden>
+      <button class="btn btn-danger" id="btn-delete-user">Profil löschen 🗑</button>
+      <button class="btn btn-export" id="btn-export-pdf">PDF exportieren ↓</button>
+      <button class="btn btn-export" id="btn-export-view">JSON exportieren ↓</button>
+      <button class="btn btn-submit" id="btn-edit">Profil anpassen ✎</button>
+    </div>
   </section>
 
   <!-- ============================================
@@ -316,7 +405,7 @@
   <section class="page-section" id="page-plan">
     <div class="page-section-header">
       <div class="page-section-eyebrow">03 — Trainingsplan</div>
-      <h2>Dein Trainingsplan</h2>
+      <h2>Mein Trainingsplan</h2>
       <p>Aufbau bis zum Trip — Kategorien sind farblich markiert.</p>
     </div>
 
@@ -324,6 +413,9 @@
       <!-- Plan rows rendered by JS -->
     </div>
   </section>
+
+  <!-- PDF Export Container (nur beim Drucken sichtbar) -->
+  <div id="pdf-print-root" aria-hidden="true"></div>
 
   <script src="pgd-inputform.js"></script>
 </body>

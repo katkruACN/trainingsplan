@@ -7,7 +7,7 @@
     "changedBy": "Katharina",
     "trigger": "user-edit",
     "summary": "",
-    "updatedAt": "2026-05-21T08:40:40.828Z"
+    "updatedAt": "2026-05-21T15:28:09.107Z"
   },
   "changes": [
     {
@@ -73,6 +73,22 @@
         "completed": false
       },
       "reason": "user-add"
+    },
+    {
+      "id": "c5",
+      "unitId": "w0-d3-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    },
+    {
+      "id": "c6",
+      "unitId": "w0-d6-u1",
+      "field": "title",
+      "from": "Yoga nach Eisbach – 30 min",
+      "to": "Yoga  – 30 min",
+      "reason": "user-edit"
     }
   ],
   "delta": {

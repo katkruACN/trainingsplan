@@ -8,12 +8,14 @@
       "gewicht": 69,
       "maxHF": 170,
       "trainingLevel": "anfaenger",
-      "surfLevel": "anfaenger"
+      "surfLevel": "intermediate"
     },
     "goal": {
       "tripDatum": "2026-06-20",
+      "datumFlex": "fix",
       "surfTage": 8,
-      "surfStunden": 2
+      "surfStunden": 2,
+      "anderesZiel": "Reisetag: 13.-14.6. Maldiven. Danach nur leichte Übungen und ggf Paddeln möglich. Am 21.6. Anreise Himmafuji."
     },
     "paddlePower": {
       "paddelausdauer": 2,
@@ -21,12 +23,26 @@
       "cardio": 2
     },
     "surfStrength": {
-      "popup": 2,
+      "popup": 3,
       "stabilitaet": 2
     },
     "stabilitaetBeweglichkeit": {
-      "beweglichkeit": 3,
+      "beweglichkeit": 2,
       "balance": 2
+    },
+    "equipment": {
+      "activities": [
+        "home",
+        "schwimmen",
+        "yoga"
+      ],
+      "sonstiges": "Calisthenics über YouTube"
+    },
+    "routinen": {
+      "noSportWeekdays": [],
+      "biweekly": false,
+      "praeferenzen": "keine Möglichkeit zu paddeln oder Surfen in Berlin",
+      "verletzungen": "Nach einer Runde Bein im liegen Heben schon starken Muskelkater gehabt"
     },
     "garmin": {
       "vo2max": null,
@@ -37,5 +53,5 @@
       "status": null
     }
   },
-  "profileUpdatedAt": "2026-05-21T07:47:56.908Z"
+  "profileUpdatedAt": "2026-05-22T10:23:08.975Z"
 }

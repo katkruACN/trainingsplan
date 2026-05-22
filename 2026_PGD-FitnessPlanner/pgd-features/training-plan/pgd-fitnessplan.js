@@ -22,7 +22,7 @@ const WEEK_START_DATES = [
 const SUB_GOALS = [
   { title: 'Paddel Power', color: 'paddeln', categories: ['paddeln', 'schwimmen', 'rad', 'laufen', 'kraft-upper'] },
   { title: 'Surf Strength', color: 'kraft-lower', categories: ['hiit', 'kraft', 'kraft-lower', 'popup', 'surfen-eisbach', 'surfen-o2', 'surfen-jochen'] },
-  { title: 'Stabilität & Beweglichkeit', color: 'mobility', categories: ['mobility', 'yoga', 'balance'] }
+  { title: 'Mobility', color: 'mobility', categories: ['mobility', 'yoga', 'balance'] }
 ];
 
 const GOAL_EXCLUDED_CATEGORIES = new Set(['erholung']);

@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "version": "2026-05-21",
+    "versionNumber": 1,
+    "createdAt": "2026-05-21",
+    "basedOn": "base",
+    "changedBy": "Katharina",
+    "trigger": "user-edit",
+    "summary": "",
+    "updatedAt": "2026-05-21T15:45:39.580Z"
+  },
+  "changes": [
+    {
+      "id": "c1",
+      "unitId": "w0-d3-u0",
+      "field": "completed",
+      "from": false,
+      "to": true,
+      "reason": "user-completed"
+    }
+  ],
+  "delta": {
+    "categoryShifts": {},
+    "durationDeltaMin": 0,
+    "unitsAdded": 0,
+    "unitsRemoved": 0
+  },
+  "goalImpact": null
+}

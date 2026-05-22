@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "version": "2026-05-22",
+    "versionNumber": 1,
+    "createdAt": "2026-05-22",
+    "basedOn": "base",
+    "changedBy": "Katharina",
+    "trigger": "user-edit",
+    "summary": "",
+    "updatedAt": "2026-05-22T10:52:24.448Z"
+  },
+  "changes": [
+    {
+      "id": "c1",
+      "unitId": "w1-d2-u0",
+      "field": "added",
+      "from": null,
+      "to": {
+        "unitId": "w1-d2-u0",
+        "category": "erholung",
+        "title": "Aktive Erholung",
+        "description": "",
+        "detail": [],
+        "duration": 0,
+        "completed": false
+      },
+      "reason": "user-add"
+    },
+    {
+      "id": "c2",
+      "unitId": "w3-d6-u0",
+      "field": "added",
+      "from": null,
+      "to": {
+        "unitId": "w3-d6-u0",
+        "category": "erholung",
+        "title": "Aktive Erholung",
+        "description": "",
+        "detail": [],
+        "duration": 0,
+        "completed": false
+      },
+      "reason": "user-add"
+    },
+    {
+      "id": "c3",
+      "unitId": "w3-d4-u2",
+      "field": "removed",
+      "from": {
+        "unitId": "w3-d4-u2",
+        "category": "erholung",
+        "targetComponent": null,
+        "title": "Früh ins Bett!",
+        "description": "Morgen geht's los. 🌊",
+        "duration": 0,
+        "intensity": "keine",
+        "detail": [],
+        "muscleGroups": [],
+        "completed": false
+      },
+      "to": null,
+      "reason": "user-delete"
+    },
+    {
+      "id": "c4",
+      "unitId": "w0-d4-u0",
+      "field": "category",
+      "from": "popup",
+      "to": "mobility",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c5",
+      "unitId": "w0-d4-u0",
+      "field": "title",
+      "from": "Pop-up kennenlernen – 2×5",
+      "to": "Mobilisation",
+      "reason": "user-edit"
+    },
+    {
+      "id": "c6",
+      "unitId": "w0-d4-u0",
+      "field": "detail",
+      "from": [
+        "Ausgangsposition: flach auf dem Bauch, Hände neben der Brust.",
+        "Bewegung: beide Beine gleichzeitig nach vorne schwingen – in Stand kommen.",
+        "Stance testen: welcher Fuß vorne fühlt sich natürlicher an?",
+        "Langsam und bewusst. Pause nach jedem Pop-up.",
+        "Danach: Cobra-Stretch 5×."
+      ],
+      "to": [
+        "Katze-Kuh 10×",
+        "Thorax-Rotation 10× je Seite",
+        "Hip Circles 10× je Seite",
+        "Schulter-Querstretch 30 sek/S",
+        "Kind-Haltung 1 min"
+      ],
+      "reason": "user-edit"
+    }
+  ],
+  "delta": {
+    "categoryShifts": {},
+    "durationDeltaMin": 0,
+    "unitsAdded": 2,
+    "unitsRemoved": 1
+  },
+  "goalImpact": null
+}
