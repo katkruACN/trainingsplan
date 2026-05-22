@@ -185,11 +185,27 @@ async function saveProfile(profile) {
   }
 }
 
+// Shared-Secret-Token vom Server abholen (einmalig gecached). Leerer String,
+// falls Server APP_API_TOKEN nicht gesetzt hat oder Endpoint unerreichbar ist.
+let appTokenPromise = null;
+function getAppToken() {
+  if (!appTokenPromise) {
+    appTokenPromise = fetch('/api/client-config', { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : { apiToken: '' })
+      .then(cfg => cfg?.apiToken || '')
+      .catch(() => '');
+  }
+  return appTokenPromise;
+}
+
 // Generiert plan-v1.json via Claude API (Server-Proxy POST /api/generate-plan)
 async function generatePlanV1(profile) {
+  const token = await getAppToken();
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['X-App-Token'] = token;
   const res = await fetch('/api/generate-plan', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ profile })
   });
   if (!res.ok) {

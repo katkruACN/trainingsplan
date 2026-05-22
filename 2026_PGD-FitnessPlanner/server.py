@@ -9,6 +9,7 @@
 - DELETE /users/{id}       → löscht User-Ordner rekursiv
 - POST /api/generate-plan  → ruft Claude API, erzeugt plan-v1.json aus Profil
 """
+import hmac
 import http.server
 import json
 import os
@@ -65,11 +66,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     # ---- GET ---------------------------------------------------------
     def do_GET(self):
+        # Client-Config (Shared-Secret-Token für /api/generate-plan)
+        if self.path == '/api/client-config':
+            self._handle_client_config()
+            return
         # Generisches _list-Endpoint
         if self.path.rstrip('/').endswith('/_list'):
             self._handle_list()
             return
         super().do_GET()
+
+    def _handle_client_config(self):
+        body = json.dumps({
+            'apiToken': os.environ.get('APP_API_TOKEN', '')
+        }).encode('utf-8')
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
     def _handle_list(self):
         rel_dir = self.path.rstrip('/').rsplit('/_list', 1)[0].lstrip('/')
@@ -157,6 +172,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if self.path != '/api/generate-plan':
             self._send_json_error(404, 'Nur /api/generate-plan unterstützt POST')
             return
+        expected_token = os.environ.get('APP_API_TOKEN', '')
+        if expected_token:
+            provided = self.headers.get('X-App-Token', '')
+            if not hmac.compare_digest(provided, expected_token):
+                self._send_json_error(401, 'Ungültiger oder fehlender X-App-Token Header')
+                return
         try:
             length = int(self.headers.get('Content-Length', '0'))
             body = json.loads(self.rfile.read(length))
@@ -356,6 +377,8 @@ def main():
     print(f'    Verzeichnis: {ROOT}')
     api_status = 'aktiv' if os.environ.get('ANTHROPIC_API_KEY') else 'NICHT konfiguriert (.env fehlt)'
     print(f'    Claude API: {api_status}')
+    token_status = 'aktiv (X-App-Token erforderlich)' if os.environ.get('APP_API_TOKEN') else 'offen (APP_API_TOKEN nicht gesetzt)'
+    print(f'    /api/generate-plan: {token_status}')
     print('    Browser öffnet sich gleich. Strg+C zum Beenden.\n')
     threading.Thread(target=open_browser_delayed, daemon=True).start()
     try:
